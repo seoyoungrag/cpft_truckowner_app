@@ -4,23 +4,26 @@ import Swiper from "react-native-web-swiper";
 import { Dimensions, ActivityIndicator, ScrollView } from "react-native";
 import Slide from "../../components/Movies/Slide";
 import Title from "../../components/Title";
+import Vertical from "../../components/Vertical";
+import Horizontal from "../../components/Horizontal";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
 
 const SliderContainer = styled.View`
- width: ${WIDTH}px;
+ width: 100%;
  height: ${HEIGHT / 4}px;
- margin-bottom: 50px;
+ margin-bottom: 40px;
 `;
 
 const Container = styled.View``;
-export default ({ loading, nowPlaying }) => (
+
+const UpcomingContainer = styled.View`
+margin-top: 20px;`;
+export default ({ loading, nowPlaying,popular,upcoming }) => (
  <ScrollView
-  style={{
-   backgroundColor: "black",
-  }}
+ style={{backgroundColor: "black",}}
   contentContainerStyle={{
-   flex: 1,
+      flex: loading ? 1: 0,
    justifyContent: loading ? "center" : "flex-start",
   }}
  >
@@ -45,6 +48,16 @@ export default ({ loading, nowPlaying }) => (
     </SliderContainer>
     <Container>
      <Title title={"Popular Movies"} />
+     <ScrollView contentContainerStyle={{paddingLeft:30}} horizontal showsHorizontalScrollIndicator={false}
+     style={{marginTop: 20, marginBottom:40}}>
+         {popular.map(movie => <Vertical id={movie.id} key={movie.id} poster={movie.poster_path} title={movie.title} votes={movie.vote_average}/>)}
+     </ScrollView>
+     <Title title={"Coming Soon"}></Title>
+     <UpcomingContainer>
+     {upcoming.map(movie=>(
+         <Horizontal key={movie.id} id={movie.id} title={movie.title} releaseDate={movie.release_date} poster={movie.poster_path} overview={movie.overview}/>
+     ))}
+     </UpcomingContainer>
     </Container>
    </>
   )}
