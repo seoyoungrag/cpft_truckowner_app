@@ -41,6 +41,7 @@ export default ({ movies, shows, keyword, onChange, onSubmit }) => (
    <HorizontalSlider title={"TV results"}>
     {shows.map((show) => (
      <Vertical
+      isTv
       key={show.id}
       id={show.id}
       title={show.name}
