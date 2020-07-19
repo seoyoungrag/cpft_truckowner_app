@@ -1,27 +1,39 @@
 {
-  "expo": {
-    "name": "cpft_truckowner_app",
-    "slug": "cpft_truckowner_app",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
-    "description": ""
-  }
+ "expo": {
+  "name": "플랫폼_차주앱",
+  "slug": "cpft_truckowner_app",
+  "version": "1.0.0",
+  "orientation": "portrait",
+  "icon": "./assets/icon.png",
+  "primaryColor": "#ffffff",
+  "backgroundColor": "#ffffff",
+  "splash": {
+   "image": "./assets/splash.png",
+   "resizeMode": "contain",
+   "backgroundColor": "#ffffff"
+  },
+  "updates": {
+   "fallbackToCacheTimeout": 0
+  },
+  "assetBundlePatterns": ["**/*"],
+  "ios": {
+   "supportsTablet": true
+  },
+  "android": {
+   "package": "kr.co.teamfresh.cpft.android.test",
+   "versionCode": 1
+  },
+  "androidStatusBar": {
+   "barStyle": "dark-content",
+   "backgroundColor": "#000000"
+  },
+  "androidNavigationBar": {
+   "barStyle": "dark-content",
+   "backgroundColor": "#000000"
+  },
+  "web": {
+   "favicon": "./assets/icon.png"
+  },
+  "description": ""
+ }
 }
