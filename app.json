@@ -21,7 +21,23 @@
   },
   "android": {
    "package": "kr.co.teamfresh.cpft.android.test",
-   "versionCode": 1
+   "versionCode": 3,
+   "permissions": [
+    "CAMERA",
+    "CAMERA_ROLL",
+    "RECORD_AUDIO",
+    "READ_PHONE_STATE",
+    "READ_CONTACTS",
+    "READ_INTERNAL_STORAGE",
+    "READ_EXTERNAL_STORAGE",
+    "WRITE_EXTERNAL_STORAGE",
+    "ACCESS_FINE_LOCATION",
+    "ACCESS_COARSE_LOCATION",
+    "CHANGE_CONFIGURATION",
+    "com.google.android.c2dm.permission.RECEIVE",
+    "com.android.launcher.permission.INSTALL_SHORTCUT",
+    "com.htc.launcher.permission.UPDATE_SHORTCUT"
+   ]
   },
   "androidStatusBar": {
    "barStyle": "dark-content",
