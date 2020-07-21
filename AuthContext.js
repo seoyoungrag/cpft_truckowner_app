@@ -3,11 +3,11 @@ import { AsyncStorage } from "react-native";
 
 export const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
- const [isLoggedIn, setIsLoggedIn] = useState(null);
+export const AuthProvider = ({ isLoggedIn: isLoggedInProp, children }) => {
+ const [isLoggedIn, setIsLoggedIn] = useState(isLoggedInProp);
  const logUserIn = async () => {
   try {
-   await AsyncStorage.setItem("isLoggedin", "true");
+   await AsyncStorage.setItem("isLoggedIn", "true");
    setIsLoggedIn(true);
   } catch (e) {
    console.log(e);
@@ -16,12 +16,13 @@ export const AuthProvider = ({ children }) => {
 
  const logUserOut = async () => {
   try {
-   await AsyncStorage.setItem("isLoggedin", "false");
+   await AsyncStorage.setItem("isLoggedIn", "false");
    setIsLoggedIn(false);
   } catch (e) {
    console.log(e);
   }
  };
+
  return (
   <AuthContext.Provider value={{ isLoggedIn, logUserIn, logUserOut }}>
    {children}
@@ -30,16 +31,16 @@ export const AuthProvider = ({ children }) => {
 };
 
 export const useIsLoggedIn = () => {
- const isLoggedIn = useContext(AuthContext);
+ const { isLoggedIn } = useContext(AuthContext);
  return isLoggedIn;
 };
 
-export const userLogIn = () => {
+export const useLogIn = () => {
  const { logUserIn } = useContext(AuthContext);
- return;
+ return logUserIn;
 };
 
-export const userLogOut = () => {
+export const useLogOut = () => {
  const { logUserOut } = useContext(AuthContext);
- return;
+ return logUserOut;
 };

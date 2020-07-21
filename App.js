@@ -22,11 +22,14 @@ const cacheImages = (images) =>
    return Asset.fromModule(image).downloadAsync();
   }
  });
+
 const cacheFonts = (fonts) =>
  fonts.map((font) => {
   Font.loadAsync(font);
  });
+
 export default function App() {
+ const [isLoggedIn, setIsLoggedIn] = useState(null);
  const [isReady, setIsReady] = useState(false);
  const [hasCameraPermission, setHasCameraPermission] = useState(null);
 
@@ -39,6 +42,12 @@ export default function App() {
  };
 
  const onFinish = async () => {
+  const isLoggedIn = await AsyncStorage.getItem("isLoggedIn");
+  if (!isLoggedIn || isLoggedIn === "false") {
+   setIsLoggedIn(false);
+  } else {
+   setIsLoggedIn(true);
+  }
   setIsReady(true);
  };
 
@@ -57,7 +66,7 @@ export default function App() {
   <Provider store={store}>
    <ReactStore.Provider>
     <ThemeProvider theme={styles}>
-     <AuthProvider>
+     <AuthProvider isLoggedIn={isLoggedIn}>
       <NavigationContainer>
        <Stack />
       </NavigationContainer>

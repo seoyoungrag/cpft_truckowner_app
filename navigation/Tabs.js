@@ -5,7 +5,8 @@ import Tv from "../screens/Tv";
 import Search from "../screens/Search";
 import Favs from "../screens/Favs";
 import { Ionicons } from "@expo/vector-icons";
-import { Platform } from "react-native";
+import { Platform, View } from "react-native";
+import PhotoNavigation from "./PhotoNavigation";
 
 const Tabs = createBottomTabNavigator();
 
@@ -51,6 +52,7 @@ export default ({ navigation, route }) => {
    <Tabs.Screen name="TV" component={Tv} />
    <Tabs.Screen name="Search" component={Search} />
    <Tabs.Screen name="Discovery" component={Favs} />
+   <Tabs.Screen name="Photo" component={PhotoNavigation} />
   </Tabs.Navigator>
  );
 };
