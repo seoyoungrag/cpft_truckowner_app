@@ -16,8 +16,13 @@ const View = styled.View`
  flex: 1;
 `;
 
+ 
 export default ({ navigation }) => {
- const logIn = useLogIn();
+    const logIn = useLogIn();
+    
+    const loginSuccess = () => {
+        logIn('testToken');
+     }
  const emailInput = useInput("");
  const [loading, setLoading] = useState(false);
  const handleLogin = async () => {
@@ -54,5 +59,5 @@ export default ({ navigation }) => {
    setLoading(false);
   }
  };
- return <PatternLockContianer {...navigation} />;
+ return <PatternLockContianer loginSuccess={loginSuccess} />;
 };

@@ -10,8 +10,8 @@ import {
 import Svg, { Line, Circle } from "react-native-svg";
 import constants from "../../../constants";
 
-const DEFAULT_DOT_RADIUS = 8;
-const SNAP_DOT_RADIUS = 10;
+const DEFAULT_DOT_RADIUS = 10;
+const SNAP_DOT_RADIUS = 40;
 const SNAP_DURATION = 100;
 
 export default ({
@@ -202,13 +202,14 @@ export default ({
     if (_isPatternMatched(pattern)) {
      setInitialGestureCoordinate(null);
      setActiveDotCoordinate(null);
-     
+     /*
       Alert.alert(
        "",
        "설정 오케이!",
        [{ text: "OK", onPress: onPatternMatch }],
        { cancelable: false }
       );
+      */
       onMatchedPattern();
     } else {
      setInitialGestureCoordinate(null);
@@ -251,6 +252,7 @@ export default ({
    <View style={styles.hintContainer}>
     <Text style={styles.hintText}>{message}</Text>
    </View>
+   {pattern? (
    <Animated.View {..._panResponder.panHandlers}>
     <Svg height={containerHeight} width={containerWidth}>
      {_dots.map((dot, i) => {
@@ -312,7 +314,7 @@ export default ({
       />
      ) : null}
     </Svg>
-   </Animated.View>
+   </Animated.View> ):null}
   </View>
  );
 };

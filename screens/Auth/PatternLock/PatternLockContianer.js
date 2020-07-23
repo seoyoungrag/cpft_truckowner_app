@@ -45,10 +45,11 @@ const updateClock = () => {
   date,
  };
 };
-export default ({ navigation }) => {
+export default ({loginSuccess}) => {
     const onMatchedPattern = () =>{
         console.log('go main');
-        console.log(navigation);
+        console.log(loginSuccess);
+        loginSuccess();
     }
  const [showPatternLock, setShowPatternLock] = useState(false);
  const [currentDateTime, setCurrentDateTime] = useState(updateClock());
@@ -70,13 +71,11 @@ export default ({ navigation }) => {
   onMoveShouldSetPanResponderCapture: () => !showPatternLock,
 
   onPanResponderGrant: () => {
-      console.log('onPanResponderGrant')
    _panYCoordinate.setValue(0);
   },
 
   onPanResponderMove: (e, gestureState) => {
    let { dy } = gestureState;
-   console.log('onPanResponderMove', dy)
    _panYCoordinate.setValue(dy);
   },
 
