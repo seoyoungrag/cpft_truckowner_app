@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { TouchableWithoutFeedback, Keyboard } from "react-native";
-import Svg, { Circle, Rect, Line } from "react-native-svg";
 import AuthButton from "../../components/AuthButton";
 import AuthInput from "../../components/AuthInput";
 import useInput from "../../hooks/useInput";
 import { Alert } from "react-native";
 import { LOG_IN } from "./AuthQueries";
 import { useLogIn } from "../../AuthContext";
-import PatternLockContianer from "./PatternLock/PatternLockContianer";
 
 const View = styled.View`
  justify-content: center;
@@ -54,5 +52,19 @@ export default ({ navigation }) => {
    setLoading(false);
   }
  };
- return <PatternLockContianer {...navigation} />;
+ return (
+  <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+   <View>
+    <AuthInput
+     {...emailInput}
+     placeholder="Email"
+     keyboardType="email-address"
+     returnKeyType="send"
+     onSubmitEditing={handleLogin}
+     autoCorrect={false}
+    />
+    <AuthButton loading={loading} onPress={handleLogin} text="Log In" />
+   </View>
+  </TouchableWithoutFeedback>
+ );
 };
