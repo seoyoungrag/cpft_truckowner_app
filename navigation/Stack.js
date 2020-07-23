@@ -7,12 +7,13 @@ import { useIsLoggedIn, useLogIn, useLogOut } from "../AuthContext";
 import AuthNavigation from "./AuthNavigation";
 import { TouchableOpacity, Text, Button } from "react-native";
 import PhotoNavigation from "./PhotoNavigation";
+import MessageNavigation from "./MessageNavigation";
 
 const Stack = createStackNavigator();
 
 export default () => {
- //const isLoggedIn = useIsLoggedIn();
- const isLoggedIn = true;
+ const isLoggedIn = useIsLoggedIn();
+ //const isLoggedIn = true;
  const logIn = useLogIn();
  const logOut = useLogOut();
  return isLoggedIn ? (
@@ -39,6 +40,7 @@ export default () => {
      <Stack.Screen name="Tabs" component={Tabs} />
      <Stack.Screen name="Detail" component={Detail} />
      <Stack.Screen name="PhotoNavigation" component={PhotoNavigation} />
+     <Stack.Screen name="MessageNavigation" component={MessageNavigation} />
     </Stack.Navigator>
    </NavigationContainer>
   </>

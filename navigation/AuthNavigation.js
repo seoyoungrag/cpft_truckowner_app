@@ -15,9 +15,9 @@ export default () => (
     headerShown: false,
    }}
   >
+   <AuthNavigation.Screen name="Login" component={Login} />
    <AuthNavigation.Screen name="AuthHome" component={AuthHome} />
    <AuthNavigation.Screen name="Signup" component={Signup} />
-   <AuthNavigation.Screen name="Login" component={Login} />
    <AuthNavigation.Screen name="Confirm" component={Confirm} />
   </AuthNavigation.Navigator>
  </NavigationContainer>
