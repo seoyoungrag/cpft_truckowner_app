@@ -10,7 +10,7 @@ import {
 import Svg, { Line, Circle } from "react-native-svg";
 import constants from "../../../constants";
 
-const DEFAULT_DOT_RADIUS = 5;
+const DEFAULT_DOT_RADIUS = 8;
 const SNAP_DOT_RADIUS = 10;
 const SNAP_DURATION = 100;
 
@@ -20,7 +20,10 @@ export default ({
  containerHeight,
  correctPattern,
  onPatternMatch,
+ hint,
+ onMatchedPattern
 }) => {
+  const [snap, setSnap] = useState(null);
  const [initialGestureCoordinate, setInitialGestureCoordinate] = useState(null);
  const [activeDotCoordinate, setActiveDotCoordinate] = useState(null);
  const [pattern, setPattern] = useState([]);
@@ -86,6 +89,9 @@ export default ({
   return matched;
  };
 
+ let endGestureX;
+ let endGestureY;
+
  const _panResponder = PanResponder.create({
   onMoveShouldSetResponderCapture: () => !showError,
   onMoveShouldSetPanResponderCapture: () => !showError,
@@ -99,35 +105,41 @@ export default ({
    );
 
    if (activeDotIndex != null) {
-    let activeDotCoordinate = _dots[activeDotIndex];
-    let firstDot = _mappedDotsIndex[activeDotIndex];
-    let dotWillSnap = _snapAnimatedValues[activeDotIndex];
+    let activeDotCoordinate = _dots[activeDotIndex.i];
+    let firstDot = _mappedDotsIndex[activeDotIndex.i];
+    let dotWillSnap = _snapAnimatedValues[activeDotIndex.i];
+    
+   endGestureX += activeDotIndex.x;
+   endGestureY += activeDotIndex.y;
     setActiveDotCoordinate(activeDotCoordinate);
     setInitialGestureCoordinate(activeDotCoordinate);
     setPattern([firstDot]);
-    _snapDot(dotWillSnap);
+    //_snapDot(dotWillSnap);
+    console.log(activeDotIndex.i)
+    setSnap([activeDotIndex.i]);
+    //console.log(activeDotCoordinate);
    }
   },
   onPanResponderMove: (e, gestureState) => {
    let { dx, dy } = gestureState;
-
+//console.log(dx, dy, endGestureX, endGestureY);
    if (activeDotCoordinate == null || initialGestureCoordinate == null) {
     return;
    }
 
-   let endGestureX = initialGestureCoordinate.x + dx;
-   let endGestureY = initialGestureCoordinate.y + dy;
+   endGestureX = activeDotCoordinate.x+dx;
+   endGestureY = activeDotCoordinate.y+dy;
 
    let matchedDotIndex = constants.getDotIndex(
     { x: endGestureX, y: endGestureY },
     _dots
    );
-
+//console.log(matchedDotIndex);
    let matchedDot =
-    matchedDotIndex != null && _mappedDotsIndex[matchedDotIndex];
+    matchedDotIndex.i != null && _mappedDotsIndex[matchedDotIndex.i];
 
    if (
-    matchedDotIndex != null &&
+    matchedDotIndex.i != null &&
     matchedDot &&
     !_isAlreadyInPattern(matchedDot)
    ) {
@@ -157,18 +169,26 @@ export default ({
 
     pattern.push(newPattern);
 
-    let animateIndexes = [...filteredIntermediateDotIndexes, matchedDotIndex];
+    let animateIndexes = [...filteredIntermediateDotIndexes, matchedDotIndex.i];
 
     setPattern(pattern);
-    setActiveDotCoordinate(_dots[matchedDotIndex]);
+    //console.log(_dots[matchedDotIndex]);
+    setActiveDotCoordinate(_dots[matchedDotIndex.i]);
 
-    () => {
+    
+      //console.log('1');
      if (animateIndexes.length) {
+      setSnap(animateIndexes);
+      /*
       animateIndexes.forEach((index) => {
        _snapDot(_snapAnimatedValues[index]);
       });
+     */
      }
-    };
+
+    
+   endGestureX += matchedDotIndex.x;
+   endGestureY += matchedDotIndex.y;
    } else {
     _activeLine &&
      _activeLine.setNativeProps({
@@ -182,25 +202,18 @@ export default ({
     if (_isPatternMatched(pattern)) {
      setInitialGestureCoordinate(null);
      setActiveDotCoordinate(null);
-     () => {
+     
       Alert.alert(
        "",
        "설정 오케이!",
        [{ text: "OK", onPress: onPatternMatch }],
        { cancelable: false }
       );
-     };
+      onMatchedPattern();
     } else {
      setInitialGestureCoordinate(null);
      setActiveDotCoordinate(null);
      setShowError(true);
-     () => {
-      _resetTimeout = setTimeout(() => {
-       setShowHint(true);
-       setShowError(false);
-       setPattern([]);
-      }, 2000);
-     };
     }
    }
   },
@@ -214,10 +227,25 @@ export default ({
  }
 
  useEffect(() => {
+   if(showError){
+
+    _resetTimeout = setTimeout(() => {
+      setShowHint(true);
+      setShowError(false);
+      setPattern([]);
+     }, 2000);
+    
+   }
+   //console.log(snap);
+   if(snap?.length){     
+     snap.map((obj) => {
+      _snapDot(_snapAnimatedValues[obj]);
+     });
+   }
   return () => {
    clearTimeout(_resetTimeout);
   };
- });
+ },[showError, snap]);
  return (
   <View style={styles.container}>
    <View style={styles.hintContainer}>

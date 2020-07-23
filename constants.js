@@ -26,7 +26,7 @@ const getMonthName = (index) => {
  return monthName[index];
 };
 
-const DEFAULT_HIT_SLOP = 25;
+const DEFAULT_HIT_SLOP = 15;
 
 const getDotIndex = (gestureCoordinate, dots, hitSlop = DEFAULT_HIT_SLOP) => {
  let dotIndex;
@@ -43,7 +43,7 @@ const getDotIndex = (gestureCoordinate, dots, hitSlop = DEFAULT_HIT_SLOP) => {
    break;
   }
  }
- return dotIndex;
+ return {i:dotIndex, x:x-dots[dotIndex]?.x, y:y-dots[dotIndex]?.y};
 };
 const populateDotsCoordinate = (
  dotsDimension,

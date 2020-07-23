@@ -17,8 +17,8 @@ import PatternLockPresenter from "./PatternLockPresenter";
 
 const { width, height } = Dimensions.get("window");
 
-const PATTERN_CONTAINER_HEIGHT = constants.height;
-const PATTERN_CONTAINER_WIDTH = constants.width / 2;
+const PATTERN_CONTAINER_HEIGHT = height /2 ;
+const PATTERN_CONTAINER_WIDTH = width;
 const PATTERN_DIMENSION = 3;
 const CORRECT_UNLOCK_PATTERN = [
  { x: 0, y: 0 },
@@ -46,6 +46,10 @@ const updateClock = () => {
  };
 };
 export default ({ navigation }) => {
+    const onMatchedPattern = () =>{
+        console.log('go main');
+        console.log(navigation);
+    }
  const [showPatternLock, setShowPatternLock] = useState(false);
  const [currentDateTime, setCurrentDateTime] = useState(updateClock());
 
@@ -66,11 +70,13 @@ export default ({ navigation }) => {
   onMoveShouldSetPanResponderCapture: () => !showPatternLock,
 
   onPanResponderGrant: () => {
+      console.log('onPanResponderGrant')
    _panYCoordinate.setValue(0);
   },
 
   onPanResponderMove: (e, gestureState) => {
    let { dy } = gestureState;
+   console.log('onPanResponderMove', dy)
    _panYCoordinate.setValue(dy);
   },
 
@@ -96,10 +102,9 @@ export default ({ navigation }) => {
  };
 
  let _updateClockInterval;
+ BackHandler.addEventListener("hardwareBackPress", onBackPress);
  useEffect(() => {
-  _panYCoordinate.setValue(0);
-
-  if (showPatternLock) {
+    if (showPatternLock) {
    Animated.parallel([
     Animated.timing(_panYCoordinate, {
      toValue: -500,
@@ -113,12 +118,12 @@ export default ({ navigation }) => {
     }),
    ]).start();
   }
+  /*
   _updateClockInterval = setInterval(() => {
    let currentDateTime = updateClock();
    setCurrentDateTime(currentDateTime);
   }, 1000);
-
-  BackHandler.addEventListener("hardwareBackPress", onBackPress);
+*/
   return () => {
    clearInterval(_updateClockInterval);
    BackHandler.removeEventListener("hardwareBackPress", onBackPress);
@@ -150,7 +155,7 @@ export default ({ navigation }) => {
   outputRange: [0.2, 1],
   extrapolate: "clamp",
  });
-
+//console.log(showPatternLock, _panYCoordinate, patternLockScale, _patternContainerOpacity);
  return (
   <View style={styles.root}>
    <Animated.View
@@ -193,6 +198,7 @@ export default ({ navigation }) => {
       correctPattern={CORRECT_UNLOCK_PATTERN}
       hint="Z를 그려보셈."
       onPatternMatch={onBackPress}
+      onMatchedPattern={onMatchedPattern}
      />
      {Platform.OS === "ios" && (
       <View style={styles.backButtonContainer}>
