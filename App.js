@@ -53,10 +53,7 @@ export default function App() {
 
  const _requestCameraPermission = async () => {
   const { status } = await Permissions.askAsync(Permissions.CAMERA);
-  console.log(status);
-  const { status1 } = await Permissions.askAsync(Permissions.LOCATION);
-  console.log(status1);
-  setHasCameraPermission("granted");
+  setHasCameraPermission(status);
  };
 
  useEffect(() => {

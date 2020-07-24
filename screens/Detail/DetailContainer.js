@@ -9,7 +9,6 @@ export default ({
   params: { isTv, id, title, backgroundImage, poster, votes, overview },
  },
 }) => {
- const [loading, setLoading] = useState(true);
  const [detail, setDetail] = useState({
   loading: true,
   result: {
@@ -18,7 +17,9 @@ export default ({
    poster,
    overview,
    votes,
-   videos: { results: [] },
+   videos: {
+    results: [],
+   },
   },
  });
  const getData = async () => {
@@ -37,14 +38,17 @@ export default ({
    },
   });
  };
+
  useEffect(() => {
   getData();
  }, [id]);
  React.useLayoutEffect(() => {
   navigation.setOptions({ title });
  });
+
  const openBrowser = async (url) => {
   await WebBrowser.openBrowserAsync(url);
  };
+
  return <DetailPresenter openBrowser={openBrowser} {...detail} />;
 };

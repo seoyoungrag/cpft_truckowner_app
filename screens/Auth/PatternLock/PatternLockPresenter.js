@@ -12,7 +12,7 @@ import constants from "../../../constants";
 
 const DEFAULT_DOT_RADIUS = 10;
 const SNAP_DOT_RADIUS = 15;
-const SNAP_DURATION = 500;
+const SNAP_DURATION = 100;
 
 export default ({
  containerDimension,

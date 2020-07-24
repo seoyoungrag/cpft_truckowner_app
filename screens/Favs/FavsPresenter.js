@@ -40,6 +40,7 @@ export default ({ results }) => {
       x: WIDTH + 100,
       y: dy,
      },
+     useNativeDriver: true,
     }).start(nextCard);
    } else if (dx <= -250) {
     Animated.spring(position, {
@@ -47,6 +48,7 @@ export default ({ results }) => {
       x: -WIDTH - 100,
       y: dy,
      },
+     useNativeDriver: true,
     }).start(nextCard);
    } else {
     Animated.spring(position, {
@@ -54,6 +56,7 @@ export default ({ results }) => {
       x: 0,
       y: 0,
      },
+     useNativeDriver: true,
     }).start();
    }
   },

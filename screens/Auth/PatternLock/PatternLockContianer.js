@@ -47,8 +47,6 @@ const updateClock = () => {
 };
 export default ({ loginSuccess }) => {
  const onMatchedPattern = () => {
-  console.log("go main");
-  console.log(loginSuccess);
   loginSuccess();
  };
  const [showPatternLock, setShowPatternLock] = useState(false);
@@ -63,6 +61,7 @@ export default ({ loginSuccess }) => {
   Animated.timing(_panYCoordinate, {
    toValue: 0,
    duration: 200,
+   useNativeDriver: false,
   }).start();
  };
 
@@ -123,12 +122,14 @@ export default ({ loginSuccess }) => {
    setCurrentDateTime(currentDateTime);
   }, 1000);
 */
+ }, [showPatternLock]);
+
+ useEffect(() => {
   return () => {
    clearInterval(_updateClockInterval);
    BackHandler.removeEventListener("hardwareBackPress", onBackPress);
   };
- }, [showPatternLock]);
-
+ });
  let { hour, minute, dayName, monthName, date } = currentDateTime;
 
  const paddingTop = _panYCoordinate.interpolate({
@@ -182,7 +183,7 @@ export default ({ loginSuccess }) => {
       duration={1500}
       style={[styles.hint, { opacity: timeOpacity }]}
      >
-      Swipe up to unlock
+      스와이프해서 로그인 하세요.
      </Animatable.Text>
     </View>
    </Animated.View>

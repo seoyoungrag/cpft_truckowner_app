@@ -34,14 +34,14 @@ const Title = styled.Text`
  color: white;
  font-weight: bold;
  font-size: 19px;
-  margin-bottom: 10px;
+ margin-bottom: 10px;
 `;
 const VotesContainer = styled.Text`
  margin-bottom: 7px;
 `;
 const Overview = styled.Text`
  color: rgb(220, 220, 220);
-  font-size: 14px;
+ font-size: 14px;
  font-weight: 500;
 `;
 const Button = styled.View`
@@ -53,17 +53,27 @@ const Button = styled.View`
 
 const ButtonText = styled.Text``;
 const Slide = ({ id, title, backgroundImage, votes, overview, poster }) => {
-  const navigation =useNavigation();
-  const goToDetail = () => navigation.navigate("Detail", {id, title, backgroundImage, votes, overview, poster})
-  return (
+ const navigation = useNavigation();
+ const goToDetail = () =>
+  navigation.navigate("Detail", {
+   id,
+   title,
+   backgroundImage,
+   votes,
+   overview,
+   poster,
+  });
+ return (
   <Container>
    <BG source={{ uri: apiImage(backgroundImage) }} />
    <Content>
     <Poster url={poster} />
     <Data>
      <Title>{trimText(title, 40)}</Title>
-     <VotesContainer><Votes votes={votes}/></VotesContainer>
-     <Overview>{trimText(overview,110)}</Overview>
+     <VotesContainer>
+      <Votes votes={votes} />
+     </VotesContainer>
+     <Overview>{trimText(overview, 110)}</Overview>
      <TouchableOpacity onPress={goToDetail}>
       <Button>
        <ButtonText>View Details</ButtonText>
@@ -72,15 +82,16 @@ const Slide = ({ id, title, backgroundImage, votes, overview, poster }) => {
     </Data>
    </Content>
   </Container>
- )};
+ );
+};
 
 Slide.propTypes = {
  id: PropTypes.number.isRequired,
  title: PropTypes.string.isRequired,
- backgroundImage: PropTypes.string.isRequired,
+ backgroundImage: PropTypes.string,
  votes: PropTypes.number.isRequired,
  overview: PropTypes.string.isRequired,
- poster: PropTypes.string.isRequired
+ poster: PropTypes.string.isRequired,
 };
 
 export default Slide;

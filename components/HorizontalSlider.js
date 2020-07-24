@@ -18,7 +18,7 @@ const HorizontalSlider = ({ title, children }) => (
 );
 HorizontalSlider.propTypes = {
  title: PropTypes.string.isRequired,
- childeren: PropTypes.node.isRequired,
+ childeren: PropTypes.node,
 };
 
 export default HorizontalSlider;

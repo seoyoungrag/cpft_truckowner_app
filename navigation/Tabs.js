@@ -34,6 +34,8 @@ export default ({ navigation, route }) => {
       iconName += "search";
      } else if (route.name === "Discovery") {
       iconName += "heart";
+     } else if (route.name === "Photo") {
+      iconName += "albums";
      }
      return (
       <Ionicons name={iconName} color={focused ? "white" : "grey"} size={26} />
