@@ -11,8 +11,8 @@ import Svg, { Line, Circle } from "react-native-svg";
 import constants from "../../../constants";
 
 const DEFAULT_DOT_RADIUS = 10;
-const SNAP_DOT_RADIUS = 40;
-const SNAP_DURATION = 1000;
+const SNAP_DOT_RADIUS = 15;
+const SNAP_DURATION = 500;
 
 export default ({
  containerDimension,
@@ -23,6 +23,7 @@ export default ({
  hint,
  onMatchedPattern,
 }) => {
+ const [activeLine, setActiveLine] = useState(null);
  const [snap, setSnap] = useState(null);
  const [initialGestureCoordinate, setInitialGestureCoordinate] = useState(null);
  const [activeDotCoordinate, setActiveDotCoordinate] = useState(null);
@@ -40,6 +41,7 @@ export default ({
  let _mappedDotsIndex = mappedIndex;
  let _dotNodes = [];
 
+ const lineOpacity = new Animated.Value(0.2);
  let _activeLine;
 
  const _snapAnimatedValues = _dots.map((dot, index) => {
@@ -58,11 +60,13 @@ export default ({
     toValue: SNAP_DOT_RADIUS,
     duration: SNAP_DURATION,
     //duration: 1000,
+    useNativeDriver: true,
    }),
    Animated.timing(animatedValue, {
     toValue: DEFAULT_DOT_RADIUS,
     duration: SNAP_DURATION,
     //duration: 1000,
+    useNativeDriver: true,
    }),
   ]).start();
  };
@@ -117,15 +121,14 @@ export default ({
     setInitialGestureCoordinate(activeDotCoordinate);
     setPattern([firstDot]);
     //_snapDot(dotWillSnap);
-    //console.log(activeDotIndex.i);
+
     setSnap([activeDotIndex.i]);
     //setSnap(dotWillSnap);
-    //console.log(activeDotCoordinate);
    }
   },
   onPanResponderMove: (e, gestureState) => {
    let { dx, dy } = gestureState;
-   //console.log(dx, dy, endGestureX, endGestureY);
+
    if (activeDotCoordinate == null || initialGestureCoordinate == null) {
     return;
    }
@@ -137,7 +140,7 @@ export default ({
     { x: endGestureX, y: endGestureY },
     _dots
    );
-   //console.log(matchedDotIndex);
+
    let matchedDot =
     matchedDotIndex.i != null && _mappedDotsIndex[matchedDotIndex.i];
 
@@ -175,13 +178,10 @@ export default ({
     let animateIndexes = [...filteredIntermediateDotIndexes, matchedDotIndex.i];
 
     setPattern(pattern);
-    //console.log(_dots[matchedDotIndex]);
+
     setActiveDotCoordinate(_dots[matchedDotIndex.i]);
 
-    //console.log('1');
     if (animateIndexes.length) {
-     console.log("asdasd");
-     console.log(snap, animateIndexes);
      setSnap(animateIndexes);
      /*
      animateIndexes.forEach((index) => {
@@ -199,6 +199,7 @@ export default ({
       x2: endGestureX.toString(),
       y2: endGestureY.toString(),
      });
+    _activeLine && setActiveLine(_activeLine);
    }
   },
   onPanResponderRelease: () => {
@@ -256,18 +257,29 @@ export default ({
      Animated.timing(_snapAnimatedValues[idx], {
       toValue: DEFAULT_DOT_RADIUS,
       duration: SNAP_DURATION,
+      useNativeDriver: true,
       //duration: 1000,
      }).start();
     }
    });
   }
+  if (activeLine) {
+   lineOpacity.addListener(({ value }) => {
+    activeLine.setNativeProps({ strokeOpacity: value });
+   });
+   Animated.timing(lineOpacity, {
+    toValue: 1,
+    duration: 2000,
+    useNativeDriver: true,
+   }).start();
+  }
   /*
   if (snap) {
    _snapDot(snap);
-   console.log(snap);
+   
   }
   */
- }, [snap]);
+ }, [snap, activeLine]);
  return (
   <View style={styles.container}>
    <View style={styles.hintContainer}>
@@ -279,7 +291,7 @@ export default ({
       {_dots.map((dot, i) => {
        let mappedDot = _mappedDotsIndex[i];
        let isIncludedInPattern = pattern.find(
-        (dot) => dot?.x === mappedDot.x && dot.y === mappedDot.y
+        (dot) => dot?.x === mappedDot.x && dot?.y === mappedDot.y
        );
        return (
         <Circle
@@ -319,7 +331,7 @@ export default ({
          x2={actualEndDot.x}
          y2={actualEndDot.y}
          stroke={showError ? "red" : "white"}
-         strokeWidth="2"
+         strokeWidth="4"
         />
        );
       })}
@@ -330,8 +342,9 @@ export default ({
         y1={activeDotCoordinate.y}
         x2={activeDotCoordinate.x}
         y2={activeDotCoordinate.y}
-        stroke="red"
-        strokeWidth="2"
+        stroke="white"
+        strokeWidth="4"
+        strokeOpacity="0"
        />
       ) : null}
      </Svg>

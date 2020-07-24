@@ -113,7 +113,7 @@ export default ({ loginSuccess }) => {
     Animated.timing(_patternContainerOpacity, {
      toValue: 1,
      duration: 400,
-     useNativeDriver: false,
+     useNativeDriver: true,
     }),
    ]).start();
   }
