@@ -12,7 +12,7 @@ import constants from "../../../constants";
 
 const DEFAULT_DOT_RADIUS = 10;
 const SNAP_DOT_RADIUS = 40;
-const SNAP_DURATION = 100;
+const SNAP_DURATION = 1000;
 
 export default ({
  containerDimension,
@@ -21,9 +21,9 @@ export default ({
  correctPattern,
  onPatternMatch,
  hint,
- onMatchedPattern
+ onMatchedPattern,
 }) => {
-  const [snap, setSnap] = useState(null);
+ const [snap, setSnap] = useState(null);
  const [initialGestureCoordinate, setInitialGestureCoordinate] = useState(null);
  const [activeDotCoordinate, setActiveDotCoordinate] = useState(null);
  const [pattern, setPattern] = useState([]);
@@ -57,17 +57,19 @@ export default ({
    Animated.timing(animatedValue, {
     toValue: SNAP_DOT_RADIUS,
     duration: SNAP_DURATION,
+    //duration: 1000,
    }),
    Animated.timing(animatedValue, {
     toValue: DEFAULT_DOT_RADIUS,
     duration: SNAP_DURATION,
+    //duration: 1000,
    }),
   ]).start();
  };
 
  const _isAlreadyInPattern = ({ x, y }) => {
   return pattern.find((dot) => {
-   return dot.x === x && dot.y === y;
+   return dot?.x === x && dot?.y === y;
   }) == null
    ? false
    : true;
@@ -108,33 +110,34 @@ export default ({
     let activeDotCoordinate = _dots[activeDotIndex.i];
     let firstDot = _mappedDotsIndex[activeDotIndex.i];
     let dotWillSnap = _snapAnimatedValues[activeDotIndex.i];
-    
-   endGestureX += activeDotIndex.x;
-   endGestureY += activeDotIndex.y;
+
+    endGestureX += activeDotIndex.x;
+    endGestureY += activeDotIndex.y;
     setActiveDotCoordinate(activeDotCoordinate);
     setInitialGestureCoordinate(activeDotCoordinate);
     setPattern([firstDot]);
     //_snapDot(dotWillSnap);
-    console.log(activeDotIndex.i)
+    //console.log(activeDotIndex.i);
     setSnap([activeDotIndex.i]);
+    //setSnap(dotWillSnap);
     //console.log(activeDotCoordinate);
    }
   },
   onPanResponderMove: (e, gestureState) => {
    let { dx, dy } = gestureState;
-//console.log(dx, dy, endGestureX, endGestureY);
+   //console.log(dx, dy, endGestureX, endGestureY);
    if (activeDotCoordinate == null || initialGestureCoordinate == null) {
     return;
    }
 
-   endGestureX = activeDotCoordinate.x+dx;
-   endGestureY = activeDotCoordinate.y+dy;
+   endGestureX = activeDotCoordinate.x + dx;
+   endGestureY = activeDotCoordinate.y + dy;
 
    let matchedDotIndex = constants.getDotIndex(
     { x: endGestureX, y: endGestureY },
     _dots
    );
-//console.log(matchedDotIndex);
+   //console.log(matchedDotIndex);
    let matchedDot =
     matchedDotIndex.i != null && _mappedDotsIndex[matchedDotIndex.i];
 
@@ -175,20 +178,21 @@ export default ({
     //console.log(_dots[matchedDotIndex]);
     setActiveDotCoordinate(_dots[matchedDotIndex.i]);
 
-    
-      //console.log('1');
-     if (animateIndexes.length) {
-      setSnap(animateIndexes);
-      /*
-      animateIndexes.forEach((index) => {
-       _snapDot(_snapAnimatedValues[index]);
-      });
+    //console.log('1');
+    if (animateIndexes.length) {
+     console.log("asdasd");
+     console.log(snap, animateIndexes);
+     setSnap(animateIndexes);
+     /*
+     animateIndexes.forEach((index) => {
+      setSnap(_snapAnimatedValues[index]);
+      //_snapDot(_snapAnimatedValues[index]);
+     });
      */
-     }
+    }
 
-    
-   endGestureX += matchedDotIndex.x;
-   endGestureY += matchedDotIndex.y;
+    endGestureX += matchedDotIndex.x;
+    endGestureY += matchedDotIndex.y;
    } else {
     _activeLine &&
      _activeLine.setNativeProps({
@@ -210,7 +214,7 @@ export default ({
        { cancelable: false }
       );
       */
-      onMatchedPattern();
+     onMatchedPattern();
     } else {
      setInitialGestureCoordinate(null);
      setActiveDotCoordinate(null);
@@ -228,93 +232,111 @@ export default ({
  }
 
  useEffect(() => {
-   if(showError){
-
-    _resetTimeout = setTimeout(() => {
-      setShowHint(true);
-      setShowError(false);
-      setPattern([]);
-     }, 2000);
-    
-   }
-   //console.log(snap);
-   if(snap?.length){     
-     snap.map((obj) => {
-      _snapDot(_snapAnimatedValues[obj]);
-     });
-   }
+  if (showError) {
+   _resetTimeout = setTimeout(() => {
+    setShowHint(true);
+    setShowError(false);
+    setPattern([]);
+   }, 2000);
+  }
+ }, [showError]);
+ useEffect(() => {
   return () => {
    clearTimeout(_resetTimeout);
   };
- },[showError, snap]);
+ }, []);
+ useEffect(() => {
+  if (snap?.length) {
+   snap.map((obj) => {
+    _snapDot(_snapAnimatedValues[obj]);
+    //drawAni(obj);
+   });
+   _snapAnimatedValues.map((obj, idx) => {
+    if (!snap.includes(idx)) {
+     Animated.timing(_snapAnimatedValues[idx], {
+      toValue: DEFAULT_DOT_RADIUS,
+      duration: SNAP_DURATION,
+      //duration: 1000,
+     }).start();
+    }
+   });
+  }
+  /*
+  if (snap) {
+   _snapDot(snap);
+   console.log(snap);
+  }
+  */
+ }, [snap]);
  return (
   <View style={styles.container}>
    <View style={styles.hintContainer}>
     <Text style={styles.hintText}>{message}</Text>
    </View>
-   {pattern? (
-   <Animated.View {..._panResponder.panHandlers}>
-    <Svg height={containerHeight} width={containerWidth}>
-     {_dots.map((dot, i) => {
-      let mappedDot = _mappedDotsIndex[i];
-      let isIncludedInPattern = pattern.find(
-       (dot) => dot.x === mappedDot.x && dot.y === mappedDot.y
-      );
-      return (
-       <Circle
-        ref={(circle) => (_dotNodes[i] = circle)}
-        key={i}
-        cx={dot.x}
-        cy={dot.y}
-        r={DEFAULT_DOT_RADIUS}
-        fill={(showError && isIncludedInPattern && "red") || "white"}
-       />
-      );
-     })}
-     {pattern.map((startCoordinate, index) => {
-      if (index === pattern.length - 1) {
-       return;
-      }
-      let startIndex = _mappedDotsIndex.findIndex((dot) => {
-       return dot.x === startCoordinate.x && dot.y === startCoordinate.y;
-      });
-      let endCoordinate = pattern[index + 1];
-      let endIndex = _mappedDotsIndex.findIndex((dot) => {
-       return dot.x === endCoordinate.x && dot.y === endCoordinate.y;
-      });
+   {pattern ? (
+    <Animated.View {..._panResponder.panHandlers}>
+     <Svg height={containerHeight} width={containerWidth}>
+      {_dots.map((dot, i) => {
+       let mappedDot = _mappedDotsIndex[i];
+       let isIncludedInPattern = pattern.find(
+        (dot) => dot?.x === mappedDot.x && dot.y === mappedDot.y
+       );
+       return (
+        <Circle
+         ref={(circle) => (_dotNodes[i] = circle)}
+         key={i}
+         cx={dot?.x}
+         cy={dot?.y}
+         r={DEFAULT_DOT_RADIUS}
+         fill={(showError && isIncludedInPattern && "red") || "white"}
+        />
+       );
+      })}
+      {pattern.map((startCoordinate, index) => {
+       if (index === pattern.length - 1) {
+        return;
+       }
+       let startIndex = _mappedDotsIndex.findIndex((dot) => {
+        return dot.x === startCoordinate.x && dot.y === startCoordinate.y;
+       });
+       let endCoordinate = pattern[index + 1];
+       let endIndex = _mappedDotsIndex.findIndex((dot) => {
+        return dot.x === endCoordinate.x && dot.y === endCoordinate.y;
+       });
 
-      if (startIndex < 0 || endIndex < 0) {
-       return;
-      }
+       if (startIndex < 0 || endIndex < 0) {
+        return;
+       }
 
-      let actualStartDot = _dots[startIndex];
-      let actualEndDot = _dots[endIndex];
+       let actualStartDot = _dots[startIndex];
+       let actualEndDot = _dots[endIndex];
 
-      return (
+       return (
+        <Line
+         key={`fixedLine${index}`}
+         x1={actualStartDot.x}
+         y1={actualStartDot.y}
+         x2={actualEndDot.x}
+         y2={actualEndDot.y}
+         stroke={showError ? "red" : "white"}
+         strokeWidth="2"
+        />
+       );
+      })}
+      {activeDotCoordinate ? (
        <Line
-        key={`fixedLine${index}`}
-        x1={actualStartDot.x}
-        y1={actualStartDot.y}
-        x2={actualEndDot.x}
-        y2={actualEndDot.y}
-        stroke={showError ? "red" : "white"}
+        ref={(component) => (_activeLine = component)}
+        x1={activeDotCoordinate.x}
+        y1={activeDotCoordinate.y}
+        x2={activeDotCoordinate.x}
+        y2={activeDotCoordinate.y}
+        stroke="red"
         strokeWidth="2"
        />
-      );
-     })}
-     {activeDotCoordinate ? (
-      <Line
-       ref={(component) => (_activeLine = component)}
-       x1={activeDotCoordinate.x}
-       y1={activeDotCoordinate.y}
-       x2={activeDotCoordinate.x}
-       y2={activeDotCoordinate.y}
-       stroke="red"
-       strokeWidth="2"
-      />
-     ) : null}
-    </Svg>
-   </Animated.View> ):null}
+      ) : null}
+     </Svg>
+    </Animated.View>
+   ) : null}
   </View>
  );
 };

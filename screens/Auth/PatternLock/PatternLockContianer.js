@@ -17,7 +17,7 @@ import PatternLockPresenter from "./PatternLockPresenter";
 
 const { width, height } = Dimensions.get("window");
 
-const PATTERN_CONTAINER_HEIGHT = height /2 ;
+const PATTERN_CONTAINER_HEIGHT = height / 2;
 const PATTERN_CONTAINER_WIDTH = width;
 const PATTERN_DIMENSION = 3;
 const CORRECT_UNLOCK_PATTERN = [
@@ -45,12 +45,12 @@ const updateClock = () => {
   date,
  };
 };
-export default ({loginSuccess}) => {
-    const onMatchedPattern = () =>{
-        console.log('go main');
-        console.log(loginSuccess);
-        loginSuccess();
-    }
+export default ({ loginSuccess }) => {
+ const onMatchedPattern = () => {
+  console.log("go main");
+  console.log(loginSuccess);
+  loginSuccess();
+ };
  const [showPatternLock, setShowPatternLock] = useState(false);
  const [currentDateTime, setCurrentDateTime] = useState(updateClock());
 
@@ -103,11 +103,11 @@ export default ({loginSuccess}) => {
  let _updateClockInterval;
  BackHandler.addEventListener("hardwareBackPress", onBackPress);
  useEffect(() => {
-    if (showPatternLock) {
+  if (showPatternLock) {
    Animated.parallel([
     Animated.timing(_panYCoordinate, {
      toValue: -500,
-     duration: 300,
+     duration: 0,
      useNativeDriver: false,
     }),
     Animated.timing(_patternContainerOpacity, {
@@ -154,7 +154,7 @@ export default ({loginSuccess}) => {
   outputRange: [0.2, 1],
   extrapolate: "clamp",
  });
-//console.log(showPatternLock, _panYCoordinate, patternLockScale, _patternContainerOpacity);
+ //console.log(showPatternLock, _panYCoordinate, patternLockScale, _patternContainerOpacity);
  return (
   <View style={styles.root}>
    <Animated.View
