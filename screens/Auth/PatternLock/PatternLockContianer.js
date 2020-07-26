@@ -14,6 +14,7 @@ import styled from "styled-components";
 import * as Animatable from "react-native-animatable";
 import constants from "../../../constants";
 import PatternLockPresenter from "./PatternLockPresenter";
+import { Ionicons } from "@expo/vector-icons";
 
 const { width, height } = Dimensions.get("window");
 
@@ -202,7 +203,7 @@ export default ({ loginSuccess }) => {
      />
      {Platform.OS === "ios" && (
       <View style={styles.backButtonContainer}>
-       <Icon
+       <Ionicons
         component={TouchableOpacity}
         onPress={onBackPress}
         name="chevron-left"
