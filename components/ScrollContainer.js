@@ -23,7 +23,7 @@ const ScrollContainer = ({
      color={"white"}
     />
    }
-   style={{ backgroundColor: "black" }}
+   style={{ backgroundColor: "#007bff" }}
    contentContainerStyle={{
     flex: loading ? 1 : 0,
     justifyContent: loading ? "center" : "flex-start",

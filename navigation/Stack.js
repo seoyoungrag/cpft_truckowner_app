@@ -5,6 +5,7 @@ import Detail from "../screens/Detail";
 import Tabs from "./Tabs";
 import { useIsLoggedIn, useLogIn, useLogOut } from "../AuthContext";
 import AuthNavigation from "./AuthNavigation";
+import PermissionNavigation from "./PermissionNavigation";
 import { TouchableOpacity, Text } from "react-native";
 import PhotoNavigation from "./PhotoNavigation";
 import MessageNavigation from "./MessageNavigation";
@@ -30,41 +31,41 @@ export default () => {
   hasPhonePermission,
   hasFilePermission
  );
- return isLoggedIn &&
-  hasCameraPermission &&
-  hasPhonePermission &&
-  hasFilePermission ? (
-  <>
-   <TouchableOpacity onPress={logOut}>
-    <Text>로그아웃</Text>
-   </TouchableOpacity>
+ return isLoggedIn ? (
+  hasCameraPermission != "undetermined" &&
+  hasPhonePermission != "undetermined" &&
+  hasFilePermission != "undetermined" ? (
+   <>
+    <TouchableOpacity onPress={logOut}>
+     <Text>로그아웃</Text>
+    </TouchableOpacity>
 
-   <NavigationContainer independent={true}>
-    <Stack.Navigator
-     mode="modal"
-     screenOptions={{
-      gestureEnabled: true,
-      headerStyle: {
-       backgroundColor: "black",
-       shadowColor: "black",
-       borderBottomColor: "black",
-      },
-      headerTintColor: "white",
-      headerBackTitleVisible: false,
-      headerShown: false,
-     }}
-    >
-     <Stack.Screen name="Tabs" component={Tabs} />
-     <Stack.Screen name="Detail" component={Detail} />
-     <Stack.Screen name="PhotoNavigation" component={PhotoNavigation} />
-     <Stack.Screen name="MessageNavigation" component={MessageNavigation} />
-    </Stack.Navigator>
-   </NavigationContainer>
-  </>
- ) : !isLoggedIn &&
-   hasCameraPermission &&
-   hasPhonePermission &&
-   hasFilePermission ? (
+    <NavigationContainer independent={true}>
+     <Stack.Navigator
+      mode="modal"
+      screenOptions={{
+       gestureEnabled: true,
+       headerStyle: {
+        backgroundColor: "black",
+        shadowColor: "black",
+        borderBottomColor: "black",
+       },
+       headerTintColor: "white",
+       headerBackTitleVisible: false,
+       headerShown: false,
+      }}
+     >
+      <Stack.Screen name="Tabs" component={Tabs} />
+      <Stack.Screen name="Detail" component={Detail} />
+      <Stack.Screen name="PhotoNavigation" component={PhotoNavigation} />
+      <Stack.Screen name="MessageNavigation" component={MessageNavigation} />
+     </Stack.Navigator>
+    </NavigationContainer>
+   </>
+  ) : (
+   <PermissionNavigation />
+  )
+ ) : (
   <AuthNavigation />
- ) : null;
+ );
 };

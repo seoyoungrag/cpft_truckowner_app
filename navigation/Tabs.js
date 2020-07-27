@@ -45,7 +45,7 @@ export default ({ navigation, route }) => {
    tabBarOptions={{
     showLabel: false,
     style: {
-     backgroundColor: "black",
+     backgroundColor: "#007bff",
      borderTopColor: "black",
     },
    }}
