@@ -8,11 +8,12 @@ import { Asset } from "expo-asset";
 import { Image, StatusBar, AsyncStorage } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
-import * as Permissions from "expo-permissions";
 import { ThemeProvider } from "styled-components";
 import Stack from "./navigation/Stack";
 import styles from "./styles";
 import { AuthProvider } from "./AuthContext";
+import { PermissionProvider } from "./PermissionContext";
+import * as Permissions from "expo-permissions";
 
 const cacheImages = (images) =>
  images.map((image) => {
@@ -31,7 +32,7 @@ const cacheFonts = (fonts) =>
 export default function App() {
  const [isLoggedIn, setIsLoggedIn] = useState(null);
  const [isReady, setIsReady] = useState(false);
- const [hasCameraPermission, setHasCameraPermission] = useState(null);
+ const [permissions, setPermissions] = useState(null);
 
  const loadAssets = () => {
   const images = cacheImages([
@@ -43,6 +44,14 @@ export default function App() {
 
  const onFinish = async () => {
   const isLoggedIn = await AsyncStorage.getItem("isLoggedIn");
+  hasCameraPermission = await getCameraPermission();
+  hasPhonePermission = await getPhonePermission();
+  hasFilePermission = await getFilePermission();
+  setPermissions({
+   hasCameraPermission,
+   hasPhonePermission,
+   hasFilePermission,
+  });
   if (!isLoggedIn || isLoggedIn === "false") {
    setIsLoggedIn(false);
   } else {
@@ -51,24 +60,38 @@ export default function App() {
   setIsReady(true);
  };
 
- const _requestCameraPermission = async () => {
-  const { status } = await Permissions.askAsync(Permissions.CAMERA);
-  setHasCameraPermission(status);
+ const getCameraPermission = async () => {
+  const { status } = await Permissions.getAsync(Permissions.CAMERA);
+  return status;
  };
 
+ const getPhonePermission = async () => {
+  const { status } = await Permissions.getAsync(Permissions.CONTACTS);
+  return status;
+ };
+ const getFilePermission = async () => {
+  const { status } = await Permissions.getAsync(Permissions.CAMERA_ROLL);
+  return status;
+ };
  useEffect(() => {
-  _requestCameraPermission();
+  //_requestCameraPermission();
  });
  return isReady ? (
   <Provider store={store}>
    <ReactStore.Provider>
     <ThemeProvider theme={styles}>
-     <AuthProvider isLoggedIn={isLoggedIn}>
-      <NavigationContainer>
-       <Stack />
-      </NavigationContainer>
-      <StatusBar barStyle="light-content" />
-     </AuthProvider>
+     <PermissionProvider
+      hasCameraPermission={permissions?.hasCameraPermission}
+      hasPhonePermission={permissions?.hasPhonePermission}
+      hasFilePermission={permissions?.hasFilePermission}
+     >
+      <AuthProvider isLoggedIn={isLoggedIn}>
+       <NavigationContainer>
+        <Stack />
+       </NavigationContainer>
+       <StatusBar barStyle="light-content" />
+      </AuthProvider>
+     </PermissionProvider>
     </ThemeProvider>
    </ReactStore.Provider>
   </Provider>

@@ -5,21 +5,38 @@ import Detail from "../screens/Detail";
 import Tabs from "./Tabs";
 import { useIsLoggedIn, useLogIn, useLogOut } from "../AuthContext";
 import AuthNavigation from "./AuthNavigation";
-import { TouchableOpacity, Text, Button } from "react-native";
+import { TouchableOpacity, Text } from "react-native";
 import PhotoNavigation from "./PhotoNavigation";
 import MessageNavigation from "./MessageNavigation";
+import {
+ useHasCameraPermission,
+ useHasFilePermission,
+ useHasPhonePermission,
+} from "../PermissionContext";
 
 const Stack = createStackNavigator();
 
 export default () => {
  const isLoggedIn = useIsLoggedIn();
+ const hasCameraPermission = useHasCameraPermission();
+ const hasPhonePermission = useHasPhonePermission();
+ const hasFilePermission = useHasFilePermission();
  //const isLoggedIn = true;
  const logIn = useLogIn();
  const logOut = useLogOut();
- return isLoggedIn ? (
+ console.log(
+  "!!!!!!!!!!!",
+  hasCameraPermission,
+  hasPhonePermission,
+  hasFilePermission
+ );
+ return isLoggedIn &&
+  hasCameraPermission &&
+  hasPhonePermission &&
+  hasFilePermission ? (
   <>
    <TouchableOpacity onPress={logOut}>
-    <Text>Log Out</Text>
+    <Text>로그아웃</Text>
    </TouchableOpacity>
 
    <NavigationContainer independent={true}>
@@ -44,7 +61,10 @@ export default () => {
     </Stack.Navigator>
    </NavigationContainer>
   </>
- ) : (
+ ) : !isLoggedIn &&
+   hasCameraPermission &&
+   hasPhonePermission &&
+   hasFilePermission ? (
   <AuthNavigation />
- );
+ ) : null;
 };

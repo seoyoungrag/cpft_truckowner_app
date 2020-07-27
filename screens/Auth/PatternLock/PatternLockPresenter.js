@@ -60,13 +60,13 @@ export default ({
     toValue: SNAP_DOT_RADIUS,
     duration: SNAP_DURATION,
     //duration: 1000,
-    useNativeDriver: true,
+    useNativeDriver: false,
    }),
    Animated.timing(animatedValue, {
     toValue: DEFAULT_DOT_RADIUS,
     duration: SNAP_DURATION,
     //duration: 1000,
-    useNativeDriver: true,
+    useNativeDriver: false,
    }),
   ]).start();
  };
@@ -236,9 +236,9 @@ export default ({
   if (showError) {
    _resetTimeout = setTimeout(() => {
     setShowHint(true);
-    setShowError(false);
     setPattern([]);
-   }, 2000);
+    setShowError(false);
+   }, 1000);
   }
  }, [showError]);
  useEffect(() => {
@@ -249,7 +249,9 @@ export default ({
  useEffect(() => {
   if (snap?.length) {
    snap.map((obj) => {
-    _snapDot(_snapAnimatedValues[obj]);
+    if (obj) {
+     _snapDot(_snapAnimatedValues[obj]);
+    }
     //drawAni(obj);
    });
    _snapAnimatedValues.map((obj, idx) => {
