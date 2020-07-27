@@ -1,13 +1,6 @@
 import React from "react";
 import styled from "styled-components/native";
 import ScrollContainer from "../../components/ScrollContainer";
-import { apiImage } from "../../api";
-import { Dimensions, ActivityIndicator, Text } from "react-native";
-import Poster from "../../components/Poster";
-import Votes from "../../components/Votes";
-import { formatDate } from "../../utils";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import Link from "../../components/Detail/Link";
 
 const BG = styled.Image`
  width: 100%;
@@ -17,14 +10,13 @@ const BG = styled.Image`
 `;
 
 const Header = styled.View`
- height: ${Dimensions.get("window").height / 3}px;
- align-items: center;
  justify-content: flex-start;
 `;
 
 const Container = styled.View`
- flex-direction: row;
- align-items: center;
+ flex: 1;
+ flex-direction: column;
+ align-items: flex-start;
  top: 30px;
 `;
 
@@ -34,33 +26,94 @@ const Info = styled.View`
 `;
 
 const Title = styled.Text`
- color: white;
+ color: #FFFFFF;
  font-weight: 600;
  font-size: 24px;
  margin-bottom: 10px;
 `;
 
 const Data = styled.View`
- margin-top: 30px;
- padding: 0px 30px;
+ margin-top: 0px;
+ padding: 0px 0px;
 `;
 
 const DataName = styled.Text`
  margin-top: 30px;
  color: white;
  opacity: 0.8;
- font-weight: 800;
+ font-weight: bold;
  margin-bottom: 15px;
+ margin-left: 40px;
+ flex: 1;
 `;
 
 const DataValue = styled.Text`
+ margin-left: 40px;
+ margin-right: 40px;
  color: white;
  opacity: 0.8;
  font-weight: 500;
+ flex: 1;
 `;
 
-export default ({ openBrowser, result, loading }) => (
- <ScrollContainer loading={false} contentContainerStyle={{ paddingBottom: 80 }}>
+const DataValueRed = styled.Text`
+ margin-left: 40px;
+ margin-right: 40px;
+ color: #FFFFFF;
+ opacity: 0.8;
+ font-weight: 500;
+ flex: 1;
+ background-color: #1283FA;
+ border-radius: 10px;
+ padding: 10px;
+ margin-top: 10px;
+`;
+
+const OuterContainer = styled.View`
+flex: 1;
+margin: 10px;
+`;
+
+const Modal = styled.View`
+flex:1;
+margin:40px;
+border-radius: 10px;
+flex-direction: column;
+background-color: #3A99FC;
+`;
+
+const ModalBody = styled.View`
+`;
+
+const ModalFooter = styled.View`
+
+position: absolute;
+bottom: 0px;
+left: 0px;
+right: 0px;
+height: 50px;
+align-items: flex-end;
+`;
+
+const ConfirmBtn = styled.TouchableOpacity`
+    width: 100px;
+    margin-right:20px;
+    margin-left:20px;
+    margin-top:10px;
+    padding-top:5px;
+    padding-bottom:5px;
+    background-color:#8FC5FC;
+    border-radius:10px;
+`;
+const ConfirmBtnText = styled.Text`
+text-align: center;
+color:#0378F1;
+`;
+
+export default ({confrimBtnClicked}) => (
+    <OuterContainer>
+<Modal>
+ <ScrollContainer loading={false} contentContainerStyle={{ paddingBottom: 80, backgroundColor:"transparent" }} refreshOn={false}>
   <>
    <Header>
     <Container>
@@ -94,10 +147,10 @@ export default ({ openBrowser, result, loading }) => (
      <DataValue>신규 알림 아이콘 알림</DataValue>
     </Container>
     <Container>
-     <Text>
+     <DataValueRed>
       선택적 접근권한은 기능 사용시 허용이 필요하며, 비허용시에도 해당기능 외
       서비스 이용이 가능합니다.
-     </Text>
+     </DataValueRed>
     </Container>
     <Container>
      <DataName>접근권한 변경방법</DataName>
@@ -106,4 +159,7 @@ export default ({ openBrowser, result, loading }) => (
    </Data>
   </>
  </ScrollContainer>
+ <ModalFooter><ConfirmBtn onPress={confrimBtnClicked}><ConfirmBtnText>확인</ConfirmBtnText></ConfirmBtn></ModalFooter>
+ </Modal>
+ </OuterContainer>
 );

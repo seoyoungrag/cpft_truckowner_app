@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from "react";
-import * as WebBrowser from "expo-web-browser";
 import PermissionPresenter from "./PermissionPresenter";
-import { movieApi, tvApi } from "../../api";
+import { useRequestCameraPermission, useRequestFilePermission, useRequestPhonePermission } from "../../PermissionContext";
 
 export default ({ navigation }) => {
+    const requestCameraPermission = useRequestCameraPermission();
+    const requestFilePermission = useRequestFilePermission();
+    const requestPhonePermission = useRequestPhonePermission();
+    const confrimBtnClicked = async () => {
+     await requestCameraPermission();
+     await requestFilePermission();
+     await requestPhonePermission();
+    };
  const [detail, setDetail] = useState({
   loading: true,
  });
@@ -18,5 +25,5 @@ export default ({ navigation }) => {
   navigation.setOptions({ title: "권한 설정" });
  });
 
- return <PermissionPresenter />;
+ return <PermissionPresenter confrimBtnClicked={confrimBtnClicked}/>;
 };
