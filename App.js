@@ -9,11 +9,12 @@ import { Image, StatusBar, AsyncStorage } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { ThemeProvider } from "styled-components";
+import * as Permissions from "expo-permissions";
 import Stack from "./navigation/Stack";
 import styles from "./styles";
 import { AuthProvider } from "./AuthContext";
 import { PermissionProvider } from "./PermissionContext";
-import * as Permissions from "expo-permissions";
+import { TutorialProvider } from "./TutorialContext";
 
 const cacheImages = (images) =>
  images.map((image) => {
@@ -31,6 +32,7 @@ const cacheFonts = (fonts) =>
 
 export default function App() {
  const [isLoggedIn, setIsLoggedIn] = useState(null);
+ const [hasTutorialPass, setHasTutorialPass] = useState(null);
  const [isReady, setIsReady] = useState(false);
  const [permissions, setPermissions] = useState(null);
 
@@ -44,6 +46,7 @@ export default function App() {
 
  const onFinish = async () => {
   const isLoggedIn = await AsyncStorage.getItem("isLoggedIn");
+  const hasTutorialPass = await AsyncStorage.getItem("hasTutorialPass");
   hasCameraPermission = await getCameraPermission();
   hasPhonePermission = await getPhonePermission();
   hasFilePermission = await getFilePermission();
@@ -56,6 +59,11 @@ export default function App() {
    setIsLoggedIn(false);
   } else {
    setIsLoggedIn(true);
+  }
+  if (!hasTutorialPass || hasTutorialPass === "false") {
+   setHasTutorialPass(false);
+  } else {
+   setHasTutorialPass(true);
   }
   setIsReady(true);
  };
@@ -86,10 +94,12 @@ export default function App() {
       hasFilePermission={permissions?.hasFilePermission}
      >
       <AuthProvider isLoggedIn={isLoggedIn}>
-       <NavigationContainer>
-        <Stack />
-       </NavigationContainer>
-       <StatusBar barStyle="light-content" />
+       <TutorialProvider hasTutorialPass={hasTutorialPass}>
+        <NavigationContainer>
+         <Stack />
+        </NavigationContainer>
+        <StatusBar barStyle="light-content" />
+       </TutorialProvider>
       </AuthProvider>
      </PermissionProvider>
     </ThemeProvider>

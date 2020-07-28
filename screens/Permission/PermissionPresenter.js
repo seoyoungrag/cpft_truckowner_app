@@ -11,23 +11,24 @@ const BG = styled.Image`
 
 const Header = styled.View`
  justify-content: flex-start;
+ margin-left: 40px;
+ margin-top: 20px;
 `;
 
 const Container = styled.View`
  flex: 1;
  flex-direction: column;
  align-items: flex-start;
- top: 30px;
 `;
 
 const Info = styled.View`
- width: 50%;
+ width: 100%;
  margin-left: 40px;
 `;
 
 const Title = styled.Text`
- color: #FFFFFF;
- font-weight: 600;
+ color: #ffffff;
+ font-weight: 400;
  font-size: 24px;
  margin-bottom: 10px;
 `;
@@ -59,107 +60,147 @@ const DataValue = styled.Text`
 const DataValueRed = styled.Text`
  margin-left: 40px;
  margin-right: 40px;
- color: #FFFFFF;
+ color: #ffffff;
  opacity: 0.8;
  font-weight: 500;
  flex: 1;
- background-color: #1283FA;
+ background-color: #1283fa;
  border-radius: 10px;
  padding: 10px;
  margin-top: 10px;
 `;
 
 const OuterContainer = styled.View`
-flex: 1;
-margin: 10px;
+ flex: 1;
+ margin: 1px;
 `;
 
 const Modal = styled.View`
-flex:1;
-margin:40px;
-border-radius: 10px;
-flex-direction: column;
-background-color: #3A99FC;
+ flex: 1;
+ margin: 20px;
+ border-radius: 10px;
+ flex-direction: column;
+ background-color: #3a99fc;
 `;
 
-const ModalBody = styled.View`
-`;
+const ModalBody = styled.View``;
 
+const ModalHeader = styled.View`
+ padding-top: 10px;
+ height: 50px;
+ align-items: flex-start;
+`;
+const ModalHeaderTitle = styled.Text`
+ color: #ffffff;
+ font-weight: bold;
+ font-size: 24px;
+ margin-bottom: 10px;
+`;
 const ModalFooter = styled.View`
-
-position: absolute;
-bottom: 0px;
-left: 0px;
-right: 0px;
-height: 50px;
-align-items: flex-end;
+ position: absolute;
+ bottom: 0px;
+ left: 0px;
+ right: 0px;
+ height: 50px;
+ align-items: flex-end;
 `;
 
 const ConfirmBtn = styled.TouchableOpacity`
-    width: 100px;
-    margin-right:20px;
-    margin-left:20px;
-    margin-top:10px;
-    padding-top:5px;
-    padding-bottom:5px;
-    background-color:#8FC5FC;
-    border-radius:10px;
+ width: 100px;
+ margin-right: 20px;
+ margin-left: 20px;
+ margin-top: 10px;
+ padding-top: 5px;
+ padding-bottom: 5px;
+ background-color: #8fc5fc;
+ border-radius: 10px;
 `;
 const ConfirmBtnText = styled.Text`
-text-align: center;
-color:#0378F1;
+ text-align: center;
+ color: #0378f1;
 `;
 
-export default ({confrimBtnClicked}) => (
-    <OuterContainer>
-<Modal>
- <ScrollContainer loading={false} contentContainerStyle={{ paddingBottom: 80, backgroundColor:"transparent" }} refreshOn={false}>
-  <>
-   <Header>
-    <Container>
-     <Info>
-      <Title>접근권한</Title>
-     </Info>
-    </Container>
-   </Header>
-   <Data>
-    <Container>
-     <Info>
-      <Title>선택적 접근</Title>
-     </Info>
-    </Container>
-    <Container>
-     <DataName>위치</DataName>
-     <DataValue>
-      내 주변 매장 찾기, 운행기록 서비스 이용, 배차현황 서비스 이용
-     </DataValue>
-    </Container>
-    <Container>
-     <DataName>카메라</DataName>
-     <DataValue>배차현황 서비스 이용 시 인수증 등록</DataValue>
-    </Container>
-    <Container>
-     <DataName>저장공간</DataName>
-     <DataValue>배차현황 서비스 이용 시 인수증 등록</DataValue>
-    </Container>
-    <Container>
-     <DataName>NOTIFICION 알림</DataName>
-     <DataValue>신규 알림 아이콘 알림</DataValue>
-    </Container>
-    <Container>
-     <DataValueRed>
-      선택적 접근권한은 기능 사용시 허용이 필요하며, 비허용시에도 해당기능 외
-      서비스 이용이 가능합니다.
-     </DataValueRed>
-    </Container>
-    <Container>
-     <DataName>접근권한 변경방법</DataName>
-     <DataValue>휴대폰 설정 {">"} 앱</DataValue>
-    </Container>
-   </Data>
-  </>
- </ScrollContainer>
- <ModalFooter><ConfirmBtn onPress={confrimBtnClicked}><ConfirmBtnText>확인</ConfirmBtnText></ConfirmBtn></ModalFooter>
- </Modal>
+export default ({ confrimBtnClicked }) => (
+ <OuterContainer>
+  <Modal>
+   <ModalHeader>
+    <Info>
+     <ModalHeaderTitle>접근 권한 안내</ModalHeaderTitle>
+    </Info>
+   </ModalHeader>
+   <ScrollContainer
+    loading={false}
+    contentContainerStyle={{
+     paddingBottom: 80,
+     backgroundColor: "transparent",
+     marginTop: 0,
+     paddingTop: 0,
+    }}
+    refreshOn={false}
+   >
+    <>
+     <Data>
+      <Header>
+       <Title>필수적 접근</Title>
+      </Header>
+      <Container>
+       <DataName>전화</DataName>
+       <DataValue>
+        휴대폰 정보 확인통화 회원가입 및 로그인, 법인 담당자 및 관리자 전화연결
+       </DataValue>
+      </Container>
+      <Container>
+       <DataName>카메라</DataName>
+       <DataValue>필수 및 추가 서류 등의 사진 촬영 기능</DataValue>
+      </Container>
+      <Container>
+       <DataName>사진/미디어/파일권한</DataName>
+       <DataValueRed>
+        필수적 접근권한 항목은 서비스의 실행을 위해 반드시 필요하며, 허용하지
+        않을 경우 서비스의 이용이 제한 됩니다.
+       </DataValueRed>
+      </Container>
+      <Container>
+       <Header style={{ marginTop: 50 }}>
+        <Title>선택적 접근</Title>
+       </Header>
+      </Container>
+      <Container>
+       <DataName>위치</DataName>
+       <DataValue>
+        내 주변 매장 찾기, 운행기록 서비스 이용, 배차현황 서비스 이용
+       </DataValue>
+      </Container>
+      <Container>
+       <DataName>카메라</DataName>
+       <DataValue>배차현황 서비스 이용 시 인수증 등록</DataValue>
+      </Container>
+      <Container>
+       <DataName>저장공간</DataName>
+       <DataValue>배차현황 서비스 이용 시 인수증 등록</DataValue>
+      </Container>
+      <Container>
+       <DataName>NOTIFICION 알림</DataName>
+       <DataValue>신규 알림 아이콘 알림</DataValue>
+      </Container>
+      <Container>
+       <DataValueRed>
+        선택적 접근권한은 기능 사용시 허용이 필요하며, 비허용시에도 해당기능 외
+        서비스 이용이 가능합니다.
+       </DataValueRed>
+      </Container>
+      <Container>
+       <DataName>접근권한 변경방법</DataName>
+       <DataValue>휴대폰 설정 {">"} 앱</DataValue>
+      </Container>
+     </Data>
+    </>
+   </ScrollContainer>
+   <ModalFooter>
+    <ConfirmBtn onPress={confrimBtnClicked}>
+     <ConfirmBtnText>확인</ConfirmBtnText>
+    </ConfirmBtn>
+   </ModalFooter>
+  </Modal>
  </OuterContainer>
 );
