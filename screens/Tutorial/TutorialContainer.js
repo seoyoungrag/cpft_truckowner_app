@@ -1,15 +1,7 @@
-import React, { Component, useState } from "react";
-import {
- SafeAreaView,
- Dimensions,
- StyleSheet,
- ScrollView,
- View,
- AsyncStorage,
-} from "react-native";
-
-import TutorialPresenter from "./TutorialPresenter";
+import React, { useState } from "react";
+import { Dimensions, StyleSheet } from "react-native";
 import styled from "styled-components/native";
+import TutorialPresenter from "./TutorialPresenter";
 import ScrollContainer from "../../components/ScrollContainer";
 import { useTutorialPass } from "../../TutorialContext";
 // import {FlatListSlider} from 'react-native-flatlist-slider';
@@ -60,7 +52,6 @@ export default () => {
  ]);
  const tutorialPass = useTutorialPass();
  const onClickStart = () => {
-  console.log(tutorialPass);
   tutorialPass();
  };
  const screenWidth = Math.round(Dimensions.get("window").width);
@@ -102,12 +93,3 @@ export default () => {
   </OuterContainer>
  );
 };
-
-const styles = StyleSheet.create({
- separator: {
-  height: 20,
- },
- contentStyle: {
-  paddingHorizontal: 16,
- },
-});

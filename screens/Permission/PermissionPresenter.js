@@ -43,7 +43,6 @@ const DataName = styled.Text`
  color: white;
  opacity: 0.8;
  font-weight: bold;
- margin-bottom: 15px;
  margin-left: 40px;
  flex: 1;
 `;

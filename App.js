@@ -15,6 +15,7 @@ import styles from "./styles";
 import { AuthProvider } from "./AuthContext";
 import { PermissionProvider } from "./PermissionContext";
 import { TutorialProvider } from "./TutorialContext";
+import { UserRegistProvider } from "./UserRegistContext";
 
 const cacheImages = (images) =>
  images.map((image) => {
@@ -31,6 +32,7 @@ const cacheFonts = (fonts) =>
  });
 
 export default function App() {
+ const [userRegistInfo, setUserRegistInfo] = useState(null);
  const [isLoggedIn, setIsLoggedIn] = useState(null);
  const [hasTutorialPass, setHasTutorialPass] = useState(null);
  const [isReady, setIsReady] = useState(false);
@@ -45,6 +47,13 @@ export default function App() {
  };
 
  const onFinish = async () => {
+  const userRegistInfo = await AsyncStorage.getItem("userRegistInfo");
+  try {
+   setUserRegistInfo(JSON.parse(userRegistInfo));
+  } catch (e) {
+   console.log(e);
+   setUserRegistInfo(null);
+  }
   const isLoggedIn = await AsyncStorage.getItem("isLoggedIn");
   const hasTutorialPass = await AsyncStorage.getItem("hasTutorialPass");
   hasCameraPermission = await getCameraPermission();
@@ -93,14 +102,16 @@ export default function App() {
       hasPhonePermission={permissions?.hasPhonePermission}
       hasFilePermission={permissions?.hasFilePermission}
      >
-      <AuthProvider isLoggedIn={isLoggedIn}>
-       <TutorialProvider hasTutorialPass={hasTutorialPass}>
-        <NavigationContainer>
-         <Stack />
-        </NavigationContainer>
-        <StatusBar barStyle="light-content" />
-       </TutorialProvider>
-      </AuthProvider>
+      <UserRegistProvider userRegistInfo={userRegistInfo}>
+       <AuthProvider isLoggedIn={isLoggedIn}>
+        <TutorialProvider hasTutorialPass={hasTutorialPass}>
+         <NavigationContainer>
+          <Stack />
+         </NavigationContainer>
+         <StatusBar barStyle="light-content" />
+        </TutorialProvider>
+       </AuthProvider>
+      </UserRegistProvider>
      </PermissionProvider>
     </ThemeProvider>
    </ReactStore.Provider>

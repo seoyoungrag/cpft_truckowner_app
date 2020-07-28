@@ -9,6 +9,7 @@ import PermissionNavigation from "./PermissionNavigation";
 import { TouchableOpacity, Text } from "react-native";
 import PhotoNavigation from "./PhotoNavigation";
 import MessageNavigation from "./MessageNavigation";
+import UserRegistNavigation from "./UserRegistNavigation";
 import {
  useHasCameraPermission,
  useHasFilePermission,
@@ -16,6 +17,11 @@ import {
 } from "../PermissionContext";
 import TutorialNavigation from "./TutorialNavigation";
 import { useHasTutorialPass } from "../TutorialContext";
+import {
+ useGetUserRegistInfo,
+ useSetUserRegistInfo,
+ useUserRegistInfo,
+} from "../UserRegistContext";
 
 const Stack = createStackNavigator();
 
@@ -28,38 +34,43 @@ export default () => {
  const logIn = useLogIn();
  const logOut = useLogOut();
  const hasTutorialPass = useHasTutorialPass();
+ const userRegistInfo = useUserRegistInfo();
  return isLoggedIn ? (
   hasCameraPermission != "undetermined" &&
   hasPhonePermission != "undetermined" &&
   hasFilePermission != "undetermined" ? (
    hasTutorialPass ? (
-    <>
-     <TouchableOpacity onPress={logOut}>
-      <Text>로그아웃</Text>
-     </TouchableOpacity>
+    userRegistInfo?.userNm ? (
+     <>
+      <TouchableOpacity onPress={logOut}>
+       <Text>로그아웃</Text>
+      </TouchableOpacity>
 
-     <NavigationContainer independent={true}>
-      <Stack.Navigator
-       mode="modal"
-       screenOptions={{
-        gestureEnabled: true,
-        headerStyle: {
-         backgroundColor: "black",
-         shadowColor: "black",
-         borderBottomColor: "black",
-        },
-        headerTintColor: "white",
-        headerBackTitleVisible: false,
-        headerShown: false,
-       }}
-      >
-       <Stack.Screen name="Tabs" component={Tabs} />
-       <Stack.Screen name="Detail" component={Detail} />
-       <Stack.Screen name="PhotoNavigation" component={PhotoNavigation} />
-       <Stack.Screen name="MessageNavigation" component={MessageNavigation} />
-      </Stack.Navigator>
-     </NavigationContainer>
-    </>
+      <NavigationContainer independent={true}>
+       <Stack.Navigator
+        mode="modal"
+        screenOptions={{
+         gestureEnabled: true,
+         headerStyle: {
+          backgroundColor: "black",
+          shadowColor: "black",
+          borderBottomColor: "black",
+         },
+         headerTintColor: "white",
+         headerBackTitleVisible: false,
+         headerShown: false,
+        }}
+       >
+        <Stack.Screen name="Tabs" component={Tabs} />
+        <Stack.Screen name="Detail" component={Detail} />
+        <Stack.Screen name="PhotoNavigation" component={PhotoNavigation} />
+        <Stack.Screen name="MessageNavigation" component={MessageNavigation} />
+       </Stack.Navigator>
+      </NavigationContainer>
+     </>
+    ) : (
+     <UserRegistNavigation />
+    )
    ) : (
     <TutorialNavigation />
    )
