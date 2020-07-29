@@ -2,13 +2,6 @@ import React from "react";
 import styled from "styled-components/native";
 import ScrollContainer from "../../components/ScrollContainer";
 
-const BG = styled.Image`
- width: 100%;
- height: 100%;
- opacity: 0.4;
- position: absolute;
-`;
-
 const Header = styled.View`
  justify-content: flex-start;
  margin-left: 40px;
@@ -81,8 +74,6 @@ const Modal = styled.View`
  flex-direction: column;
  background-color: #3a99fc;
 `;
-
-const ModalBody = styled.View``;
 
 const ModalHeader = styled.View`
  padding-top: 10px;

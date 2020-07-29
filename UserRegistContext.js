@@ -19,18 +19,20 @@ export const UserRegistProvider = ({
  };
  const setUserRegistInfo = async (value) => {
   try {
-   const value = await AsyncStorage.setItem(
-    "userRegistInfo",
-    JSON.stringify(value)
-   );
+   await AsyncStorage.setItem("userRegistInfo", JSON.stringify(value));
+   setUserRegistInfoProp(value);
   } catch (e) {
    console.log(e);
+   setUserRegistInfoProp(null);
   }
  };
  return (
   <UserRegistContext.Provider
    value={{
+    userRegistInfo,
     useUserRegistInfo,
+    getUserRegistInfo,
+    setUserRegistInfo,
     useGetUserRegistInfo,
     useSetUserRegistInfo,
    }}

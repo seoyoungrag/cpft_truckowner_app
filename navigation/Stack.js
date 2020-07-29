@@ -40,7 +40,11 @@ export default () => {
   hasPhonePermission != "undetermined" &&
   hasFilePermission != "undetermined" ? (
    hasTutorialPass ? (
-    userRegistInfo?.userNm ? (
+    userRegistInfo?.userNm &&
+    userRegistInfo?.userBirthDate &&
+    userRegistInfo?.userSex &&
+    userRegistInfo?.userHPAuthAgree &&
+    userRegistInfo?.userNm1 ? (
      <>
       <TouchableOpacity onPress={logOut}>
        <Text>로그아웃</Text>
