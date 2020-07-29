@@ -30,21 +30,22 @@ export default () => {
  const hasCameraPermission = useHasCameraPermission();
  const hasPhonePermission = useHasPhonePermission();
  const hasFilePermission = useHasFilePermission();
+ //  console.log(hasCameraPermission, hasPhonePermission, hasFilePermission);
  //const isLoggedIn = true;
  const logIn = useLogIn();
  const logOut = useLogOut();
  const hasTutorialPass = useHasTutorialPass();
  const userRegistInfo = useUserRegistInfo();
- return isLoggedIn ? (
-  hasCameraPermission != "undetermined" &&
+ return hasCameraPermission != "undetermined" &&
   hasPhonePermission != "undetermined" &&
   hasFilePermission != "undetermined" ? (
-   hasTutorialPass ? (
-    userRegistInfo?.userNm &&
-    userRegistInfo?.userBirthDate &&
-    userRegistInfo?.userSex &&
-    userRegistInfo?.userHPAuthAgree &&
-    userRegistInfo?.userNm1 ? (
+  hasTutorialPass ? (
+   userRegistInfo?.userNm &&
+   userRegistInfo?.userBirthDate &&
+   userRegistInfo?.userSex &&
+   userRegistInfo?.userHPAuthAgree &&
+   userRegistInfo?.userNm1 ? (
+    isLoggedIn ? (
      <>
       <TouchableOpacity onPress={logOut}>
        <Text>로그아웃</Text>
@@ -73,15 +74,15 @@ export default () => {
       </NavigationContainer>
      </>
     ) : (
-     <UserRegistNavigation />
+     <AuthNavigation />
     )
    ) : (
-    <TutorialNavigation />
+    <UserRegistNavigation />
    )
   ) : (
-   <PermissionNavigation />
+   <TutorialNavigation />
   )
  ) : (
-  <AuthNavigation />
+  <PermissionNavigation />
  );
 };

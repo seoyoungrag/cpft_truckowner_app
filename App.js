@@ -32,6 +32,7 @@ const cacheFonts = (fonts) =>
  });
 
 export default function App() {
+ //  AsyncStorage.clear();
  const [userRegistInfo, setUserRegistInfo] = useState(null);
  const [isLoggedIn, setIsLoggedIn] = useState(null);
  const [hasTutorialPass, setHasTutorialPass] = useState(null);

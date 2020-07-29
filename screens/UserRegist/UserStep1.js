@@ -195,10 +195,10 @@ export default ({ navigation }) => {
  }, [register]);
  useEffect(() => {
   if (userRegistInfo) {
-   setValue("userNm", userRegistInfo.userNm);
-   setValue("userBirthDate", userRegistInfo.userBirthDate);
-   setValue("userSex", userRegistInfo.userSex);
-   setValue("userHPAuthAgree", userRegistInfo.userHPAuthAgree);
+   setValue("userNm", userRegistInfo?.userNm);
+   setValue("userBirthDate", userRegistInfo?.userBirthDate);
+   setValue("userSex", userRegistInfo?.userSex);
+   setValue("userHPAuthAgree", userRegistInfo?.userHPAuthAgree);
    //setValue(userRegistInfo);
   }
  }, [userRegistInfo]);
@@ -248,7 +248,7 @@ export default ({ navigation }) => {
          borderBottomWidth: 1,
         }}
         value={getValues("userNm")}
-        defaultValue={userRegistInfo.userNm}
+        defaultValue={userRegistInfo?.userNm}
        />
        {errors.userNm && <DataValueRed>필수 값 입니다.</DataValueRed>}
        <View style={{ flexDirection: "row" }}>
@@ -272,7 +272,7 @@ export default ({ navigation }) => {
            borderBottomWidth: 1,
           }}
           value={getValues("userBirthDate")}
-          defaultValue={userRegistInfo.userBirthDate}
+          defaultValue={userRegistInfo?.userBirthDate}
          />
          {errors.userBirthDate?.type === "required" && (
           <DataValueRed>필수 값 입니다.</DataValueRed>
@@ -304,7 +304,7 @@ export default ({ navigation }) => {
             borderBottomWidth: 1,
            }}
            value={getValues("userSex")}
-           defaultValue={userRegistInfo.userSex}
+           defaultValue={userRegistInfo?.userSex}
           />
           <Text style={{ paddingTop: 5, fontSize: 32, color: "silver" }}>
            ******
