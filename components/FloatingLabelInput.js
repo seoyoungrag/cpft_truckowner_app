@@ -85,7 +85,6 @@ export default class FloatingLabelInput extends Component {
        } else if (input.length > 0) {
         value = `${zip}`;
        }
-       console.log(value);
        this.setState({ value });
       } else {
        this.setState({ value });

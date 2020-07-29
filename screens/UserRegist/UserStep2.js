@@ -11,6 +11,7 @@ import {
 import ScrollContainer from "../../components/ScrollContainer";
 import { View } from "react-native-animatable";
 import FloatingLabelInput from "../../components/FloatingLabelInput";
+import { TextInput } from "react-native-gesture-handler";
 
 const screenWidth = Math.round(Dimensions.get("window").width);
 const screenHeight = Math.round(Dimensions.get("window").height);
@@ -136,6 +137,7 @@ const DataValueRed = styled.Text`
 `;
 export default ({ navigation }) => {
  const [selectedValue, setSelectedValue] = useState("SKT");
+ const [userPHAuthNumber, setUserPHAuthNumber] = useState(null);
 
  const goStep1 = () => {
   navigation.navigate("UserStep1");
@@ -160,23 +162,34 @@ export default ({ navigation }) => {
  const getUserRegistInfo = useGetUserRegistInfo();
  const setUserRegistInfo = useSetUserRegistInfo();
 
- console.log(userRegistInfo);
+ 
+ const requestPHAuthNumber = () => {
+    setValue("userPHAuthNumber", '123456');
+    setUserPHAuthNumber('123456');
+    //setUserRegistInfoProp({...userRegistInfo, userPHAuthNumber: '123456'})
+ }
  const confrimBtnClicked = (userRegistInfo) => {
+    userRegistInfo.userPHAuthNumber = undefined;
   setUserRegistInfo(userRegistInfo);
   navigation.navigate("UserStep3");
  };
 
- useEffect(() => {});
+ useEffect(() => {
+    setValue("userPHAuthNumber", '123456');},[userPHAuthNumber]);
  useEffect(() => {
   register(
    { name: "userPHNumber" },
    {
+    minLength: 13,
+    maxLength: 13,
     required: true,
    }
   );
   register(
    { name: "userPHAuthNumber" },
    {
+    minLength: 6,
+    maxLength: 6,
     required: true,
    }
   );
@@ -278,6 +291,11 @@ export default ({ navigation }) => {
          />
         </View>
        </View>
+       {errors.userPHNumber?.type==='required' && <DataValueRed>필수 값 입니다.</DataValueRed>}
+         {(errors.userPHNumber?.type === "maxLength" ||
+          errors.userPHNumber?.type === "minLength") && (
+          <DataValueRed>올바르지 않은 휴대폰 번호입니다.</DataValueRed>
+         )}
        <View style={{ flexDirection: "column" }}>
         <View
          style={{
@@ -305,9 +323,10 @@ export default ({ navigation }) => {
            alignItems: "center",
            justifyContent: "center",
           }}
+          onPress={requestPHAuthNumber}
          >
           <Text>인증번호 받기</Text>
-         </TouchableOpacity>
+         </TouchableOpacity>{/**
          <FloatingLabelInput
           maxLength={6}
           keyboardType={"numeric"}
@@ -326,11 +345,34 @@ export default ({ navigation }) => {
            fontSize: 32,
            borderBottomWidth: 1,
           }}
-          value={getValues("userPHAuthNumber")}
-          defaultValue={userRegistInfo?.userPHAuthNumber}
+          value={userPHAuthNumber}
+          defaultValue={userPHAuthNumber}
+         /> */}
+         <TextInput
+          maxLength={6}
+          keyboardType={"numeric"}
+          placeholder="인증번호 입력"
+          editable = {false}
+          style={{
+           color: "black",
+           opacity: 0.8,
+           fontSize: 20,
+           borderBottomWidth: 1,
+           height: 30,
+           color: "#000",
+           borderBottomColor: "#555",
+          }}
+          value={userPHAuthNumber}
+          defaultValue={userPHAuthNumber}
          />
         </View>
        </View>
+        <DataValueRed style={{color:'grey'}}>프로토타입에서 휴대폰 본인 인증은 구현되지 않았습니다.</DataValueRed>
+       {errors.userPHAuthNumber?.type==='required' && <DataValueRed>필수 값 입니다.</DataValueRed>}
+         {(errors.userPHAuthNumber?.type === "maxLength" ||
+          errors.userPHAuthNumber?.type === "minLength") && (
+          <DataValueRed>올바르지 않은 인증 번호입니다.</DataValueRed>
+         )}
        <View style={{ flexDirection: "column" }}>
         <DataName>이용약관 동의</DataName>
         <DataValue>앱 서비스 이용을 위한 약관에 동의</DataValue>
