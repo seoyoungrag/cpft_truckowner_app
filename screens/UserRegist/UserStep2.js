@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
-import { Dimensions, Text, TouchableOpacity } from "react-native";
+import { Dimensions, Text, TouchableOpacity, Picker } from "react-native";
 import styled from "styled-components/native";
 import { useForm } from "react-hook-form";
 import { AntDesign } from "@expo/vector-icons";
@@ -135,6 +135,8 @@ const DataValueRed = styled.Text`
  border-radius: 10px;
 `;
 export default ({ navigation }) => {
+ const [selectedValue, setSelectedValue] = useState("SKT");
+
  const goStep1 = () => {
   navigation.navigate("UserStep1");
  };
@@ -150,14 +152,15 @@ export default ({ navigation }) => {
  const goToHPA4 = () => {
   navigation.push("UserStep1HPA4");
  };
- const [userHPAuthAgree, setUserHPAuthAgree] = useState(
-  useUserRegistInfo()?.userHPAuthAgree
+ const [userServiceAuthAgree, setUserServiceAuthAgree] = useState(
+  useUserRegistInfo()?.userServiceAuthAgree
  );
  const { register, getValues, setValue, handleSubmit, errors } = useForm();
  const [userRegistInfo, setUserRegistInfoProp] = useState(useUserRegistInfo());
  const getUserRegistInfo = useGetUserRegistInfo();
  const setUserRegistInfo = useSetUserRegistInfo();
 
+ console.log(userRegistInfo);
  const confrimBtnClicked = (userRegistInfo) => {
   setUserRegistInfo(userRegistInfo);
   navigation.navigate("UserStep3");
@@ -166,42 +169,29 @@ export default ({ navigation }) => {
  useEffect(() => {});
  useEffect(() => {
   register(
-   { name: "userNm" },
+   { name: "userPHNumber" },
    {
     required: true,
    }
   );
   register(
-   { name: "userBirthDate" },
+   { name: "userPHAuthNumber" },
    {
-    minLength: 6,
-    maxLength: 6,
     required: true,
    }
   );
   register(
-   { name: "userSex" },
+   { name: "userServiceAuthAgree" },
    {
     required: true,
-    minLength: 1,
-    maxLength: 1,
-    validate: (value) => {
-     if (value == 1 || value == 2) {
-      return true;
-     } else {
-      return false;
-     }
-    },
    }
   );
-  register({ name: "userHPAuthAgree" }, { required: true });
  }, [register]);
  useEffect(() => {
   if (userRegistInfo) {
-   setValue("userNm", userRegistInfo.userNm);
-   setValue("userBirthDate", userRegistInfo.userBirthDate);
-   setValue("userSex", userRegistInfo.userSex);
-   setValue("userHPAuthAgree", userRegistInfo.userHPAuthAgree);
+   setValue("userPHNumber", userRegistInfo?.userPHNumber);
+   setValue("userPHAuthNumber", userRegistInfo?.userPHAuthNumber);
+   setValue("userServiceAuthAgree", userRegistInfo?.userServiceAuthAgree);
    //setValue(userRegistInfo);
   }
  }, [userRegistInfo]);
@@ -235,40 +225,46 @@ export default ({ navigation }) => {
       <Container
        style={{ flex: 1, justifyContent: "flex-start", marginTop: 0 }}
       >
-       <DataName>기본정보 입력</DataName>
-       <FloatingLabelInput
-        maxLength={6}
-        label="이름 입력"
-        placeholder="이름 입력"
-        onChangeText={setValue}
-        fieldNm="userNm"
-        containerStyle={{
-         marginLeft: 40,
-         marginRight: 40,
-        }}
-        style={{
-         color: "black",
-         opacity: 0.8,
-         fontWeight: 500,
-         fontSize: 32,
-         borderBottomWidth: 1,
-        }}
-        value={getValues("userNm")}
-        defaultValue={userRegistInfo.userNm}
-       />
-       {errors.userNm && <DataValueRed>필수 값 입니다.</DataValueRed>}
-       <View style={{ flexDirection: "row" }}>
-        <View style={{ flex: 1, flexDirection: "column" }}>
-         <FloatingLabelInput
-          maxLength={6}
-          keyboardType={"numeric"}
-          label="주민등록번호"
-          placeholder="주민등록번호"
-          onChangeText={setValue}
-          fieldNm="userBirthDate"
-          containerStyle={{
+       <DataName>휴대폰 인증</DataName>
+       <View style={{ flexDirection: "column" }}>
+        <View
+         style={{
+          flexDirection: "row",
+          justifyContent: "flex-end",
+          alignItems: "flex-end",
+         }}
+        >
+         <Picker
+          selectedValue={selectedValue}
+          style={{
+           height: 40,
+           width: 100,
            marginLeft: 40,
-           marginRight: 10,
+           paddingLeft: 0,
+           paddingTop: 0,
+          }}
+          onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+          itemStyle={{
+           backgroundColor: "grey",
+           color: "blue",
+           fontFamily: "Ebrima",
+           fontSize: 17,
+          }}
+         >
+          <Picker.Item label="SKT" value="SKT" />
+          <Picker.Item label="KT" value="KT" />
+          <Picker.Item label="LGT" value="LGT" />
+         </Picker>
+         <FloatingLabelInput
+          maxLength={13}
+          keyboardType={"phone-pad"}
+          label="휴대폰 번호 입력"
+          placeholder="휴대폰 번호 입력"
+          onChangeText={setValue}
+          fieldNm="userPHNumber"
+          containerStyle={{
+           height: 50,
+           margin: 0,
           }}
           style={{
            color: "black",
@@ -277,100 +273,106 @@ export default ({ navigation }) => {
            fontSize: 32,
            borderBottomWidth: 1,
           }}
-          value={getValues("userBirthDate")}
-          defaultValue={userRegistInfo.userBirthDate}
+          value={getValues("userPHNumber")}
+          defaultValue={userRegistInfo?.userPHNumber}
          />
-         {errors.userBirthDate?.type === "required" && (
-          <DataValueRed>필수 값 입니다.</DataValueRed>
-         )}
-         {(errors.userBirthDate?.type === "maxLength" ||
-          errors.userBirthDate?.type === "minLength") && (
-          <DataValueRed>6자리를 입력해야합니다.</DataValueRed>
-         )}
-        </View>
-        <View>
-         <Text style={{ fontSize: 32 }}>-</Text>
-        </View>
-        <View style={{ flex: 1, flexDirection: "column" }}>
-         <View style={{ flexDirection: "row" }}>
-          <FloatingLabelInput
-           maxLength={1}
-           keyboardType={"numeric"}
-           onChangeText={setValue}
-           fieldNm="userSex"
-           containerStyle={{
-            marginLeft: 10,
-            marginRight: 0,
-           }}
-           style={{
-            color: "black",
-            opacity: 0.8,
-            fontWeight: 500,
-            fontSize: 32,
-            borderBottomWidth: 1,
-           }}
-           value={getValues("userSex")}
-           defaultValue={userRegistInfo.userSex}
-          />
-          <Text style={{ paddingTop: 5, fontSize: 32, color: "silver" }}>
-           ******
-          </Text>
-         </View>
-         {errors.userSex?.type === "required" && (
-          <DataValueRed style={{ marginLeft: 0 }}>필수 값 입니다.</DataValueRed>
-         )}
-         {errors.userSex?.type === "maxLength" && (
-          <DataValueRed style={{ marginLeft: 0 }}>
-           1자리 수를 입력해야 합니다.
-          </DataValueRed>
-         )}
-         {errors.userSex?.type === "validate" && (
-          <DataValueRed style={{ marginLeft: 0 }}>
-           1또는 2의 값이어야 합니다.
-          </DataValueRed>
-         )}
         </View>
        </View>
        <View style={{ flexDirection: "column" }}>
-        <DataName>본인인증 동의</DataName>
-        <DataValue>본인인증을 위한 약관에 동의</DataValue>
+        <View
+         style={{
+          flexDirection: "row",
+          justifyContent: "flex-end",
+          alignItems: "flex-end",
+         }}
+        >
+         <TouchableOpacity
+          style={{
+           height: 35,
+           width: 100,
+           marginLeft: 40,
+           paddingLeft: 0,
+           paddingTop: 0,
+           borderWidth: 1,
+           borderRadius: 10,
+           borderColor: "silver",
+           color: "black",
+           opacity: 0.8,
+           fontWeight: 500,
+           fontSize: 16,
+           flexDirection: "row",
+           justifyContent: "space-between",
+           alignItems: "center",
+           justifyContent: "center",
+          }}
+         >
+          <Text>인증번호 받기</Text>
+         </TouchableOpacity>
+         <FloatingLabelInput
+          maxLength={6}
+          keyboardType={"numeric"}
+          label="인증번호 입력"
+          placeholder="인증번호 입력"
+          onChangeText={setValue}
+          fieldNm="userPHAuthNumber"
+          containerStyle={{
+           height: 50,
+           margin: 0,
+          }}
+          style={{
+           color: "black",
+           opacity: 0.8,
+           fontWeight: 500,
+           fontSize: 32,
+           borderBottomWidth: 1,
+          }}
+          value={getValues("userPHAuthNumber")}
+          defaultValue={userRegistInfo?.userPHAuthNumber}
+         />
+        </View>
+       </View>
+       <View style={{ flexDirection: "column" }}>
+        <DataName>이용약관 동의</DataName>
+        <DataValue>앱 서비스 이용을 위한 약관에 동의</DataValue>
         <DataValueBtn
          onPress={() => {
-          const userHPAuthAgreeTmp = getValues("userHPAuthAgree");
-          if (!userHPAuthAgreeTmp) {
-           setValue("userHPAuthAgree", "Y");
-           setUserHPAuthAgree("Y");
+          const userServiceAuthAgreeTmp = getValues("userServiceAuthAgree");
+          if (!userServiceAuthAgreeTmp) {
+           setValue("userServiceAuthAgree", "Y");
+           setUserServiceAuthAgree("Y");
           } else {
-           setValue("userHPAuthAgree", undefined);
-           setUserHPAuthAgree(null);
+           setValue("userServiceAuthAgree", undefined);
+           setUserServiceAuthAgree(null);
           }
          }}
-         style={{ borderColor: userHPAuthAgree == "Y" ? "#3a99fc" : "grey" }}
+         style={{
+          borderColor: userServiceAuthAgree == "Y" ? "#3a99fc" : "grey",
+         }}
         >
-         <Text>휴대폰 본인인증 동의(필수)</Text>
+         <Text>앱 서비스 이용 동의(필수)</Text>
          <AntDesign
           name={"checkcircleo"}
-          color={userHPAuthAgree == "Y" ? "#3a99fc" : "grey"}
+          color={userServiceAuthAgree == "Y" ? "#3a99fc" : "grey"}
           size={22}
          />
         </DataValueBtn>
-        {errors.userHPAuthAgree && (
+        {errors.userServiceAuthAgree && (
          <DataValueRed>동의해야 진행할 수 있습니다.</DataValueRed>
         )}
         <DataValueBtnSec onPress={goToHPA1}>
-         <Text>본인확인 서비스 이용약관(필수)</Text>
+         <Text>앱 서비스 이용 동의(필수)</Text>
          <AntDesign name={"right"} color={"grey"} size={22} />
         </DataValueBtnSec>
         <DataValueBtnSec onPress={goToHPA2}>
-         <Text>개인정보 수집 이용(필수)</Text>
+         <Text>앱 서비스 이용 동의(필수)</Text>
          <AntDesign name={"right"} color={"grey"} size={22} />
         </DataValueBtnSec>
         <DataValueBtnSec onPress={goToHPA3}>
-         <Text>고유식별정보 처리동의(필수)</Text>
+         <Text>앱 서비스 이용 동의(필수)</Text>
          <AntDesign name={"right"} color={"grey"} size={22} />
         </DataValueBtnSec>
         <DataValueBtnSec onPress={goToHPA4}>
-         <Text>본인확인 통신사 이용약관(필수)</Text>
+         <Text>앱 서비스 이용 동의(필수)</Text>
          <AntDesign name={"right"} color={"grey"} size={22} />
         </DataValueBtnSec>
        </View>

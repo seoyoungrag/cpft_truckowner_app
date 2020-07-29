@@ -47,7 +47,7 @@ export default class FloatingLabelInput extends Component {
     <TextInput
      {...props}
      style={{
-      height: 26,
+      height: 30,
       fontSize: 20,
       color: "#000",
       borderBottomWidth: 1,
@@ -59,6 +59,33 @@ export default class FloatingLabelInput extends Component {
      onChangeText={(value) => {
       if (this.props.keyboardType && this.props.keyboardType == "numeric") {
        value = value.replace(/[^0-9]/g, "");
+       this.setState({ value });
+      } else if (
+       this.props.keyboardType &&
+       this.props.keyboardType == "phone-pad"
+      ) {
+       /*
+       value = ("" + value).replace(/\D/g, "");
+       var match = value.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/);
+       if (match) {
+        var intlCode = match[1] ? "+1 " : "",
+         value = [intlCode, match[2], "-", match[3], "-", match[4]].join("");
+       }
+       */
+
+       const input = value.replace(/\D/g, "").substring(0, 11); // First ten digits of input only
+       const zip = input.substring(0, 3);
+       const middle = input.substring(3, 7);
+       const last = input.substring(7, 11);
+
+       if (input.length > 7) {
+        value = `${zip}-${middle}-${last}`;
+       } else if (input.length > 3) {
+        value = `${zip}-${middle}`;
+       } else if (input.length > 0) {
+        value = `${zip}`;
+       }
+       console.log(value);
        this.setState({ value });
       } else {
        this.setState({ value });

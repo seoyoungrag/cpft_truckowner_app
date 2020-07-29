@@ -306,7 +306,7 @@ export default ({ navigation }) => {
            value={getValues("userSex")}
            defaultValue={userRegistInfo?.userSex}
           />
-          <Text style={{ paddingTop: 5, fontSize: 32, color: "silver" }}>
+          <Text style={{ paddingTop: 10, fontSize: 32, color: "silver" }}>
            ******
           </Text>
          </View>
