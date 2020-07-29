@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
-import { Dimensions, Text } from "react-native";
+import { Dimensions, Text, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 import { useForm } from "react-hook-form";
 import { AntDesign } from "@expo/vector-icons";
@@ -26,9 +26,13 @@ const Modal = styled.View`
 `;
 
 const ModalHeader = styled.View`
- padding: 20px;
  height: 40px;
- align-items: flex-end;
+ padding-left: 20px;
+ padding-right: 20px;
+ padding-top: 20px;
+ align-items: center;
+ flex-direction: row;
+ justify-content: space-between;
 `;
 const ModalHeaderTitle = styled.Text`
  color: black;
@@ -135,13 +139,13 @@ export default ({ navigation }) => {
   navigation.push("UserStep1HPA1");
  };
  const goToHPA2 = () => {
-  navigation.navigate("UserStep1HPA2");
+  navigation.push("UserStep1HPA2");
  };
  const goToHPA3 = () => {
-  navigation.navigate("UserStep1HPA3");
+  navigation.push("UserStep1HPA3");
  };
  const goToHPA4 = () => {
-  navigation.navigate("UserStep1HPA4");
+  navigation.push("UserStep1HPA4");
  };
  const [userHPAuthAgree, setUserHPAuthAgree] = useState(
   useUserRegistInfo()?.userHPAuthAgree
@@ -202,6 +206,13 @@ export default ({ navigation }) => {
   <OuterContainer>
    <Modal>
     <ModalHeader>
+     <TouchableOpacity
+      style={{
+       width: 40,
+       height: 40,
+       justifyContent: "center",
+      }}
+     ></TouchableOpacity>
      <ModalHeaderTitle>1/5</ModalHeaderTitle>
     </ModalHeader>
     <ScrollContainer
