@@ -58,8 +58,24 @@ export default class FloatingLabelInput extends Component {
      onBlur={this.handleBlur}
      onChangeText={(value) => {
       if (this.props.keyboardType && this.props.keyboardType == "numeric") {
-       value = value.replace(/[^0-9]/g, "");
-       this.setState({ value });
+       if (this.props.keyboardTypeAddOn == "corpNum") {
+        const input = value.replace(/\D/g, "").substring(0, 10); // First ten digits of input only
+        const zip = input.substring(0, 3);
+        const middle = input.substring(3, 5);
+        const last = input.substring(5, 10);
+
+        if (input.length > 5) {
+         value = `${zip}-${middle}-${last}`;
+        } else if (input.length > 3) {
+         value = `${zip}-${middle}`;
+        } else if (input.length > 0) {
+         value = `${zip}`;
+        }
+        this.setState({ value });
+       } else {
+        value = value.replace(/[^0-9]/g, "");
+        this.setState({ value });
+       }
       } else if (
        this.props.keyboardType &&
        this.props.keyboardType == "phone-pad"

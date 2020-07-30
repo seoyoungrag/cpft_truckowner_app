@@ -137,21 +137,6 @@ export default ({ navigation }) => {
  const goStep3 = () => {
   navigation.navigate("UserStep3");
  };
- const goToHPA1 = () => {
-  navigation.push("UserStep1HPA1");
- };
- const goToHPA2 = () => {
-  navigation.push("UserStep1HPA2");
- };
- const goToHPA3 = () => {
-  navigation.push("UserStep1HPA3");
- };
- const goToHPA4 = () => {
-  navigation.push("UserStep1HPA4");
- };
- const [userHPAuthAgree, setUserHPAuthAgree] = useState(
-  useUserRegistInfo()?.userHPAuthAgree
- );
  const { register, getValues, setValue, handleSubmit, errors } = useForm();
  const [userRegistInfo, setUserRegistInfoProp] = useState(useUserRegistInfo());
  const getUserRegistInfo = useGetUserRegistInfo();
@@ -251,7 +236,7 @@ export default ({ navigation }) => {
       >
        <DataName>추가정보를 입력해주세요.</DataName>
        <FloatingLabelInput
-        maxLength={6}
+        maxLength={11}
         label="차량 번호"
         placeholder="차량 번호"
         onChangeText={setValue}
@@ -270,9 +255,11 @@ export default ({ navigation }) => {
         value={getValues("carNum")}
         defaultValue={userRegistInfo?.carNum}
        />
-       {errors.userNm && <DataValueRed>필수 값 입니다.</DataValueRed>}
+       {errors.carNum && <DataValueRed>필수 값 입니다.</DataValueRed>}
        <FloatingLabelInput
-        maxLength={6}
+        maxLength={12}
+        keyboardTypeAddOn={"corpNum"}
+        keyboardType={"numeric"}
         label="사업자 번호"
         placeholder="사업자 번호"
         onChangeText={setValue}
@@ -291,7 +278,7 @@ export default ({ navigation }) => {
         value={getValues("corpNum")}
         defaultValue={userRegistInfo?.corpNum}
        />
-       {errors.userNm && <DataValueRed>필수 값 입니다.</DataValueRed>}
+       {errors.corpNum && <DataValueRed>필수 값 입니다.</DataValueRed>}
        <FloatingLabelInput
         maxLength={6}
         label="회사명"
@@ -312,7 +299,7 @@ export default ({ navigation }) => {
         value={getValues("corpNm")}
         defaultValue={userRegistInfo?.corpNm}
        />
-       {errors.userNm && <DataValueRed>필수 값 입니다.</DataValueRed>}
+       {errors.corpNm && <DataValueRed>필수 값 입니다.</DataValueRed>}
        <FloatingLabelInput
         maxLength={6}
         label="대표자명"
@@ -333,7 +320,7 @@ export default ({ navigation }) => {
         value={getValues("corpRpresentNm")}
         defaultValue={userRegistInfo?.corpRpresentNm}
        />
-       {errors.userNm && <DataValueRed>필수 값 입니다.</DataValueRed>}
+       {errors.corpRpresentNm && <DataValueRed>필수 값 입니다.</DataValueRed>}
        <FloatingLabelInput
         maxLength={6}
         label="업태"
@@ -354,7 +341,7 @@ export default ({ navigation }) => {
         value={getValues("corpCategory")}
         defaultValue={userRegistInfo?.corpCategory}
        />
-       {errors.userNm && <DataValueRed>필수 값 입니다.</DataValueRed>}
+       {errors.corpCategory && <DataValueRed>필수 값 입니다.</DataValueRed>}
        <FloatingLabelInput
         maxLength={6}
         label="업종"
@@ -375,7 +362,7 @@ export default ({ navigation }) => {
         value={getValues("corpType")}
         defaultValue={userRegistInfo?.corpType}
        />
-       {errors.userNm && <DataValueRed>필수 값 입니다.</DataValueRed>}
+       {errors.corpType && <DataValueRed>필수 값 입니다.</DataValueRed>}
        <FloatingLabelInput
         maxLength={6}
         label="주소"
