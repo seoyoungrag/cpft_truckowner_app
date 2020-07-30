@@ -37,7 +37,7 @@ const ScrollContainer = ({
     ...contentContainerStyle,
    }}
   >
-   {loading ? <ActivityIndicator color="white" size="large" /> : children}
+   {loading ? <ActivityIndicator color="#3a99fc" size="large" /> : children}
   </ScrollView>
  );
 };

@@ -9,6 +9,7 @@ import UserStep1HPA4 from "../screens/UserRegist/UserStep1HPA4";
 import UserStep2 from "../screens/UserRegist/UserStep2";
 import UserStep3 from "../screens/UserRegist/UserStep3";
 import UserStep4 from "../screens/UserRegist/UserStep4";
+import UserStep4AddrFindView from "../screens/UserRegist/UserStep4AddrFindView";
 import UserStep5 from "../screens/UserRegist/UserStep5";
 
 const UserRegistlNavigation = createStackNavigator();
@@ -97,6 +98,10 @@ export default () => (
      },
      cardStyleInterpolator: forFade,
     }}
+   />
+   <UserRegistlNavigation.Screen
+    name="UserStep4AddrFindView"
+    component={UserStep4AddrFindView}
    />
    <UserRegistlNavigation.Screen
     name="UserStep5"

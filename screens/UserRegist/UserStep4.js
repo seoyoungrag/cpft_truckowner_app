@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
-import { Dimensions, Text, TouchableOpacity } from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import { Dimensions, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 import { useForm } from "react-hook-form";
 import { AntDesign } from "@expo/vector-icons";
@@ -9,7 +9,6 @@ import {
  useSetUserRegistInfo,
 } from "../../UserRegistContext";
 import ScrollContainer from "../../components/ScrollContainer";
-import { View } from "react-native-animatable";
 import FloatingLabelInput from "../../components/FloatingLabelInput";
 
 const screenWidth = Math.round(Dimensions.get("window").width);
@@ -134,15 +133,20 @@ const DataValueRed = styled.Text`
  border-radius: 10px;
 `;
 export default ({ navigation }) => {
+ const goAddrFindView = () => {
+  navigation.push("UserStep4AddrFindView");
+ };
  const goStep3 = () => {
   navigation.navigate("UserStep3");
  };
  const { register, getValues, setValue, handleSubmit, errors } = useForm();
- const [userRegistInfo, setUserRegistInfoProp] = useState(useUserRegistInfo());
+ const [userRegistInfo, setUserRegistInfoProp] = useState(
+  useGetUserRegistInfo()
+ );
+
  const getUserRegistInfo = useGetUserRegistInfo();
  const setUserRegistInfo = useSetUserRegistInfo();
 
- console.log("step4", userRegistInfo);
  const confrimBtnClicked = async (userRegistInfoForm) => {
   const newValue = Object.assign({}, userRegistInfo, userRegistInfoForm);
   await setUserRegistInfo(newValue);
@@ -195,6 +199,7 @@ export default ({ navigation }) => {
   );
  }, [register]);
  useEffect(() => {
+  console.log("step4", userRegistInfo);
   if (userRegistInfo) {
    setValue("carNum", userRegistInfo?.carNum);
    setValue("corpNum", userRegistInfo?.corpNum);
@@ -363,26 +368,28 @@ export default ({ navigation }) => {
         defaultValue={userRegistInfo?.corpType}
        />
        {errors.corpType && <DataValueRed>필수 값 입니다.</DataValueRed>}
-       <FloatingLabelInput
-        maxLength={6}
-        label="주소"
-        placeholder="주소"
-        onChangeText={setValue}
-        fieldNm="userAddress"
-        containerStyle={{
-         marginLeft: 40,
-         marginRight: 40,
-        }}
-        style={{
-         color: "black",
-         opacity: 0.8,
-         fontWeight: 500,
-         fontSize: 32,
-         borderBottomWidth: 1,
-        }}
-        value={getValues("userAddress")}
-        defaultValue={userRegistInfo?.userAddress}
-       />
+       <TouchableOpacity onPress={goAddrFindView}>
+        <FloatingLabelInput
+         editable={false}
+         label="주소"
+         placeholder="주소"
+         onChangeText={setValue}
+         fieldNm="userAddress"
+         containerStyle={{
+          marginLeft: 40,
+          marginRight: 40,
+         }}
+         style={{
+          color: "black",
+          opacity: 0.8,
+          fontWeight: 500,
+          fontSize: 32,
+          borderBottomWidth: 1,
+         }}
+         value={getValues("userAddress")}
+         defaultValue={userRegistInfo?.userAddress}
+        />
+       </TouchableOpacity>
        {errors.userAddress && <DataValueRed>필수 값 입니다.</DataValueRed>}
       </Container>
      </Data>
