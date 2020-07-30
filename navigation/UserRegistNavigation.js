@@ -76,9 +76,39 @@ export default () => (
      cardStyleInterpolator: forFade,
     }}
    />
-   <UserRegistlNavigation.Screen name="UserStep3" component={UserStep3} />
-   <UserRegistlNavigation.Screen name="UserStep4" component={UserStep4} />
-   <UserRegistlNavigation.Screen name="UserStep5" component={UserStep5} />
+   <UserRegistlNavigation.Screen
+    name="UserStep3"
+    component={UserStep3}
+    options={{
+     transitionSpec: {
+      open: config,
+      close: config,
+     },
+     cardStyleInterpolator: forFade,
+    }}
+   />
+   <UserRegistlNavigation.Screen
+    name="UserStep4"
+    component={UserStep4}
+    options={{
+     transitionSpec: {
+      open: config,
+      close: config,
+     },
+     cardStyleInterpolator: forFade,
+    }}
+   />
+   <UserRegistlNavigation.Screen
+    name="UserStep5"
+    component={UserStep5}
+    options={{
+     transitionSpec: {
+      open: config,
+      close: config,
+     },
+     cardStyleInterpolator: forFade,
+    }}
+   />
   </UserRegistlNavigation.Navigator>
  </NavigationContainer>
 );

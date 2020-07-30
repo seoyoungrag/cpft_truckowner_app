@@ -155,8 +155,10 @@ export default ({ navigation }) => {
  const getUserRegistInfo = useGetUserRegistInfo();
  const setUserRegistInfo = useSetUserRegistInfo();
 
- const confrimBtnClicked = (userRegistInfo) => {
-  setUserRegistInfo(userRegistInfo);
+ console.log("step1", userRegistInfo);
+ const confrimBtnClicked = async (userRegistInfoForm) => {
+  const newValue = Object.assign({}, userRegistInfo, userRegistInfoForm);
+  await setUserRegistInfo(newValue);
   navigation.navigate("UserStep2");
  };
 

@@ -23,11 +23,13 @@ export default ({
  hint,
  onMatchedPattern,
 }) => {
+ const [message, setMessage] = useState("패스워드를 입력해주세요.");
  const [activeLine, setActiveLine] = useState(null);
  const [snap, setSnap] = useState(null);
  const [initialGestureCoordinate, setInitialGestureCoordinate] = useState(null);
  const [activeDotCoordinate, setActiveDotCoordinate] = useState(null);
  const [pattern, setPattern] = useState([]);
+ const [firstPattern, setFirstPattern] = useState([]);
  const [showError, setShowError] = useState(false);
  const [showHint, setShowHint] = useState(false);
 
@@ -80,12 +82,12 @@ export default ({
  };
 
  const _isPatternMatched = (currentPattern) => {
-  if (currentPattern.length !== correctPattern.length) {
+  if (currentPattern.length !== firstPattern.length) {
    return false;
   }
   let matched = true;
   for (let index = 0; index < currentPattern.length; index++) {
-   let correctDot = correctPattern[index];
+   let correctDot = firstPattern[index];
    let currentDot = currentPattern[index];
    if (correctDot.x !== currentDot.x || correctDot.y !== currentDot.y) {
     matched = false;
@@ -204,18 +206,26 @@ export default ({
   },
   onPanResponderRelease: () => {
    if (pattern.length) {
-    if (_isPatternMatched(pattern)) {
+    if (firstPattern?.length == 0) {
+     setFirstPattern(pattern);
+     setMessage("패스워드 확인을 위해 다시한번 입력해주세요.");
      setInitialGestureCoordinate(null);
      setActiveDotCoordinate(null);
-     /*
-      Alert.alert(
-       "",
-       "설정 오케이!",
-       [{ text: "OK", onPress: onPatternMatch }],
-       { cancelable: false }
-      );
-      */
-     onMatchedPattern();
+     setPattern([]);
+    } else if (firstPattern?.length > 0) {
+     if (_isPatternMatched(pattern)) {
+      setInitialGestureCoordinate(null);
+      setActiveDotCoordinate(null);
+      onMatchedPattern(pattern);
+      setPattern([]);
+      setMessage("패스워드 설정이 완료 되었습니다.");
+     } else {
+      setFirstPattern([]);
+      setInitialGestureCoordinate(null);
+      setActiveDotCoordinate(null);
+      setPattern([]);
+      setMessage("패스워드 설정이 실패했습니다. 처음부터 입력해주세요.");
+     }
     } else {
      setInitialGestureCoordinate(null);
      setActiveDotCoordinate(null);
@@ -224,13 +234,6 @@ export default ({
    }
   },
  });
-
- let message;
- if (showHint) {
-  message = `hint: ${hint}`;
- } else if (showError) {
-  message = "Wrong Pattern";
- }
 
  useEffect(() => {
   if (showError) {
@@ -302,7 +305,7 @@ export default ({
          cx={dot?.x}
          cy={dot?.y}
          r={DEFAULT_DOT_RADIUS}
-         fill={(showError && isIncludedInPattern && "red") || "white"}
+         fill={(showError && isIncludedInPattern && "red") || "black"}
         />
        );
       })}
@@ -332,7 +335,7 @@ export default ({
          y1={actualStartDot.y}
          x2={actualEndDot.x}
          y2={actualEndDot.y}
-         stroke={showError ? "red" : "white"}
+         stroke={showError ? "red" : "black"}
          strokeWidth="4"
         />
        );
@@ -344,7 +347,7 @@ export default ({
         y1={activeDotCoordinate.y}
         x2={activeDotCoordinate.x}
         y2={activeDotCoordinate.y}
-        stroke="white"
+        stroke="black"
         strokeWidth="4"
         strokeOpacity="0"
        />
@@ -370,7 +373,7 @@ const styles = StyleSheet.create({
   flexWrap: "wrap",
  },
  hintText: {
-  color: "white",
+  color: "black",
   textAlign: "center",
  },
 });

@@ -1,5 +1,11 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
-import { Dimensions, Text, TouchableOpacity, Picker } from "react-native";
+import {
+ Dimensions,
+ Text,
+ TouchableOpacity,
+ Picker,
+ Alert,
+} from "react-native";
 import styled from "styled-components/native";
 import { useForm } from "react-hook-form";
 import { AntDesign } from "@expo/vector-icons";
@@ -128,87 +134,43 @@ const DataValueBtnSec = styled.TouchableOpacity`
 `;
 
 const DataValueRed = styled.Text`
- width: 200px;
+ width: 80%;
  margin-left: 40px;
  margin-right: 40px;
  color: red;
  opacity: 0.8;
- font-weight: 500;
+ font-weight: bold;
+ font-size: 18px;
  border-radius: 10px;
+ text-align: center;
 `;
 export default ({ navigation }) => {
- const [selectedValue, setSelectedValue] = useState("SKT");
- const [userPHAuthNumber, setUserPHAuthNumber] = useState(null);
+ const [userPattern, setUserPattern] = useState(null);
+ const onMatchedPattern = (pattern) => {
+  setUserPattern(pattern);
+ };
 
  const goStep2 = () => {
   navigation.navigate("UserStep2");
  };
- const goToHPA1 = () => {
-  navigation.push("UserStep1HPA1");
- };
- const goToHPA2 = () => {
-  navigation.push("UserStep1HPA2");
- };
- const goToHPA3 = () => {
-  navigation.push("UserStep1HPA3");
- };
- const goToHPA4 = () => {
-  navigation.push("UserStep1HPA4");
- };
- const [userServiceAuthAgree, setUserServiceAuthAgree] = useState(
-  useUserRegistInfo()?.userServiceAuthAgree
- );
- const { register, getValues, setValue, handleSubmit, errors } = useForm();
  const [userRegistInfo, setUserRegistInfoProp] = useState(useUserRegistInfo());
  const getUserRegistInfo = useGetUserRegistInfo();
  const setUserRegistInfo = useSetUserRegistInfo();
 
- 
- const requestPHAuthNumber = () => {
-    setValue("userPHAuthNumber", '123456');
-    setUserPHAuthNumber('123456');
-    //setUserRegistInfoProp({...userRegistInfo, userPHAuthNumber: '123456'})
- }
- const confrimBtnClicked = (userRegistInfo) => {
-    userRegistInfo.userPHAuthNumber = undefined;
-  setUserRegistInfo(userRegistInfo);
-  navigation.navigate("UserStep3");
- };
+ console.log("step3", userRegistInfo);
 
- useEffect(() => {
-    setValue("userPHAuthNumber", '123456');},[userPHAuthNumber]);
- useEffect(() => {
-  register(
-   { name: "userPHNumber" },
-   {
-    minLength: 13,
-    maxLength: 13,
-    required: true,
-   }
-  );
-  register(
-   { name: "userPHAuthNumber" },
-   {
-    minLength: 6,
-    maxLength: 6,
-    required: true,
-   }
-  );
-  register(
-   { name: "userServiceAuthAgree" },
-   {
-    required: true,
-   }
-  );
- }, [register]);
- useEffect(() => {
-  if (userRegistInfo) {
-   setValue("userPHNumber", userRegistInfo?.userPHNumber);
-   setValue("userPHAuthNumber", userRegistInfo?.userPHAuthNumber);
-   setValue("userServiceAuthAgree", userRegistInfo?.userServiceAuthAgree);
-   //setValue(userRegistInfo);
+ const confrimBtnClicked = async () => {
+  if (!userPattern) {
+   Alert.alert("", "패스워드 설정이 필요합니다.", [{ text: "OK" }], {
+    cancelable: false,
+   });
+  } else {
+   const newValue = Object.assign({}, userRegistInfo, userPattern);
+   await setUserRegistInfo(newValue);
+   navigation.navigate("UserStep4");
   }
- }, [userRegistInfo]);
+ };
+ useEffect(() => {}, [userPattern]);
  return (
   <OuterContainer>
    <Modal>
@@ -225,27 +187,37 @@ export default ({ navigation }) => {
      </TouchableOpacity>
      <ModalHeaderTitle>3/5</ModalHeaderTitle>
     </ModalHeader>
-    <ScrollContainer
-     loading={false}
-     contentContainerStyle={{
+    <View
+     style={{
       paddingBottom: 80,
       backgroundColor: "transparent",
       marginTop: 0,
       paddingTop: 0,
      }}
-     refreshOn={false}
     >
      <Data style={{ width: screenWidth, height: screenHeight - 100 }}>
-       <DataName>잠금패턴 설정</DataName>
-        <DataValue>앱 잠금패턴을 설정해주세요.</DataValue>
-        <View style={{flex:1, height:500, backgroundColor:"red"}}>
-       <PatternLockContianer loginSuccess={null} />
+      <DataName>잠금패턴 설정</DataName>
+      <DataValue>앱 잠금패턴을 설정해주세요.</DataValue>
+      {!userPattern ? (
+       <View style={{ flex: 1 }}>
+        <PatternLockContianer onMatchedPattern={onMatchedPattern} />
        </View>
+      ) : (
+       <View
+        style={{
+         flex: 1,
+         justifyContent: "center",
+         alignItems: "center",
+        }}
+       >
+        <DataValueRed>앱 잠금패턴 설정이 완료되었습니다.</DataValueRed>
+       </View>
+      )}
      </Data>
-    </ScrollContainer>
+    </View>
 
     <ModalFooter>
-     <ConfirmBtn onPress={handleSubmit(confrimBtnClicked)}>
+     <ConfirmBtn onPress={confrimBtnClicked}>
       <ConfirmBtnText>다음</ConfirmBtnText>
      </ConfirmBtn>
     </ModalFooter>

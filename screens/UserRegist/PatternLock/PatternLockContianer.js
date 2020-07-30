@@ -32,11 +32,7 @@ const CORRECT_UNLOCK_PATTERN = [
 ];
 const HINT_DELAY = 3000;
 
-export default ({ loginSuccess }) => {
- const onMatchedPattern = () => {
-  loginSuccess();
- };
-
+export default ({ onMatchedPattern }) => {
  const _patternContainerOpacity = new Animated.Value(0);
 
  const resetAnimation = () => {
@@ -85,7 +81,7 @@ export default ({ loginSuccess }) => {
      containerWidth={PATTERN_CONTAINER_WIDTH}
      containerHeight={PATTERN_CONTAINER_HEIGHT}
      correctPattern={CORRECT_UNLOCK_PATTERN}
-     hint="Z를 그려보셈."
+     hint="패스워드가 일치하지 않습니다. 다시 입력해주세요."
      onPatternMatch={onBackPress}
      onMatchedPattern={onMatchedPattern}
     />
@@ -107,7 +103,7 @@ export default ({ loginSuccess }) => {
 const styles = StyleSheet.create({
  root: {
   flex: 1,
-  backgroundColor: "black",
+  backgroundColor: "transparent",
  },
  backgroundContainer: {
   flex: 1,
@@ -144,7 +140,7 @@ const styles = StyleSheet.create({
  },
  hint: {
   backgroundColor: "transparent",
-  color: "#f2f2f2",
+  color: "black",
   fontSize: 16,
  },
 });

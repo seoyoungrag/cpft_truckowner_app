@@ -136,7 +136,9 @@ const DataValueRed = styled.Text`
  border-radius: 10px;
 `;
 export default ({ navigation }) => {
- const [selectedValue, setSelectedValue] = useState("SKT");
+ const [userPHType, setUserPHType] = useState(
+  userRegistInfo?.userPHType ? userRegistInfo.userPHType : "SKT"
+ );
  const [userPHAuthNumber, setUserPHAuthNumber] = useState(null);
 
  const goStep1 = () => {
@@ -162,20 +164,23 @@ export default ({ navigation }) => {
  const getUserRegistInfo = useGetUserRegistInfo();
  const setUserRegistInfo = useSetUserRegistInfo();
 
- 
+ console.log("step2", userRegistInfo);
  const requestPHAuthNumber = () => {
-    setValue("userPHAuthNumber", '123456');
-    setUserPHAuthNumber('123456');
-    //setUserRegistInfoProp({...userRegistInfo, userPHAuthNumber: '123456'})
- }
- const confrimBtnClicked = (userRegistInfo) => {
-    userRegistInfo.userPHAuthNumber = undefined;
-  setUserRegistInfo(userRegistInfo);
+  setValue("userPHAuthNumber", "123456");
+  setUserPHAuthNumber("123456");
+  //setUserRegistInfoProp({...userRegistInfo, userPHAuthNumber: '123456'})
+ };
+ const confrimBtnClicked = async (userRegistInfoForm) => {
+  userRegistInfoForm.userPHType = userPHType;
+  userRegistInfoForm.userPHAuthNumber = undefined;
+  const newValue = Object.assign({}, userRegistInfo, userRegistInfoForm);
+  await setUserRegistInfo(newValue);
   navigation.navigate("UserStep3");
  };
 
  useEffect(() => {
-    setValue("userPHAuthNumber", '123456');},[userPHAuthNumber]);
+  setValue("userPHAuthNumber", "123456");
+ }, [userPHAuthNumber]);
  useEffect(() => {
   register(
    { name: "userPHNumber" },
@@ -248,7 +253,7 @@ export default ({ navigation }) => {
          }}
         >
          <Picker
-          selectedValue={selectedValue}
+          selectedValue={userPHType}
           style={{
            height: 40,
            width: 100,
@@ -256,7 +261,7 @@ export default ({ navigation }) => {
            paddingLeft: 0,
            paddingTop: 0,
           }}
-          onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+          onValueChange={(itemValue, itemIndex) => setUserPHType(itemValue)}
           itemStyle={{
            backgroundColor: "grey",
            color: "blue",
@@ -291,11 +296,13 @@ export default ({ navigation }) => {
          />
         </View>
        </View>
-       {errors.userPHNumber?.type==='required' && <DataValueRed>필수 값 입니다.</DataValueRed>}
-         {(errors.userPHNumber?.type === "maxLength" ||
-          errors.userPHNumber?.type === "minLength") && (
-          <DataValueRed>올바르지 않은 휴대폰 번호입니다.</DataValueRed>
-         )}
+       {errors.userPHNumber?.type === "required" && (
+        <DataValueRed>필수 값 입니다.</DataValueRed>
+       )}
+       {(errors.userPHNumber?.type === "maxLength" ||
+        errors.userPHNumber?.type === "minLength") && (
+        <DataValueRed>올바르지 않은 휴대폰 번호입니다.</DataValueRed>
+       )}
        <View style={{ flexDirection: "column" }}>
         <View
          style={{
@@ -326,7 +333,8 @@ export default ({ navigation }) => {
           onPress={requestPHAuthNumber}
          >
           <Text>인증번호 받기</Text>
-         </TouchableOpacity>{/**
+         </TouchableOpacity>
+         {/**
          <FloatingLabelInput
           maxLength={6}
           keyboardType={"numeric"}
@@ -352,7 +360,7 @@ export default ({ navigation }) => {
           maxLength={6}
           keyboardType={"numeric"}
           placeholder="인증번호 입력"
-          editable = {false}
+          editable={false}
           style={{
            color: "black",
            opacity: 0.8,
@@ -367,12 +375,16 @@ export default ({ navigation }) => {
          />
         </View>
        </View>
-        <DataValueRed style={{color:'grey'}}>프로토타입에서 휴대폰 본인 인증은 구현되지 않았습니다.</DataValueRed>
-       {errors.userPHAuthNumber?.type==='required' && <DataValueRed>필수 값 입니다.</DataValueRed>}
-         {(errors.userPHAuthNumber?.type === "maxLength" ||
-          errors.userPHAuthNumber?.type === "minLength") && (
-          <DataValueRed>올바르지 않은 인증 번호입니다.</DataValueRed>
-         )}
+       <DataValueRed style={{ color: "grey" }}>
+        프로토타입에서 휴대폰 본인 인증은 구현되지 않았습니다.
+       </DataValueRed>
+       {errors.userPHAuthNumber?.type === "required" && (
+        <DataValueRed>필수 값 입니다.</DataValueRed>
+       )}
+       {(errors.userPHAuthNumber?.type === "maxLength" ||
+        errors.userPHAuthNumber?.type === "minLength") && (
+        <DataValueRed>올바르지 않은 인증 번호입니다.</DataValueRed>
+       )}
        <View style={{ flexDirection: "column" }}>
         <DataName>이용약관 동의</DataName>
         <DataValue>앱 서비스 이용을 위한 약관에 동의</DataValue>
