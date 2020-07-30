@@ -7,7 +7,7 @@ const ScrollContainer = ({
  children,
  contentContainerStyle,
  refreshFn,
- refreshOn
+ refreshOn,
 }) => {
  const [refreshing, setRefreshing] = useState(false);
  const onRefresh = async () => {
@@ -17,15 +17,20 @@ const ScrollContainer = ({
  };
  return (
   <ScrollView
-  
-   refreshControl={!refreshOn? 
-    null : <RefreshControl
-    refreshing={refreshing}
-    onRefresh={onRefresh}
-    color={"white"}
-   />}
-   
-   style={{ backgroundColor: contentContainerStyle?.backgroundColor? contentContainerStyle.backgroundColor:  "#007bff" }}
+   refreshControl={
+    !refreshOn ? null : (
+     <RefreshControl
+      refreshing={refreshing}
+      onRefresh={onRefresh}
+      color={"white"}
+     />
+    )
+   }
+   style={{
+    backgroundColor: contentContainerStyle?.backgroundColor
+     ? contentContainerStyle.backgroundColor
+     : "#007bff",
+   }}
    contentContainerStyle={{
     flex: loading ? 1 : 0,
     justifyContent: loading ? "center" : "flex-start",

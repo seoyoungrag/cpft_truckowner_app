@@ -157,8 +157,6 @@ export default ({ navigation }) => {
  const getUserRegistInfo = useGetUserRegistInfo();
  const setUserRegistInfo = useSetUserRegistInfo();
 
- console.log("step3", userRegistInfo);
-
  const confrimBtnClicked = async () => {
   if (!userPattern) {
    Alert.alert("", "패스워드 설정이 필요합니다.", [{ text: "OK" }], {

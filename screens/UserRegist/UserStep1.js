@@ -40,7 +40,6 @@ const ModalHeaderTitle = styled.Text`
 `;
 
 const ModalFooter = styled.View`
- position: absolute;
  bottom: 0px;
  left: 0px;
  right: 0px;

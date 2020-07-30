@@ -236,15 +236,6 @@ export default ({
  });
 
  useEffect(() => {
-  if (showError) {
-   _resetTimeout = setTimeout(() => {
-    setShowHint(true);
-    setPattern([]);
-    setShowError(false);
-   }, 1000);
-  }
- }, [showError]);
- useEffect(() => {
   return () => {
    clearTimeout(_resetTimeout);
   };
