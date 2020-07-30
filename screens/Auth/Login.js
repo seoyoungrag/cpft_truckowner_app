@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { TouchableWithoutFeedback, Keyboard } from "react-native";
 import Svg, { Circle, Rect, Line } from "react-native-svg";
@@ -8,6 +8,11 @@ import useInput from "../../hooks/useInput";
 import { Alert } from "react-native";
 import { LOG_IN } from "./AuthQueries";
 import { useLogIn } from "../../AuthContext";
+import {
+ useUserRegistInfo,
+ useGetUserRegistInfo,
+ useSetUserRegistInfo,
+} from "../../UserRegistContext";
 import PatternLockContianer from "./PatternLock/PatternLockContianer";
 
 const View = styled.View`
@@ -23,6 +28,9 @@ export default ({ navigation }) => {
   logIn("testToken");
  };
  const emailInput = useInput("");
+ const [userRegistInfo, setUserRegistInfoProp] = useState(null);
+ const getUserRegistInfo = useGetUserRegistInfo();
+
  const [loading, setLoading] = useState(false);
  const handleLogin = async () => {
   const { value } = emailInput;
@@ -58,5 +66,20 @@ export default ({ navigation }) => {
    setLoading(false);
   }
  };
- return <PatternLockContianer loginSuccess={loginSuccess} />;
+ useEffect(() => {
+    const fetchData = async() => { 
+        try {
+        const data = await getUserRegistInfo();
+        setUserRegistInfoProp(data);
+    } catch (e) {
+     console.log(e);
+    } finally {
+    }
+        };
+        navigation.addListener('focus', async() => {
+            await fetchData();
+        }
+    );
+ },[]);
+ return userRegistInfo?.userPattern ? <PatternLockContianer userPattern={userRegistInfo.userPattern} loginSuccess={loginSuccess} /> : null;
 };

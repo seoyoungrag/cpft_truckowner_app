@@ -32,7 +32,7 @@ const CORRECT_UNLOCK_PATTERN = [
 ];
 const HINT_DELAY = 3000;
 
-export default ({ loginSuccess }) => {
+export default ({ userPattern, loginSuccess }) => {
  const onMatchedPattern = () => {
   loginSuccess();
  };
@@ -84,7 +84,7 @@ export default ({ loginSuccess }) => {
      containerDimension={PATTERN_DIMENSION}
      containerWidth={PATTERN_CONTAINER_WIDTH}
      containerHeight={PATTERN_CONTAINER_HEIGHT}
-     correctPattern={CORRECT_UNLOCK_PATTERN}
+     correctPattern={userPattern}
      hint="Z를 그려보셈."
      onPatternMatch={onBackPress}
      onMatchedPattern={onMatchedPattern}
@@ -107,7 +107,7 @@ export default ({ loginSuccess }) => {
 const styles = StyleSheet.create({
  root: {
   flex: 1,
-  backgroundColor: "black",
+  backgroundColor: "#3a99fc",
  },
  backgroundContainer: {
   flex: 1,

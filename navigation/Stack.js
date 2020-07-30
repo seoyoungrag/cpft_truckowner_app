@@ -44,7 +44,9 @@ export default () => {
    userRegistInfo?.userBirthDate &&
    userRegistInfo?.userSex &&
    userRegistInfo?.userHPAuthAgree &&
-   userRegistInfo?.userNm1 ? (
+   userRegistInfo?.userPHNumber &&
+   userRegistInfo?.userPattern &&
+   userRegistInfo?.userServiceAuthAgree ? (
     isLoggedIn ? (
      <>
       <TouchableOpacity onPress={logOut}>

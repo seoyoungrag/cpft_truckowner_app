@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
-import { Dimensions, Text, TouchableOpacity } from "react-native";
+import { Dimensions, Text, TouchableOpacity, AsyncStorage } from "react-native";
 import styled from "styled-components/native";
 import { useForm } from "react-hook-form";
 import { AntDesign } from "@expo/vector-icons";
@@ -146,21 +146,16 @@ export default ({ navigation }) => {
  const goToHPA4 = () => {
   navigation.push("UserStep1HPA4");
  };
- const [userHPAuthAgree, setUserHPAuthAgree] = useState(
-  useUserRegistInfo()?.userHPAuthAgree
- );
- const { register, getValues, setValue, handleSubmit, errors } = useForm();
- const [userRegistInfo, setUserRegistInfoProp] = useState(useUserRegistInfo());
+ const [userRegistInfo, setUserRegistInfoProp] = useState(null);
  const getUserRegistInfo = useGetUserRegistInfo();
  const setUserRegistInfo = useSetUserRegistInfo();
-
- console.log("step1", userRegistInfo);
  const confrimBtnClicked = async (userRegistInfoForm) => {
   const newValue = Object.assign({}, userRegistInfo, userRegistInfoForm);
   await setUserRegistInfo(newValue);
   navigation.navigate("UserStep2");
  };
 
+ const { register, getValues, setValue, handleSubmit, errors } = useForm();
  useEffect(() => {});
  useEffect(() => {
   register(
@@ -195,14 +190,21 @@ export default ({ navigation }) => {
   register({ name: "userHPAuthAgree" }, { required: true });
  }, [register]);
  useEffect(() => {
-  if (userRegistInfo) {
-   setValue("userNm", userRegistInfo?.userNm);
-   setValue("userBirthDate", userRegistInfo?.userBirthDate);
-   setValue("userSex", userRegistInfo?.userSex);
-   setValue("userHPAuthAgree", userRegistInfo?.userHPAuthAgree);
-   //setValue(userRegistInfo);
-  }
- }, [userRegistInfo]);
+    const fetchData = async() => { 
+        const data = await getUserRegistInfo();
+        console.log('fetch!', data);
+        setUserRegistInfoProp(data);
+        
+   setValue("userNm", data?.userNm);
+   setValue("userBirthDate", data?.userBirthDate);
+   setValue("userSex", data?.userSex);
+   setValue("userHPAuthAgree", data?.userHPAuthAgree);
+    };
+    navigation.addListener('focus', async() => {
+        await fetchData();
+    }
+    );
+ },[]);
  return (
   <OuterContainer>
    <Modal>
@@ -248,7 +250,6 @@ export default ({ navigation }) => {
          fontSize: 32,
          borderBottomWidth: 1,
         }}
-        value={getValues("userNm")}
         defaultValue={userRegistInfo?.userNm}
        />
        {errors.userNm && <DataValueRed>필수 값 입니다.</DataValueRed>}
@@ -272,7 +273,6 @@ export default ({ navigation }) => {
            fontSize: 32,
            borderBottomWidth: 1,
           }}
-          value={getValues("userBirthDate")}
           defaultValue={userRegistInfo?.userBirthDate}
          />
          {errors.userBirthDate?.type === "required" && (
@@ -304,7 +304,6 @@ export default ({ navigation }) => {
             fontSize: 32,
             borderBottomWidth: 1,
            }}
-           value={getValues("userSex")}
            defaultValue={userRegistInfo?.userSex}
           />
           <Text style={{ paddingTop: 10, fontSize: 32, color: "silver" }}>
@@ -331,21 +330,20 @@ export default ({ navigation }) => {
         <DataValue>본인인증을 위한 약관에 동의</DataValue>
         <DataValueBtn
          onPress={() => {
-          const userHPAuthAgreeTmp = getValues("userHPAuthAgree");
-          if (!userHPAuthAgreeTmp) {
-           setValue("userHPAuthAgree", "Y");
-           setUserHPAuthAgree("Y");
+          if (!userRegistInfo?.userHPAuthAgree) {
+            setUserRegistInfoProp({...userRegistInfo, userHPAuthAgree:"Y"});
+            setValue("userHPAuthAgree", 'Y');
           } else {
-           setValue("userHPAuthAgree", undefined);
-           setUserHPAuthAgree(null);
+           setUserRegistInfoProp({...userRegistInfo, userHPAuthAgree:null});
+           setValue("userHPAuthAgree", null);
           }
          }}
-         style={{ borderColor: userHPAuthAgree == "Y" ? "#3a99fc" : "grey" }}
+         style={{ borderColor: userRegistInfo?.userHPAuthAgree == "Y" ? "#3a99fc" : "grey" }}
         >
          <Text>휴대폰 본인인증 동의(필수)</Text>
          <AntDesign
           name={"checkcircleo"}
-          color={userHPAuthAgree == "Y" ? "#3a99fc" : "grey"}
+          color={userRegistInfo?.userHPAuthAgree == "Y" ? "#3a99fc" : "grey"}
           size={22}
          />
         </DataValueBtn>

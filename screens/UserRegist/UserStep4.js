@@ -140,9 +140,7 @@ export default ({ navigation }) => {
   navigation.navigate("UserStep3");
  };
  const { register, getValues, setValue, handleSubmit, errors } = useForm();
- const [userRegistInfo, setUserRegistInfoProp] = useState(
-  useGetUserRegistInfo()
- );
+ const [userRegistInfo, setUserRegistInfoProp] = useState(null);
 
  const getUserRegistInfo = useGetUserRegistInfo();
  const setUserRegistInfo = useSetUserRegistInfo();
@@ -199,17 +197,23 @@ export default ({ navigation }) => {
   );
  }, [register]);
  useEffect(() => {
-  console.log("step4", userRegistInfo);
-  if (userRegistInfo) {
-   setValue("carNum", userRegistInfo?.carNum);
-   setValue("corpNum", userRegistInfo?.corpNum);
-   setValue("corpNm", userRegistInfo?.corpNm);
-   setValue("corpRpresentNm", userRegistInfo?.corpRpresentNm);
-   setValue("corpCategory", userRegistInfo?.corpCategory);
-   setValue("corpType", userRegistInfo?.corpType);
-   setValue("userAddress", userRegistInfo?.userAddress);
-  }
- }, [userRegistInfo]);
+    const fetchData = async() => { 
+        console.log('fetch!');
+        const data = await getUserRegistInfo();
+        setUserRegistInfoProp(data);
+        setValue("carNum", data?.carNum);
+        setValue("corpNum", data?.corpNum);
+        setValue("corpNm", data?.corpNm);
+        setValue("corpRpresentNm", data?.corpRpresentNm);
+        setValue("corpCategory", data?.corpCategory);
+        setValue("corpType", data?.corpType);
+        setValue("userAddress", data?.userAddress);
+    };
+    navigation.addListener('focus', async() => {
+        await fetchData();
+    }
+    );
+ },[]);
  return (
   <OuterContainer>
    <Modal>
@@ -257,7 +261,6 @@ export default ({ navigation }) => {
          fontSize: 32,
          borderBottomWidth: 1,
         }}
-        value={getValues("carNum")}
         defaultValue={userRegistInfo?.carNum}
        />
        {errors.carNum && <DataValueRed>필수 값 입니다.</DataValueRed>}
@@ -280,7 +283,6 @@ export default ({ navigation }) => {
          fontSize: 32,
          borderBottomWidth: 1,
         }}
-        value={getValues("corpNum")}
         defaultValue={userRegistInfo?.corpNum}
        />
        {errors.corpNum && <DataValueRed>필수 값 입니다.</DataValueRed>}
@@ -301,7 +303,6 @@ export default ({ navigation }) => {
          fontSize: 32,
          borderBottomWidth: 1,
         }}
-        value={getValues("corpNm")}
         defaultValue={userRegistInfo?.corpNm}
        />
        {errors.corpNm && <DataValueRed>필수 값 입니다.</DataValueRed>}
@@ -322,7 +323,6 @@ export default ({ navigation }) => {
          fontSize: 32,
          borderBottomWidth: 1,
         }}
-        value={getValues("corpRpresentNm")}
         defaultValue={userRegistInfo?.corpRpresentNm}
        />
        {errors.corpRpresentNm && <DataValueRed>필수 값 입니다.</DataValueRed>}
@@ -343,7 +343,6 @@ export default ({ navigation }) => {
          fontSize: 32,
          borderBottomWidth: 1,
         }}
-        value={getValues("corpCategory")}
         defaultValue={userRegistInfo?.corpCategory}
        />
        {errors.corpCategory && <DataValueRed>필수 값 입니다.</DataValueRed>}
@@ -364,7 +363,6 @@ export default ({ navigation }) => {
          fontSize: 32,
          borderBottomWidth: 1,
         }}
-        value={getValues("corpType")}
         defaultValue={userRegistInfo?.corpType}
        />
        {errors.corpType && <DataValueRed>필수 값 입니다.</DataValueRed>}
@@ -386,7 +384,6 @@ export default ({ navigation }) => {
           fontSize: 32,
           borderBottomWidth: 1,
          }}
-         value={getValues("userAddress")}
          defaultValue={userRegistInfo?.userAddress}
         />
        </TouchableOpacity>

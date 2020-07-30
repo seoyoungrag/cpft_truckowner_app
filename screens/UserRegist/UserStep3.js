@@ -153,7 +153,7 @@ export default ({ navigation }) => {
  const goStep2 = () => {
   navigation.navigate("UserStep2");
  };
- const [userRegistInfo, setUserRegistInfoProp] = useState(useUserRegistInfo());
+ const [userRegistInfo, setUserRegistInfoProp] = useState(null);
  const getUserRegistInfo = useGetUserRegistInfo();
  const setUserRegistInfo = useSetUserRegistInfo();
 
@@ -163,12 +163,23 @@ export default ({ navigation }) => {
     cancelable: false,
    });
   } else {
-   const newValue = Object.assign({}, userRegistInfo, userPattern);
+    const data = await getUserRegistInfo();
+   const newValue = Object.assign({}, data, {userPattern: userPattern});
    await setUserRegistInfo(newValue);
    navigation.navigate("UserStep4");
   }
  };
- useEffect(() => {}, [userPattern]);
+ useEffect(() => {
+    const fetchData = async() => { 
+        console.log('fetch!');
+        const data = await getUserRegistInfo();
+        setUserRegistInfoProp(data);
+    };
+    navigation.addListener('focus', async() => {
+        await fetchData();
+    }
+    );
+ },[]);
  return (
   <OuterContainer>
    <Modal>
@@ -196,10 +207,10 @@ export default ({ navigation }) => {
      <Data style={{ width: screenWidth, height: screenHeight - 100 }}>
       <DataName>잠금패턴 설정</DataName>
       <DataValue>앱 잠금패턴을 설정해주세요.</DataValue>
-      {!userPattern ? (
-       <View style={{ flex: 1 }}>
+      {!userPattern ? (userRegistInfo ? 
+       (<View style={{ flex: 1 }}>
         <PatternLockContianer onMatchedPattern={onMatchedPattern} />
-       </View>
+       </View>):null
       ) : (
        <View
         style={{

@@ -6,23 +6,24 @@ export default class FloatingLabelInput extends Component {
   super(props);
   this.state = {
    isFocused: false,
-   value: this.props.defaultValue ? this.props.defaultValue : "",
+   value: "",
   };
-  this._animatedIsFocused = new Animated.Value(this.state.value === "" ? 0 : 1);
+  this._animatedIsFocused = new Animated.Value((!this.props.defaultValue || this.state.value === "") ? 0 : 1);
  }
 
  handleFocus = () => this.setState({ isFocused: true });
  handleBlur = () => this.setState({ isFocused: false });
 
  componentDidUpdate() {
-  this.props.onChangeText(this.props.fieldNm, this.state.value);
   Animated.timing(this._animatedIsFocused, {
-   toValue: this.state.isFocused || this.state.value !== "" ? 1 : 0,
-   duration: 200,
+   toValue: this.state.isFocused || (this.props.defaultValue || (this.state.value!==undefined && this.state.value !== "")) ? 1 : 0,
+   duration: 100,
    useNativeDriver: false,
   }).start();
  }
-
+componentDidMount(){
+  this.setState({value: this.props.defaultValue});
+}
  render() {
   const { label, ...props } = this.props;
   const labelStyle = {
@@ -105,6 +106,7 @@ export default class FloatingLabelInput extends Component {
       } else {
        this.setState({ value });
       }
+      this.props.onChangeText(this.props.fieldNm, value);
      }}
      blurOnSubmit
      value={this.state.value}
