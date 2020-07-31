@@ -8,7 +8,9 @@ export default class FloatingLabelInput extends Component {
    isFocused: false,
    value: "",
   };
-  this._animatedIsFocused = new Animated.Value((!this.props.defaultValue || this.state.value === "") ? 0 : 1);
+  this._animatedIsFocused = new Animated.Value(
+   !this.props.defaultValue || this.state.value === "" ? 0 : 1
+  );
  }
 
  handleFocus = () => this.setState({ isFocused: true });
@@ -16,14 +18,19 @@ export default class FloatingLabelInput extends Component {
 
  componentDidUpdate() {
   Animated.timing(this._animatedIsFocused, {
-   toValue: this.state.isFocused || (this.props.defaultValue || (this.state.value!==undefined && this.state.value !== "")) ? 1 : 0,
+   toValue:
+    this.state.isFocused ||
+    this.props.defaultValue ||
+    (this.state.value !== undefined && this.state.value !== "")
+     ? 1
+     : 0,
    duration: 100,
    useNativeDriver: false,
   }).start();
  }
-componentDidMount(){
-  this.setState({value: this.props.defaultValue});
-}
+ componentDidMount() {
+  this.setState({ value: this.props.defaultValue });
+ }
  render() {
   const { label, ...props } = this.props;
   const labelStyle = {
@@ -60,6 +67,7 @@ componentDidMount(){
      onChangeText={(value) => {
       if (this.props.keyboardType && this.props.keyboardType == "numeric") {
        if (this.props.keyboardTypeAddOn == "corpNum") {
+        value = value.replace(/[^0-9]/g, "");
         const input = value.replace(/\D/g, "").substring(0, 10); // First ten digits of input only
         const zip = input.substring(0, 3);
         const middle = input.substring(3, 5);
@@ -106,6 +114,7 @@ componentDidMount(){
       } else {
        this.setState({ value });
       }
+
       this.props.onChangeText(this.props.fieldNm, value);
      }}
      blurOnSubmit

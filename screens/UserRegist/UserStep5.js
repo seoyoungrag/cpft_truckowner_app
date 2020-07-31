@@ -135,23 +135,28 @@ const DataValueRed = styled.Text`
  border-radius: 10px;
 `;
 export default ({ navigation }) => {
-    const logIn = useLogIn();
-    const loginSuccess = () => {
-        console.log('long');
-     logIn("testToken");
-    };
+ const logIn = useLogIn();
  const [userRegistInfo, setUserRegistInfoProp] = useState(null);
  const getUserRegistInfo = useGetUserRegistInfo();
+ const setUserRegistInfo = useSetUserRegistInfo();
 
- useEffect(() => {});
+ const loginSuccess = async () => {
+  await logIn("testToken");
+  //await setUserRegistInfoProp({...userRegistInfo, userRegistComplete: "Y"});
+  //await setUserRegistInfo({...userRegistInfo, userRegistComplete: "Y"})
+ };
+
+ const fetchData = async () => {
+  const data = await getUserRegistInfo();
+  setUserRegistInfoProp(data);
+ };
  useEffect(() => {
-    const fetchData = async() => { 
-        const data = await getUserRegistInfo();
-        console.log('fetch!', data);
-        setUserRegistInfoProp(data);
-    };
-    fetchData();
- },[]);
+  const unsubscribe = navigation.addListener("focus", async () => {
+   await fetchData();
+  });
+  return unsubscribe;
+ }, [navigation]);
+ useEffect(() => {}, []);
  return (
   <OuterContainer>
    <Modal>
@@ -180,7 +185,9 @@ export default ({ navigation }) => {
        style={{ flex: 1, justifyContent: "flex-start", marginTop: 0 }}
       >
        <DataName>가입 완료</DataName>
-    <DataValue>{userRegistInfo? JSON.stringify(userRegistInfo): null}</DataValue>
+       <DataValue>
+        {userRegistInfo ? JSON.stringify(userRegistInfo) : null}
+       </DataValue>
       </Container>
      </Data>
     </ScrollContainer>

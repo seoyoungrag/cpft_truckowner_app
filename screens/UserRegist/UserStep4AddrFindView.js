@@ -4,11 +4,6 @@ import styled from "styled-components/native";
 import { AntDesign } from "@expo/vector-icons";
 import Postcode from "react-native-daum-postcode";
 import { View } from "react-native-animatable";
-import {
- useUserRegistInfo,
- useGetUserRegistInfo,
- useSetUserRegistInfo,
-} from "../../UserRegistContext";
 
 const screenWidth = Math.round(Dimensions.get("window").width);
 const screenHeight = Math.round(Dimensions.get("window").height);
@@ -57,24 +52,13 @@ const DataName = styled.Text`
  margin-right: 40px;
 `;
 
-export default ({ navigation }) => {
- const goBack = () => {
-  navigation.pop();
+export default ({ navigation, route }) => {
+ const goBack = async () => {
+  await navigation.pop();
  };
-
- const [userRegistInfo, setUserRegistInfoProp] = useState(useUserRegistInfo());
- const getUserRegistInfo = useGetUserRegistInfo();
- const setUserRegistInfo = useSetUserRegistInfo();
-
  const confrimBtnClicked = async (addrData) => {
-  const newValue = Object.assign({}, userRegistInfo, {
-   userAddress: addrData.roadAddress + " " + addrData.zonecode,
-   roadAddress: addrData.roadAddress,
-   zonecode: addrData.zonecode,
-  });
-  console.log("newValue", newValue);
-  await setUserRegistInfo(newValue);
-  navigation.pop();
+  await route?.params?.setAddress(addrData);
+  await navigation.pop();
  };
 
  return (

@@ -36,55 +36,56 @@ export default () => {
  const logOut = useLogOut();
  const hasTutorialPass = useHasTutorialPass();
  const userRegistInfo = useUserRegistInfo();
- return hasCameraPermission != "undetermined" &&
+ return !isLoggedIn ? (
+  hasCameraPermission != "undetermined" &&
   hasPhonePermission != "undetermined" &&
   hasFilePermission != "undetermined" ? (
-  hasTutorialPass ? (
-   userRegistInfo?.userNm &&
-   userRegistInfo?.userBirthDate &&
-   userRegistInfo?.userSex &&
-   userRegistInfo?.userHPAuthAgree &&
-   userRegistInfo?.userPHNumber &&
-   userRegistInfo?.userPattern &&
-   userRegistInfo?.userServiceAuthAgree ? (
-    isLoggedIn ? (
-     <>
-      <TouchableOpacity onPress={logOut}>
-       <Text>로그아웃</Text>
-      </TouchableOpacity>
-
-      <NavigationContainer independent={true}>
-       <Stack.Navigator
-        mode="modal"
-        screenOptions={{
-         gestureEnabled: true,
-         headerStyle: {
-          backgroundColor: "black",
-          shadowColor: "black",
-          borderBottomColor: "black",
-         },
-         headerTintColor: "white",
-         headerBackTitleVisible: false,
-         headerShown: false,
-        }}
-       >
-        <Stack.Screen name="Tabs" component={Tabs} />
-        <Stack.Screen name="Detail" component={Detail} />
-        <Stack.Screen name="PhotoNavigation" component={PhotoNavigation} />
-        <Stack.Screen name="MessageNavigation" component={MessageNavigation} />
-       </Stack.Navigator>
-      </NavigationContainer>
-     </>
-    ) : (
+   hasTutorialPass ? (
+    userRegistInfo?.userNm &&
+    userRegistInfo?.userBirthDate &&
+    userRegistInfo?.userSex &&
+    userRegistInfo?.userHPAuthAgree &&
+    userRegistInfo?.userPHNumber &&
+    userRegistInfo?.userPattern &&
+    userRegistInfo?.userServiceAuthAgree &&
+    userRegistInfo?.userRegistComplete ? (
      <AuthNavigation />
+    ) : (
+     <UserRegistNavigation />
     )
    ) : (
-    <UserRegistNavigation />
+    <TutorialNavigation />
    )
   ) : (
-   <TutorialNavigation />
+   <PermissionNavigation />
   )
  ) : (
-  <PermissionNavigation />
+  <>
+   <TouchableOpacity onPress={logOut}>
+    <Text>로그아웃</Text>
+   </TouchableOpacity>
+
+   <NavigationContainer independent={true}>
+    <Stack.Navigator
+     mode="modal"
+     screenOptions={{
+      gestureEnabled: true,
+      headerStyle: {
+       backgroundColor: "black",
+       shadowColor: "black",
+       borderBottomColor: "black",
+      },
+      headerTintColor: "white",
+      headerBackTitleVisible: false,
+      headerShown: false,
+     }}
+    >
+     <Stack.Screen name="Tabs" component={Tabs} />
+     <Stack.Screen name="Detail" component={Detail} />
+     <Stack.Screen name="PhotoNavigation" component={PhotoNavigation} />
+     <Stack.Screen name="MessageNavigation" component={MessageNavigation} />
+    </Stack.Navigator>
+   </NavigationContainer>
+  </>
  );
 };

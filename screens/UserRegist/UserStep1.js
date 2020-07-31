@@ -156,7 +156,22 @@ export default ({ navigation }) => {
  };
 
  const { register, getValues, setValue, handleSubmit, errors } = useForm();
- useEffect(() => {});
+
+ const fetchData = async () => {
+  const data = await getUserRegistInfo();
+  setUserRegistInfoProp(data);
+
+  setValue("userNm", data?.userNm);
+  setValue("userBirthDate", data?.userBirthDate);
+  setValue("userSex", data?.userSex);
+  setValue("userHPAuthAgree", data?.userHPAuthAgree);
+ };
+ useEffect(() => {
+  const unsubscribe = navigation.addListener("focus", async () => {
+   await fetchData();
+  });
+  return unsubscribe;
+ }, [navigation]);
  useEffect(() => {
   register(
    { name: "userNm" },
@@ -189,22 +204,7 @@ export default ({ navigation }) => {
   );
   register({ name: "userHPAuthAgree" }, { required: true });
  }, [register]);
- useEffect(() => {
-    const fetchData = async() => { 
-        const data = await getUserRegistInfo();
-        console.log('fetch!', data);
-        setUserRegistInfoProp(data);
-        
-   setValue("userNm", data?.userNm);
-   setValue("userBirthDate", data?.userBirthDate);
-   setValue("userSex", data?.userSex);
-   setValue("userHPAuthAgree", data?.userHPAuthAgree);
-    };
-    navigation.addListener('focus', async() => {
-        await fetchData();
-    }
-    );
- },[]);
+ useEffect(() => {}, []);
  return (
   <OuterContainer>
    <Modal>
@@ -331,14 +331,17 @@ export default ({ navigation }) => {
         <DataValueBtn
          onPress={() => {
           if (!userRegistInfo?.userHPAuthAgree) {
-            setUserRegistInfoProp({...userRegistInfo, userHPAuthAgree:"Y"});
-            setValue("userHPAuthAgree", 'Y');
+           setUserRegistInfoProp({ ...userRegistInfo, userHPAuthAgree: "Y" });
+           setValue("userHPAuthAgree", "Y");
           } else {
-           setUserRegistInfoProp({...userRegistInfo, userHPAuthAgree:null});
+           setUserRegistInfoProp({ ...userRegistInfo, userHPAuthAgree: null });
            setValue("userHPAuthAgree", null);
           }
          }}
-         style={{ borderColor: userRegistInfo?.userHPAuthAgree == "Y" ? "#3a99fc" : "grey" }}
+         style={{
+          borderColor:
+           userRegistInfo?.userHPAuthAgree == "Y" ? "#3a99fc" : "grey",
+         }}
         >
          <Text>휴대폰 본인인증 동의(필수)</Text>
          <AntDesign

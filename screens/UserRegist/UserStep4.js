@@ -132,9 +132,19 @@ const DataValueRed = styled.Text`
  font-weight: 500;
  border-radius: 10px;
 `;
-export default ({ navigation }) => {
+export default ({ navigation, route }) => {
+ const setAddress = async (addrData) => {
+  const newValue = Object.assign({}, userRegistInfo, {
+   ...getValues(),
+   userAddress: addrData.roadAddress + " " + addrData.zonecode,
+   roadAddress: addrData.roadAddress,
+   zonecode: addrData.zonecode,
+  });
+  console.log(newValue);
+  await setUserRegistInfo(newValue);
+ };
  const goAddrFindView = () => {
-  navigation.push("UserStep4AddrFindView");
+  navigation.push("UserStep4AddrFindView", { setAddress });
  };
  const goStep3 = () => {
   navigation.navigate("UserStep3");
@@ -151,7 +161,29 @@ export default ({ navigation }) => {
   navigation.navigate("UserStep5");
  };
 
- useEffect(() => {});
+ const fetchData = async () => {
+  console.log("fetch!");
+  const data = await getUserRegistInfo();
+  setUserRegistInfoProp(data);
+  setValue("carNum", data?.carNum);
+  setValue("corpNum", data?.corpNum);
+  setValue("corpNm", data?.corpNm);
+  setValue("corpRpresentNm", data?.corpRpresentNm);
+  setValue("corpCategory", data?.corpCategory);
+  setValue("corpType", data?.corpType);
+  setValue("userAddress", data?.userAddress);
+ };
+
+ useEffect(() => {
+  const unsubscribe = navigation.addListener("focus", async () => {
+   console.log("asdf", userRegistInfo);
+   if (!userRegistInfo) {
+    await fetchData();
+   } else {
+   }
+  });
+  return unsubscribe;
+ }, [navigation]);
  useEffect(() => {
   register(
    { name: "carNum" },
@@ -196,24 +228,7 @@ export default ({ navigation }) => {
    }
   );
  }, [register]);
- useEffect(() => {
-    const fetchData = async() => { 
-        console.log('fetch!');
-        const data = await getUserRegistInfo();
-        setUserRegistInfoProp(data);
-        setValue("carNum", data?.carNum);
-        setValue("corpNum", data?.corpNum);
-        setValue("corpNm", data?.corpNm);
-        setValue("corpRpresentNm", data?.corpRpresentNm);
-        setValue("corpCategory", data?.corpCategory);
-        setValue("corpType", data?.corpType);
-        setValue("userAddress", data?.userAddress);
-    };
-    navigation.addListener('focus', async() => {
-        await fetchData();
-    }
-    );
- },[]);
+ useEffect(() => {}, []);
  return (
   <OuterContainer>
    <Modal>

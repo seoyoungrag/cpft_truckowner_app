@@ -157,7 +157,7 @@ export default ({ navigation }) => {
 
  const requestPHAuthNumber = () => {
   setValue("userPHAuthNumber", "123456");
-  setUserRegistInfoProp({...userRegistInfo, userPHAuthNumber: "123456"});
+  setUserRegistInfoProp({ ...userRegistInfo, userPHAuthNumber: "123456" });
   //setUserRegistInfoProp({...userRegistInfo, userPHAuthNumber: '123456'})
  };
  const confrimBtnClicked = async (userRegistInfoForm) => {
@@ -167,6 +167,15 @@ export default ({ navigation }) => {
   navigation.navigate("UserStep3");
  };
 
+ const fetchData = async () => {
+  console.log("fetch!");
+  const data = await getUserRegistInfo();
+  setUserRegistInfoProp(data);
+  setValue("userPHAuthNumber", null);
+  setValue("userPHNumber", data?.userPHNumber);
+  setValue("userPHAuthNumber", data?.userPHAuthNumber);
+  setValue("userServiceAuthAgree", data?.userServiceAuthAgree);
+ };
  useEffect(() => {
   register(
    { name: "userPHNumber" },
@@ -192,19 +201,11 @@ export default ({ navigation }) => {
   );
  }, [register]);
  useEffect(() => {
-    const fetchData = async() => { 
-        const data = await getUserRegistInfo();
-        setUserRegistInfoProp(data);
-        setValue("userPHAuthNumber", null);
-        setValue("userPHNumber", data?.userPHNumber);
-        setValue("userPHAuthNumber", data?.userPHAuthNumber);
-        setValue("userServiceAuthAgree", data?.userServiceAuthAgree);
-        };
-        navigation.addListener('focus', async() => {
-            await fetchData();
-        }
-    );
- },[]);
+  const unsubscribe = navigation.addListener("focus", async () => {
+   await fetchData();
+  });
+  return unsubscribe;
+ }, [navigation]);
  return (
   <OuterContainer>
    <Modal>
@@ -253,7 +254,9 @@ export default ({ navigation }) => {
            paddingLeft: 0,
            paddingTop: 0,
           }}
-          onValueChange={(itemValue, itemIndex) => setUserRegistInfoProp({...userRegistInfo, userPHType:itemValue})}
+          onValueChange={(itemValue, itemIndex) =>
+           setUserRegistInfoProp({ ...userRegistInfo, userPHType: itemValue })
+          }
           itemStyle={{
            backgroundColor: "grey",
            color: "blue",
@@ -382,23 +385,32 @@ export default ({ navigation }) => {
          onPress={() => {
           const userServiceAuthAgreeTmp = getValues("userServiceAuthAgree");
           if (!userServiceAuthAgreeTmp) {
-            setUserRegistInfoProp({...userRegistInfo, userServiceAuthAgree:"Y"});
-           
-            setValue("userServiceAuthAgree", 'Y');
+           setUserRegistInfoProp({
+            ...userRegistInfo,
+            userServiceAuthAgree: "Y",
+           });
+
+           setValue("userServiceAuthAgree", "Y");
           } else {
-            setUserRegistInfoProp({...userRegistInfo, userServiceAuthAgree:null});
-           
-            setValue("userServiceAuthAgree", null);
+           setUserRegistInfoProp({
+            ...userRegistInfo,
+            userServiceAuthAgree: null,
+           });
+
+           setValue("userServiceAuthAgree", null);
           }
          }}
          style={{
-          borderColor: userRegistInfo?.userServiceAuthAgree == "Y" ? "#3a99fc" : "grey",
+          borderColor:
+           userRegistInfo?.userServiceAuthAgree == "Y" ? "#3a99fc" : "grey",
          }}
         >
          <Text>앱 서비스 이용 동의(필수)</Text>
          <AntDesign
           name={"checkcircleo"}
-          color={userRegistInfo?.userServiceAuthAgree == "Y" ? "#3a99fc" : "grey"}
+          color={
+           userRegistInfo?.userServiceAuthAgree == "Y" ? "#3a99fc" : "grey"
+          }
           size={22}
          />
         </DataValueBtn>
