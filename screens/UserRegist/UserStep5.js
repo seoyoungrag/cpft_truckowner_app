@@ -141,6 +141,10 @@ export default ({ navigation }) => {
  const setUserRegistInfo = useSetUserRegistInfo();
 
  const loginSuccess = async () => {
+  const newValue = Object.assign({}, userRegistInfo, {
+   userRegistComplete: true,
+  });
+  await setUserRegistInfo(newValue);
   await logIn("testToken");
   //await setUserRegistInfoProp({...userRegistInfo, userRegistComplete: "Y"});
   //await setUserRegistInfo({...userRegistInfo, userRegistComplete: "Y"})
