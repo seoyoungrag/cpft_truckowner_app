@@ -29,7 +29,7 @@ const ScrollContainer = ({
    style={{
     backgroundColor: contentContainerStyle?.backgroundColor
      ? contentContainerStyle.backgroundColor
-     : "#007bff",
+     : "white",
    }}
    contentContainerStyle={{
     flex: loading ? 1 : 0,

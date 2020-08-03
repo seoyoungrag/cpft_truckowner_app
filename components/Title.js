@@ -3,10 +3,11 @@ import styled from "styled-components/native";
 import PropTypes from "prop-types";
 
 const Text = styled.Text`
- color: white;
+ color: black;
  font-weight: bold;
- font-size: 16px;
- margin-left: 30px;
+ font-size: 24px;
+ margin-top: 15px;
+ margin-left: 15px;
 `;
 
 const Title = ({ title }) => <Text>{title}</Text>;
