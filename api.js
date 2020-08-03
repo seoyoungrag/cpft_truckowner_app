@@ -1,11 +1,41 @@
 import axios from "axios";
+axios.interceptors.request.use((request) => {
+ console.log("Starting Request", request);
+ return request;
+});
+
+axios.interceptors.response.use((response) => {
+ console.log("Response:", response);
+ return response;
+});
 
 const TMDB_KEY = "743fefbcfe0700b7660693ec2c54ab7f";
-
+const jwtToken =
+ "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwidXNlckxvZ2luSWQiOiJ5b3VuZ3JhZy5zZW8iLCJ1c2VyTm0iOiLshJzsmIHrnb0iLCJ1c2VyU2VxIjoiMSIsInVzZXJFbWFpbCI6InlvdW5ncmFnLnNlb0B0aW1mLmNvLmtyIiwicm9sZXMiOlsiUk9MRV9VU0VSIiwiUk9MRV9DQVJSSUVSIl0sImNhcnJpZXJTZXEiOiIxIiwiY2Fycmllck5tIjoi7YyA7ZSE66CI7IucIiwiaWF0IjoxNTk2NDE5MjE0LCJleHAiOjE1OTkwMTEyMTR9.o1o9HDtEvJSPPyqchsPlnlKeAV8RqmpLFPNfdE5uYH4";
 const makeRequest = (path, params) =>
  axios.get(`https://api.themoviedb.org/3${path}`, {
   params: { ...params, api_key: TMDB_KEY },
  });
+const makeRequestCpft = (path, config) =>
+ axios.get(`http://52.78.103.218${path}`, config);
+
+const getAnythingCpft = async (path, params = {}) => {
+ try {
+  const {
+   data: { list },
+   data,
+  } = await makeRequestCpft(path, {
+   headers: {
+    "Content-Type": "application/json",
+    "X-AUTH-TOKEN": jwtToken,
+   },
+   params: { ...params },
+  });
+  return [list || data, null];
+ } catch (e) {
+  return [null, e];
+ }
+};
 
 const getAnything = async (path, params = {}) => {
  try {
@@ -40,3 +70,7 @@ export const apiImage = (
  path,
  defaultPoster = "https://images.unsplash.com/photo-1594782078968-2b07656d7bb2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
 ) => (path ? `https://image.tmdb.org/t/p/w500${path}` : defaultPoster);
+
+export const orderApi = {
+ now: (status) => getAnythingCpft(`/v1/mobile/order/status/${status}`),
+};
