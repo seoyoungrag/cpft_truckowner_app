@@ -4,6 +4,8 @@ import Title from "./Title";
 
 const Container = styled.View`
  margin-top: 20px;
+ padding-left: 15px;
+ padding-right: 15px;
 `;
 
 const List = ({ title, children }) => (

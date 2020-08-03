@@ -15,7 +15,9 @@ import styles from "./styles";
 import { AuthProvider } from "./AuthContext";
 import { PermissionProvider } from "./PermissionContext";
 import { TutorialProvider } from "./TutorialContext";
+import { CodeProvider } from "./CodeContext";
 import { UserRegistProvider } from "./UserRegistContext";
+import { codeApi } from "./api";
 
 const cacheImages = (images) =>
  images.map((image) => {
@@ -31,23 +33,40 @@ const cacheFonts = (fonts) =>
   Font.loadAsync(font);
  });
 
+const cacheCodes = async () => {
+ const [codes, codesErr] = await codeApi.codes();
+ if (codesErr) {
+  console.error(codesErr);
+ }
+ await AsyncStorage.setItem("codes", JSON.stringify(codes));
+ return codes;
+};
 export default function App() {
  //  AsyncStorage.clear();
+ const [codes, setCodes] = useState(null);
  const [userRegistInfo, setUserRegistInfo] = useState(null);
  const [isLoggedIn, setIsLoggedIn] = useState(null);
  const [hasTutorialPass, setHasTutorialPass] = useState(null);
  const [isReady, setIsReady] = useState(false);
  const [permissions, setPermissions] = useState(null);
 
- const loadAssets = () => {
+ const loadAssets = async () => {
   const images = cacheImages([
    "https://images.unsplash.com/photo-1594782078968-2b07656d7bb2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
   ]);
   const fonts = cacheFonts([Ionicons.font, FontAwesome.font]);
-  return Promise.all([...images, ...fonts]);
+  const codes = await cacheCodes();
+  return Promise.all([...images, ...fonts, ...codes]);
  };
 
  const onFinish = async () => {
+  const codes = await AsyncStorage.getItem("codes");
+  try {
+   setCodes(JSON.parse(codes));
+  } catch (e) {
+   console.log(e);
+   setCodes(null);
+  }
   const userRegistInfo = await AsyncStorage.getItem("userRegistInfo");
   try {
    setUserRegistInfo(JSON.parse(userRegistInfo));
@@ -98,22 +117,24 @@ export default function App() {
   <Provider store={store}>
    <ReactStore.Provider>
     <ThemeProvider theme={styles}>
-     <PermissionProvider
-      hasCameraPermission={permissions?.hasCameraPermission}
-      hasPhonePermission={permissions?.hasPhonePermission}
-      hasFilePermission={permissions?.hasFilePermission}
-     >
-      <UserRegistProvider userRegistInfo={userRegistInfo}>
-       <AuthProvider isLoggedIn={isLoggedIn}>
-        <TutorialProvider hasTutorialPass={hasTutorialPass}>
-         <NavigationContainer>
-          <Stack />
-         </NavigationContainer>
-         <StatusBar barStyle="light-content" />
-        </TutorialProvider>
-       </AuthProvider>
-      </UserRegistProvider>
-     </PermissionProvider>
+     <CodeProvider codes={codes}>
+      <PermissionProvider
+       hasCameraPermission={permissions?.hasCameraPermission}
+       hasPhonePermission={permissions?.hasPhonePermission}
+       hasFilePermission={permissions?.hasFilePermission}
+      >
+       <UserRegistProvider userRegistInfo={userRegistInfo}>
+        <AuthProvider isLoggedIn={isLoggedIn}>
+         <TutorialProvider hasTutorialPass={hasTutorialPass}>
+          <NavigationContainer>
+           <Stack />
+          </NavigationContainer>
+          <StatusBar barStyle="light-content" />
+         </TutorialProvider>
+        </AuthProvider>
+       </UserRegistProvider>
+      </PermissionProvider>
+     </CodeProvider>
     </ThemeProvider>
    </ReactStore.Provider>
   </Provider>
