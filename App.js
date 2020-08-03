@@ -7,7 +7,7 @@ import * as Font from "expo-font";
 import { Asset } from "expo-asset";
 import { Image, StatusBar, AsyncStorage } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
-import { Ionicons, FontAwesome } from "@expo/vector-icons";
+import { Ionicons, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import { ThemeProvider } from "styled-components";
 import * as Permissions from "expo-permissions";
 import Stack from "./navigation/Stack";
@@ -17,6 +17,7 @@ import { PermissionProvider } from "./PermissionContext";
 import { TutorialProvider } from "./TutorialContext";
 import { CodeProvider } from "./CodeContext";
 import { UserRegistProvider } from "./UserRegistContext";
+import { ModalProvider } from "./ModalContext";
 import { codeApi } from "./api";
 
 const cacheImages = (images) =>
@@ -54,7 +55,7 @@ export default function App() {
   const images = cacheImages([
    "https://images.unsplash.com/photo-1594782078968-2b07656d7bb2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
   ]);
-  const fonts = cacheFonts([Ionicons.font, FontAwesome.font]);
+  const fonts = cacheFonts([Ionicons.font, FontAwesome.font, FontAwesome5.font]);
   const codes = await cacheCodes();
   return Promise.all([...images, ...fonts, ...codes]);
  };
@@ -117,6 +118,7 @@ export default function App() {
   <Provider store={store}>
    <ReactStore.Provider>
     <ThemeProvider theme={styles}>
+        <ModalProvider isModal={false}>
      <CodeProvider codes={codes}>
       <PermissionProvider
        hasCameraPermission={permissions?.hasCameraPermission}
@@ -135,6 +137,7 @@ export default function App() {
        </UserRegistProvider>
       </PermissionProvider>
      </CodeProvider>
+     </ModalProvider>
     </ThemeProvider>
    </ReactStore.Provider>
   </Provider>

@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Text } from "react-native";
 import Movies from "../screens/Movies";
@@ -7,9 +7,12 @@ import Search from "../screens/Search";
 import Favs from "../screens/Favs";
 import Orders from "../screens/Orders";
 import { Ionicons } from "@expo/vector-icons";
-import { Platform } from "react-native";
+import { Dimensions, TouchableOpacity, TouchableHighlight } from "react-native";
 import PhotoNavigation from "./PhotoNavigation";
 import { FontAwesome5 } from "@expo/vector-icons";
+import { View } from "react-native-animatable";
+import {useIsModal, useSetIsModalProp} from "../ModalContext"
+const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
 const Tabs = createBottomTabNavigator();
 
@@ -18,14 +21,16 @@ const getHeaderName = (route) =>
 //<FontAwesome5 name="truck-moving" size={24} color="black" />
 
 export default ({ navigation, route }) => {
- //console.log(route);
+    const setIsModalProp = useSetIsModalProp();
  useLayoutEffect(() => {
+    setIsModalProp(false);
   navigation.setOptions({
    title: getHeaderName(route),
   });
  }, [route]);
 
  return (
+     <>
   <Tabs.Navigator
    screenOptions={({ route }) => ({
     tabBarIcon: ({ focused }) => {
@@ -67,7 +72,7 @@ export default ({ navigation, route }) => {
      } else if (route.name === "Photo") {
       label = "albums";
      }
-     return <Text style={{ fontSize: 12 }}>{label}</Text>;
+     return <Text style={{ fontSize: 12, color:focused ? "#3a99fc" : "grey" }}>{label}</Text>;
     },
    })}
    tabBarOptions={{
@@ -75,16 +80,31 @@ export default ({ navigation, route }) => {
     style: {
      /*backgroundColor: "#007bff",*/
      /*backgroundColor: "white",*/
-     borderTopColor: "silver",
+     borderTopColor: useIsModal()? 'rgba(0,0,0,1)':"silver",
+     position: 'absolute',
+     /*opacity: useIsModal()? 0.5 : 1,*/
+     backgroundColor: useIsModal()? 'rgba(0,0,0,1)':"white"
+     
     },
+    tabBarOnpress: ()=>{console.log('asdf');}
+   }}
+   tabBarOnpress={({navigation, defaultHandler}) => {
+       console.log('press', useIsModal());
+       if(useIsModal()){
+           console.log('123');
+        return null;
+       }else{
+        defaultHandler();
+       }
    }}
   >
-   <Tabs.Screen name="Orders" component={Orders} />
-   <Tabs.Screen name="Movies" component={Movies} />
-   <Tabs.Screen name="TV" component={Tv} />
-   <Tabs.Screen name="Search" component={Search} />
-   <Tabs.Screen name="Discovery" component={Favs} />
-   <Tabs.Screen name="Photo" component={PhotoNavigation} />
+   <Tabs.Screen name="Orders" component={Orders} options={{tabBarButton : (props) => useIsModal()? <TouchableOpacity {...props} disabled={true} /> :<TouchableOpacity activeOpacity={1} {...props} />}} />
+   <Tabs.Screen name="Movies" component={Movies} options={{tabBarButton : (props) => useIsModal()? <TouchableOpacity {...props} disabled={true} /> :<TouchableOpacity activeOpacity={1} {...props} />}} />
+   <Tabs.Screen name="TV" component={Tv} options={{tabBarButton : (props) => useIsModal()? <TouchableOpacity {...props} disabled={true} /> :<TouchableOpacity activeOpacity={1} {...props} />}} />
+   <Tabs.Screen name="Search" component={Search} options={{tabBarButton : (props) => useIsModal()? <TouchableOpacity {...props} disabled={true} /> :<TouchableOpacity activeOpacity={1} {...props} />}} />
+   <Tabs.Screen name="Discovery" component={Favs} options={{tabBarButton : (props) => useIsModal()? <TouchableOpacity {...props} disabled={true} /> :<TouchableOpacity activeOpacity={1} {...props} />}} />
+   <Tabs.Screen name="Photo" component={PhotoNavigation} options={{tabBarButton : (props) => useIsModal()? <TouchableOpacity {...props} disabled={true} /> :<TouchableOpacity activeOpacity={1} {...props} />}} />
   </Tabs.Navigator>
+  </>
  );
 };

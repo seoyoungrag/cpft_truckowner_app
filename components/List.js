@@ -1,11 +1,13 @@
 import React from "react";
 import styled from "styled-components/native";
 import Title from "./Title";
+import { View } from "react-native";
 
 const Container = styled.View`
- margin-top: 20px;
- padding-left: 15px;
- padding-right: 15px;
+flex:1;
+margin-top: 10px;
+padding-top: 35px;
+ margin-bottom: 45px;
 `;
 const ListTitle = styled.View`
  margin-left: 15px;
@@ -15,24 +17,16 @@ const ListTitle = styled.View`
 `;
 
 const HeaderView = styled.View`
- position: absolute;
- width: 100%;
- top: 0px;
- left: 0px;
- z-index: 2;
- background-color: white;
 `;
-const BodyView = styled.View``;
+const BodyView = styled.View`
+`;
 const List = ({ title, filter, children }) => (
- <>
-  <HeaderView>
+ <View style={{flex:1, 
+    backgroundColor: 'white'}}>
    <Title title={title} />
-   {filter ? filter : null}
-  </HeaderView>
-  <BodyView>
-   <Container>{children}</Container>
-  </BodyView>
- </>
+   <Container>{children}
+   {filter ? filter : null}</Container>
+ </View>
 );
 
 export default List;
