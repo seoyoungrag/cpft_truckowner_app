@@ -1,5 +1,6 @@
 import React, { useEffect, useLayoutEffect } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Text } from "react-native";
 import Movies from "../screens/Movies";
 import Tv from "../screens/Tv";
 import Search from "../screens/Search";
@@ -28,9 +29,10 @@ export default ({ navigation, route }) => {
   <Tabs.Navigator
    screenOptions={({ route }) => ({
     tabBarIcon: ({ focused }) => {
-     let iconName = Platform.OS === "ios" ? "ios-" : "md-";
+     //let iconName = Platform.OS === "ios" ? "ios-" : "md-";
+     let iconName = "";
      if (route.name === "Orders") {
-      iconName += "film";
+      iconName += "truck";
      } else if (route.name === "Movies") {
       iconName += "film";
      } else if (route.name === "TV") {
@@ -40,19 +42,36 @@ export default ({ navigation, route }) => {
      } else if (route.name === "Discovery") {
       iconName += "heart";
      } else if (route.name === "Photo") {
-      iconName += "albums";
+      iconName += "file-image";
      }
      return (
-      <Ionicons
+      <FontAwesome5
        name={iconName}
        color={focused ? "#3a99fc" : "grey"}
-       size={26}
+       size={20}
       />
      );
     },
+    tabBarLabel: ({ focused }) => {
+     let label;
+     if (route.name === "Orders") {
+      label = "오더";
+     } else if (route.name === "Movies") {
+      label = "film";
+     } else if (route.name === "TV") {
+      label = "tv";
+     } else if (route.name === "Search") {
+      label = "search";
+     } else if (route.name === "Discovery") {
+      label = "heart";
+     } else if (route.name === "Photo") {
+      label = "albums";
+     }
+     return <Text style={{ fontSize: 12 }}>{label}</Text>;
+    },
    })}
    tabBarOptions={{
-    showLabel: false,
+    showLabel: true,
     style: {
      /*backgroundColor: "#007bff",*/
      /*backgroundColor: "white",*/

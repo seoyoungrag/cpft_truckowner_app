@@ -7,11 +7,31 @@ const Container = styled.View`
  padding-left: 15px;
  padding-right: 15px;
 `;
+const ListTitle = styled.View`
+ margin-left: 15px;
+ margin-right: 15px;
+ margin-top: 15px;
+ margin-left: 15px;
+`;
 
-const List = ({ title, children }) => (
+const HeaderView = styled.View`
+ position: absolute;
+ width: 100%;
+ top: 0px;
+ left: 0px;
+ z-index: 2;
+ background-color: white;
+`;
+const BodyView = styled.View``;
+const List = ({ title, filter, children }) => (
  <>
-  <Title title={title} />
-  <Container>{children}</Container>
+  <HeaderView>
+   <Title title={title} />
+   {filter ? filter : null}
+  </HeaderView>
+  <BodyView>
+   <Container>{children}</Container>
+  </BodyView>
  </>
 );
 
