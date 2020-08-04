@@ -1,14 +1,11 @@
-import React, { useState } from "react";
+import React, {
+ useState,
+ useEffect,
+ useLayoutEffect,
+ useCallback,
+} from "react";
 import styled from "styled-components/native";
-import {
- Dimensions,
- Picker,
- Text,
- SafeAreaView,
- View,
- TouchableWithoutFeedback,
- TouchableOpacity,
-} from "react-native";
+import { Dimensions, Text } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import HorizontalOrder from "../../components/HorizontalOrder";
 import ScrollContainer from "../../components/ScrollContainer";
@@ -61,11 +58,12 @@ const ModalBody = styled.View`
 const FilterParentBtn = styled.TouchableOpacity`
  flex: 1;
  border-width: 1px;
- padding-left: 10px;
- padding-right: 10px;
+ margin-left: 10px;
+ margin-right: 10px;
  flex-direction: row;
  align-items: center;
  justify-content: space-around;
+ border-radius: 10px;
 `;
 
 const FilterBtnList = styled.View`
@@ -77,11 +75,12 @@ const FilterBtnList = styled.View`
  align-items: stretch;
  width: 100%;
  border-top-width: 0.9px;
+ padding-bottom: 15px;
  border-bottom-width: 0.5px;
- margin-bottom: 15px;
+ border-color: grey;
 `;
 
-const FilterBtn = styled.Text`
+const FilterBtn = styled.TouchableOpacity`
  width: ${(WIDTH - 15 * 6) / 3}px;
  margin-top: 15px;
  margin-left: 15px;
@@ -90,6 +89,8 @@ const FilterBtn = styled.Text`
  border-radius: 10px;
  text-align: center;
  font-size: 16px;
+ align-items: center;
+ justify-content: center;
 `;
 
 const FilterBottomButtons = styled.View`
@@ -100,73 +101,142 @@ const FilterBottomButtons = styled.View`
 const FilterBottomButton = styled.TouchableOpacity`
  flex: 1;
  align-items: center;
+ justify-content: center;
+ background-color: #3a99fc;
+ height: 50px;
+`;
+const FilterBottomButtonText = styled.Text`
+ color: white;
+`;
+
+const FilterBottomButtonCancel = styled.TouchableOpacity`
+ flex: 1;
+ align-items: center;
+ justify-content: center;
+ background-color: whitesmoke;
+ height: 50px;
 `;
 const filter = (codes) => {
+ const [filterBtnSelected1, setFilterBtnSelected1] = useState([]);
+ const [filterBtnSelectedAll1, setFilterBtnSelectedAll1] = useState(false);
+ const [filterBtnSelected2, setFilterBtnSelected2] = useState([]);
+ const [filterBtnSelectedAll2, setFilterBtnSelectedAll2] = useState(false);
+ const [filterBtnSelected3, setFilterBtnSelected3] = useState([]);
+ const [filterBtnSelectedAll3, setFilterBtnSelectedAll3] = useState(false);
  const [filterSelected, setFilterSelected] = useState([false, false, false]);
  const setIsModal = useSetIsModalProp();
+
  return (
   <>
    <FilterContainer>
     <FilterHeader>
      <FilterParentBtn
+      style={{
+       borderColor: filterSelected[0] ? "#3a99fc" : "grey",
+      }}
       onPress={() => {
        setFilterSelected([true, false, false]);
        setIsModal(true);
       }}
      >
       <Text>지역</Text>
-      <FontAwesome5 name={"caret-down"} color={"black"} />
+      <FontAwesome5
+       name={filterSelected[0] ? "caret-square-down" : "caret-square-right"}
+       color={filterSelected[0] ? "#3a99fc" : "grey"}
+      />
      </FilterParentBtn>
      <FilterParentBtn
+      style={{ borderColor: filterSelected[1] ? "#3a99fc" : "grey" }}
       onPress={() => {
        setFilterSelected([false, true, false]);
        setIsModal(true);
       }}
      >
       <Text>모집유형</Text>
-      <FontAwesome5 name={"caret-down"} color={"black"} />
+      <FontAwesome5
+       name={filterSelected[1] ? "caret-square-down" : "caret-square-right"}
+       color={filterSelected[1] ? "#3a99fc" : "grey"}
+      />
      </FilterParentBtn>
 
      <FilterParentBtn
+      style={{ borderColor: filterSelected[2] ? "#3a99fc" : "grey" }}
       onPress={() => {
        setFilterSelected([false, false, true]);
        setIsModal(true);
       }}
      >
       <Text>톤수</Text>
-      <FontAwesome5 name={"caret-down"} color={"black"} />
+      <FontAwesome5
+       name={filterSelected[2] ? "caret-square-down" : "caret-square-right"}
+       color={filterSelected[2] ? "#3a99fc" : "grey"}
+      />
      </FilterParentBtn>
-     <FontAwesome5 name={"filter"} color={"black"} size={20} />
+     <FontAwesome5 name={"filter"} color={"grey"} size={20} />
     </FilterHeader>
     <FilterBody>
      {useIsModal() && filterSelected[0] && (
       <ModalBody>
        <FilterBtnList>
-        <FilterBtn>전체</FilterBtn>
+        <FilterBtn
+         activeOpacity={1}
+         style={{
+          borderColor: filterBtnSelectedAll1 ? "#3a99fc" : "whitesmoke",
+         }}
+         onPress={() => {
+          setFilterBtnSelectedAll1(true);
+          setFilterBtnSelected1([]);
+         }}
+        >
+         <Text>전체</Text>
+        </FilterBtn>
         {codes.map((code) => {
          return (
           code.codeCtgryNm === "지역" && (
-           <FilterBtn key={code.code}>{code.codeValue}</FilterBtn>
+           <FilterBtn
+            activeOpacity={1}
+            style={{
+             borderColor: filterBtnSelected1.includes(code.code)
+              ? "#3a99fc"
+              : "whitesmoke",
+            }}
+            key={code.code}
+            onPress={() => {
+             var cd = `${code.code}`;
+             setFilterBtnSelectedAll1(false);
+             if (
+              filterBtnSelected1.length > 1 &&
+              filterBtnSelected1.includes(cd)
+             ) {
+              var arr = filterBtnSelected1.filter((item) => item !== cd);
+              setFilterBtnSelected1(arr);
+             } else {
+              setFilterBtnSelected1([...filterBtnSelected1, cd]);
+             }
+            }}
+           >
+            <Text>{code.codeValue}</Text>
+           </FilterBtn>
           )
          );
         })}
        </FilterBtnList>
        <FilterBottomButtons>
-        <FilterBottomButton
-         onPress={() => {
-          setFilterSelected([false, false, false]);
-          setIsModal(false);
-         }}
-        >
-         <Text>확인</Text>
-        </FilterBottomButton>
-        <FilterBottomButton
+        <FilterBottomButtonCancel
          onPress={() => {
           setFilterSelected([false, false, false]);
           setIsModal(false);
          }}
         >
          <Text>취소</Text>
+        </FilterBottomButtonCancel>
+        <FilterBottomButton
+         onPress={() => {
+          setFilterSelected([false, false, false]);
+          setIsModal(false);
+         }}
+        >
+         <FilterBottomButtonText>확인</FilterBottomButtonText>
         </FilterBottomButton>
        </FilterBottomButtons>
       </ModalBody>
@@ -175,31 +245,65 @@ const filter = (codes) => {
      {useIsModal() && filterSelected[1] && (
       <ModalBody>
        <FilterBtnList>
-        <FilterBtn>전체</FilterBtn>
+        <FilterBtn
+         activeOpacity={1}
+         style={{
+          borderColor: filterBtnSelectedAll2 ? "#3a99fc" : "whitesmoke",
+         }}
+         onPress={() => {
+          setFilterBtnSelectedAll2(true);
+          setFilterBtnSelected2([]);
+         }}
+        >
+         <Text>전체</Text>
+        </FilterBtn>
         {codes.map((code) => {
          return (
           code.codeCtgryNm === "모집유형" && (
-           <FilterBtn key={code.code}>{code.codeValue}</FilterBtn>
+           <FilterBtn
+            activeOpacity={1}
+            style={{
+             borderColor: filterBtnSelected2.includes(code.code)
+              ? "#3a99fc"
+              : "whitesmoke",
+            }}
+            key={code.code}
+            onPress={() => {
+             var cd = `${code.code}`;
+             setFilterBtnSelectedAll2(false);
+             if (
+              filterBtnSelected2.length > 1 &&
+              filterBtnSelected2.includes(cd)
+             ) {
+              var arr = filterBtnSelected2.filter((item) => item !== cd);
+              setFilterBtnSelected2(arr);
+             } else {
+              setFilterBtnSelected2([...filterBtnSelected2, cd]);
+             }
+            }}
+           >
+            <Text>{code.codeValue}</Text>
+           </FilterBtn>
           )
          );
         })}
        </FilterBtnList>
        <FilterBottomButtons>
-        <FilterBottomButton
-         onPress={() => {
-          setFilterSelected([false, false, false]);
-          setIsModal(false);
-         }}
-        >
-         <Text>확인</Text>
-        </FilterBottomButton>
-        <FilterBottomButton
+        <FilterBottomButtonCancel
          onPress={() => {
           setFilterSelected([false, false, false]);
           setIsModal(false);
          }}
         >
          <Text>취소</Text>
+        </FilterBottomButtonCancel>
+        <FilterBottomButton
+         onPress={() => {
+          setFilterSelected([false, false, false]);
+          setIsModal(false);
+         }}
+        >
+         <FilterBottomButtonText>확인</FilterBottomButtonText>
         </FilterBottomButton>
        </FilterBottomButtons>
       </ModalBody>
@@ -207,31 +311,65 @@ const filter = (codes) => {
      {useIsModal() && filterSelected[2] && (
       <ModalBody>
        <FilterBtnList>
-        <FilterBtn>전체</FilterBtn>
+        <FilterBtn
+         activeOpacity={1}
+         style={{
+          borderColor: filterBtnSelectedAll3 ? "#3a99fc" : "whitesmoke",
+         }}
+         onPress={() => {
+          setFilterBtnSelectedAll3(true);
+          setFilterBtnSelected3([]);
+         }}
+        >
+         <Text>전체</Text>
+        </FilterBtn>
         {codes.map((code) => {
          return (
           code.codeCtgryNm === "톤수" && (
-           <FilterBtn key={code.code}>{code.codeValue}</FilterBtn>
+           <FilterBtn
+            activeOpacity={1}
+            style={{
+             borderColor: filterBtnSelected3.includes(code.code)
+              ? "#3a99fc"
+              : "whitesmoke",
+            }}
+            key={code.code}
+            onPress={() => {
+             var cd = `${code.code}`;
+             setFilterBtnSelectedAll3(false);
+             if (
+              filterBtnSelected3.length > 1 &&
+              filterBtnSelected3.includes(cd)
+             ) {
+              var arr = filterBtnSelected3.filter((item) => item !== cd);
+              setFilterBtnSelected3(arr);
+             } else {
+              setFilterBtnSelected3([...filterBtnSelected3, cd]);
+             }
+            }}
+           >
+            <Text>{code.codeValue}</Text>
+           </FilterBtn>
           )
          );
         })}
        </FilterBtnList>
        <FilterBottomButtons>
-        <FilterBottomButton
-         onPress={() => {
-          setFilterSelected([false, false, false]);
-          setIsModal(false);
-         }}
-        >
-         <Text>확인</Text>
-        </FilterBottomButton>
-        <FilterBottomButton
+        <FilterBottomButtonCancel
          onPress={() => {
           setFilterSelected([false, false, false]);
           setIsModal(false);
          }}
         >
          <Text>취소</Text>
+        </FilterBottomButtonCancel>
+        <FilterBottomButton
+         onPress={() => {
+          setFilterSelected([false, false, false]);
+          setIsModal(false);
+         }}
+        >
+         <FilterBottomButtonText>확인</FilterBottomButtonText>
         </FilterBottomButton>
        </FilterBottomButtons>
       </ModalBody>
