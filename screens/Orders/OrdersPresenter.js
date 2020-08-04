@@ -10,7 +10,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import HorizontalOrder from "../../components/HorizontalOrder";
 import ScrollContainer from "../../components/ScrollContainer";
 import List from "../../components/List";
-import { code } from "../../utils";
+import { code, trimText } from "../../utils";
 import { useIsModal, useSetIsModalProp } from "../../ModalContext";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
@@ -139,7 +139,18 @@ const filter = (codes) => {
        setIsModal(true);
       }}
      >
-      <Text>지역</Text>
+      <Text>
+       {filterBtnSelected1.length > 0
+        ? trimText(
+           filterBtnSelected1
+            .map((c, i) => {
+             return code(codes, c);
+            })
+            .join(),
+           7
+          )
+        : "지역전체"}
+      </Text>
       <FontAwesome5
        name={filterSelected[0] ? "caret-square-down" : "caret-square-right"}
        color={filterSelected[0] ? "#3a99fc" : "grey"}
@@ -152,7 +163,18 @@ const filter = (codes) => {
        setIsModal(true);
       }}
      >
-      <Text>모집유형</Text>
+      <Text>
+       {filterBtnSelected2.length > 0
+        ? trimText(
+           filterBtnSelected2
+            .map((c, i) => {
+             return code(codes, c);
+            })
+            .join(),
+           7
+          )
+        : "모집유형전체"}
+      </Text>
       <FontAwesome5
        name={filterSelected[1] ? "caret-square-down" : "caret-square-right"}
        color={filterSelected[1] ? "#3a99fc" : "grey"}
@@ -166,7 +188,18 @@ const filter = (codes) => {
        setIsModal(true);
       }}
      >
-      <Text>톤수</Text>
+      <Text>
+       {filterBtnSelected3.length > 0
+        ? trimText(
+           filterBtnSelected3
+            .map((c, i) => {
+             return code(codes, c);
+            })
+            .join(),
+           7
+          )
+        : "톤수전체"}
+      </Text>
       <FontAwesome5
        name={filterSelected[2] ? "caret-square-down" : "caret-square-right"}
        color={filterSelected[2] ? "#3a99fc" : "grey"}
