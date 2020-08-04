@@ -1,7 +1,11 @@
 import React from "react";
-import { createStackNavigator } from "@react-navigation/stack";
+import {
+ createStackNavigator,
+ HeaderBackButton,
+} from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import Detail from "../screens/Detail";
+import Filter from "../screens/Filter";
 import Tabs from "./Tabs";
 import { useIsLoggedIn, useLogIn, useLogOut } from "../AuthContext";
 import AuthNavigation from "./AuthNavigation";
@@ -22,6 +26,7 @@ import {
  useSetUserRegistInfo,
  useUserRegistInfo,
 } from "../UserRegistContext";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 const Stack = createStackNavigator();
 
@@ -71,9 +76,9 @@ export default () => {
      screenOptions={{
       gestureEnabled: true,
       headerStyle: {
-       backgroundColor: "black",
-       shadowColor: "black",
-       borderBottomColor: "black",
+       backgroundColor: "#3a99fc",
+       shadowColor: "#3a99fc",
+       borderBottomColor: "#3a99fc",
       },
       headerTintColor: "white",
       headerBackTitleVisible: false,
@@ -82,6 +87,44 @@ export default () => {
     >
      <Stack.Screen name="Tabs" component={Tabs} />
      <Stack.Screen name="Detail" component={Detail} />
+     <Stack.Screen
+      name="Filter"
+      component={Filter}
+      options={{
+       headerTitleStyle: {
+        textAlign: "center",
+        marginLeft: -20,
+        paddingLeft: 0,
+        fontSize: 24,
+        color: "white",
+       },
+       /*
+       headerLeft: (props) => (
+        <HeaderBackButton
+         {...props}
+         onPress={() => {
+          // Do something
+         }}
+        ></HeaderBackButton>
+       ),*/
+       headerTintColor: "white",
+       headerBackTitleVisible: false,
+       headerShown: true,
+       headerTitle: (props) => (
+        <Text {...props}>
+         필터{" "}
+         <FontAwesome5
+          name="filter"
+          size={24}
+          color="white"
+          style={{
+           marginLeft: 10,
+          }}
+         />
+        </Text>
+       ),
+      }}
+     />
      <Stack.Screen name="PhotoNavigation" component={PhotoNavigation} />
      <Stack.Screen name="MessageNavigation" component={MessageNavigation} />
     </Stack.Navigator>

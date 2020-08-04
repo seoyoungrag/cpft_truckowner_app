@@ -5,13 +5,14 @@ import React, {
  useCallback,
 } from "react";
 import styled from "styled-components/native";
-import { Dimensions, Text } from "react-native";
+import { Dimensions, Text, TouchableOpacity } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import HorizontalOrder from "../../components/HorizontalOrder";
 import ScrollContainer from "../../components/ScrollContainer";
 import List from "../../components/List";
 import { code, trimText } from "../../utils";
 import { useIsModal, useSetIsModalProp } from "../../ModalContext";
+import { useNavigation } from "@react-navigation/native";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -116,7 +117,7 @@ const FilterBottomButtonCancel = styled.TouchableOpacity`
  background-color: whitesmoke;
  height: 50px;
 `;
-const filter = (codes) => {
+const filter = (codes, navigation) => {
  const [filterBtnSelected1, setFilterBtnSelected1] = useState([]);
  const [filterBtnSelectedAll1, setFilterBtnSelectedAll1] = useState(false);
  const [filterBtnSelected2, setFilterBtnSelected2] = useState([]);
@@ -205,7 +206,20 @@ const filter = (codes) => {
        color={filterSelected[2] ? "#3a99fc" : "grey"}
       />
      </FilterParentBtn>
-     <FontAwesome5 name={"filter"} color={"grey"} size={20} />
+     <TouchableOpacity
+      onPress={() => {
+       navigation.navigate("Filter", {
+        filterBtnSelected1,
+        filterBtnSelectedAll1,
+        filterBtnSelected2,
+        filterBtnSelectedAll2,
+        filterBtnSelected3,
+        filterBtnSelectedAll3,
+       });
+      }}
+     >
+      <FontAwesome5 name={"filter"} color={"grey"} size={20} />
+     </TouchableOpacity>
     </FilterHeader>
     <FilterBody>
      {useIsModal() && filterSelected[0] && (
@@ -243,7 +257,7 @@ const filter = (codes) => {
              ) {
               var arr = filterBtnSelected1.filter((item) => item !== cd);
               setFilterBtnSelected1(arr);
-             } else {
+             } else if (!filterBtnSelected1.includes(cd)) {
               setFilterBtnSelected1([...filterBtnSelected1, cd]);
              }
             }}
@@ -310,7 +324,7 @@ const filter = (codes) => {
              ) {
               var arr = filterBtnSelected2.filter((item) => item !== cd);
               setFilterBtnSelected2(arr);
-             } else {
+             } else if (!filterBtnSelected2.includes(cd)) {
               setFilterBtnSelected2([...filterBtnSelected2, cd]);
              }
             }}
@@ -376,7 +390,7 @@ const filter = (codes) => {
              ) {
               var arr = filterBtnSelected3.filter((item) => item !== cd);
               setFilterBtnSelected3(arr);
-             } else {
+             } else if (!filterBtnSelected3.includes(cd)) {
               setFilterBtnSelected3([...filterBtnSelected3, cd]);
              }
             }}
@@ -414,7 +428,8 @@ const filter = (codes) => {
 };
 
 export default ({ refreshFn, loading, now, codes }) => {
- const Filter = filter(codes);
+ const navigation = useNavigation();
+ const Filter = filter(codes, navigation);
  return (
   <List title="오더" filter={Filter}>
    <ScrollContainer
