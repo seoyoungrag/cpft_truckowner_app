@@ -37,21 +37,9 @@ export default ({ userPattern, loginSuccess }) => {
   loginSuccess();
  };
 
- const _patternContainerOpacity = new Animated.Value(0);
-
- const resetAnimation = () => {
-  Animated.timing(_patternContainerOpacity, {
-   toValue: 0,
-   duration: 0,
-   useNativeDriver: true,
-  }).start();
- };
-
  const onBackPress = () => {
   if (showPatternLock) {
    setShowPatternLock(false);
-   _patternContainerOpacity.setValue(0);
-   resetAnimation();
    return true;
   } else {
    BackHandler.exitApp();
@@ -61,15 +49,7 @@ export default ({ userPattern, loginSuccess }) => {
 
  useEffect(() => {
   BackHandler.addEventListener("hardwareBackPress", onBackPress);
-  Animated.parallel([
-   Animated.timing(_patternContainerOpacity, {
-    toValue: 1,
-    duration: 500,
-    useNativeDriver: true,
-   }),
-  ]).start();
   return () => {
-   resetAnimation();
    BackHandler.removeEventListener("hardwareBackPress", onBackPress);
   };
  });
@@ -77,9 +57,7 @@ export default ({ userPattern, loginSuccess }) => {
  //console.log(showPatternLock, _panYCoordinate, patternLockScale, _patternContainerOpacity);
  return (
   <View style={styles.root}>
-   <Animated.View
-    style={[styles.patternContainer, { opacity: _patternContainerOpacity }]}
-   >
+   <View style={[styles.patternContainer]}>
     <PatternLockPresenter
      containerDimension={PATTERN_DIMENSION}
      containerWidth={PATTERN_CONTAINER_WIDTH}
@@ -100,7 +78,7 @@ export default ({ userPattern, loginSuccess }) => {
       />
      </View>
     )}
-   </Animated.View>
+   </View>
   </View>
  );
 };
