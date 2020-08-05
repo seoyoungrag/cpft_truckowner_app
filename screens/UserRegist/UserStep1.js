@@ -159,10 +159,12 @@ export default ({ navigation }) => {
 
  const setValueWithState = async (fildNm, value) => {
   await setValue(fildNm, value);
+  await setUserRegistInfoProp({ ...userRegistInfo, [fildNm]: value });
   await setUserRegistInfo({ ...userRegistInfo, [fildNm]: value });
  };
  const fetchData = async () => {
   const data = await getUserRegistInfo();
+  console.log(data);
   setUserRegistInfoProp(data);
   setValue("userNm", data?.userNm);
   setValue("userBirthDate", data?.userBirthDate);

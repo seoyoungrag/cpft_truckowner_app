@@ -75,7 +75,7 @@ export default ({ navigation, route }) => {
      >
       <AntDesign name={"leftcircle"} color={"black"} size={24} />
      </TouchableOpacity>
-     <ModalHeaderTitle>본인확인 서비스 이용약관</ModalHeaderTitle>
+     <ModalHeaderTitle>주소찾기</ModalHeaderTitle>
     </ModalHeader>
     <View style={{ backgroundColor: "transparent" }}>
      <Data style={{ width: screenWidth, height: screenHeight - 65 }}>

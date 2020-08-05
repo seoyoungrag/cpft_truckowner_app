@@ -156,8 +156,8 @@ export default ({ navigation }) => {
   navigation.push("UserStep1HPA4");
  };
  const setValueWithState = async (fildNm, value) => {
-  //console.log(v1, v2, v3, this);
   await setValue(fildNm, value);
+  await setUserRegistInfoProp({ ...userRegistInfo, [fildNm]: value });
   await setUserRegistInfo({ ...userRegistInfo, [fildNm]: value });
  };
  const requestPHAuthNumber = () => {

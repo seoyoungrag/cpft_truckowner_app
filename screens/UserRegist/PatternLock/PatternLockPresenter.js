@@ -62,13 +62,13 @@ export default ({
     toValue: SNAP_DOT_RADIUS,
     duration: SNAP_DURATION,
     //duration: 1000,
-    useNativeDriver: false,
+    useNativeDriver: true,
    }),
    Animated.timing(animatedValue, {
     toValue: DEFAULT_DOT_RADIUS,
     duration: SNAP_DURATION,
     //duration: 1000,
-    useNativeDriver: false,
+    useNativeDriver: true,
    }),
   ]).start();
  };

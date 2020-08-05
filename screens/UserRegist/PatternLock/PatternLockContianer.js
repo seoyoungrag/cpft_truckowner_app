@@ -33,8 +33,8 @@ const CORRECT_UNLOCK_PATTERN = [
 const HINT_DELAY = 3000;
 
 export default ({ onMatchedPattern }) => {
- const [patternContainerOpacity, setPatternContainerOpacity] = useState(1);
- const _patternContainerOpacity = new Animated.Value(0);
+ //const [patternContainerOpacity, setPatternContainerOpacity] = useState(1);
+ //const _patternContainerOpacity = new Animated.Value(0);
 
  const resetAnimation = () => {
   /*
@@ -44,13 +44,13 @@ export default ({ onMatchedPattern }) => {
    useNativeDriver: true,
   }).start();
   */
-  setPatternContainerOpacity(0);
+  //setPatternContainerOpacity(0);
  };
 
  const onBackPress = () => {
   if (showPatternLock) {
    //setShowPatternLock(false);
-   setPatternContainerOpacity(0);
+   //setPatternContainerOpacity(0);
    //resetAnimation();
    return true;
   } else {
@@ -70,9 +70,9 @@ export default ({ onMatchedPattern }) => {
    }),
   ]).start();
   */
-  setPatternContainerOpacity(1);
+  //setPatternContainerOpacity(1);
   return () => {
-   resetAnimation();
+   //resetAnimation();
    BackHandler.removeEventListener("hardwareBackPress", onBackPress);
   };
  });
@@ -80,9 +80,7 @@ export default ({ onMatchedPattern }) => {
  //console.log(showPatternLock, _panYCoordinate, patternLockScale, _patternContainerOpacity);
  return (
   <View style={styles.root}>
-   <View
-    style={[styles.patternContainer, { opacity: patternContainerOpacity }]}
-   >
+   <View style={[styles.patternContainer]}>
     <PatternLockPresenter
      containerDimension={PATTERN_DIMENSION}
      containerWidth={PATTERN_CONTAINER_WIDTH}

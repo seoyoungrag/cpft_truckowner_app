@@ -140,7 +140,6 @@ export default ({ navigation, route }) => {
    roadAddress: addrData.roadAddress,
    zonecode: addrData.zonecode,
   });
-  console.log(newValue);
   await setUserRegistInfo(newValue);
  };
  const goAddrFindView = () => {
@@ -176,6 +175,7 @@ export default ({ navigation, route }) => {
 
  const setValueWithState = async (fildNm, value) => {
   await setValue(fildNm, value);
+  await setUserRegistInfoProp({ ...userRegistInfo, [fildNm]: value });
   await setUserRegistInfo({ ...userRegistInfo, [fildNm]: value });
  };
  useEffect(() => {
