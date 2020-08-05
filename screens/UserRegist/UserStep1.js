@@ -157,10 +157,13 @@ export default ({ navigation }) => {
 
  const { register, getValues, setValue, handleSubmit, errors } = useForm();
 
+ const setValueWithState = async (fildNm, value) => {
+  await setValue(fildNm, value);
+  await setUserRegistInfo({ ...userRegistInfo, [fildNm]: value });
+ };
  const fetchData = async () => {
   const data = await getUserRegistInfo();
   setUserRegistInfoProp(data);
-
   setValue("userNm", data?.userNm);
   setValue("userBirthDate", data?.userBirthDate);
   setValue("userSex", data?.userSex);
@@ -237,7 +240,7 @@ export default ({ navigation }) => {
         maxLength={6}
         label="이름 입력"
         placeholder="이름 입력"
-        onChangeText={setValue}
+        onChangeText={setValueWithState}
         fieldNm="userNm"
         containerStyle={{
          marginLeft: 40,
@@ -260,7 +263,7 @@ export default ({ navigation }) => {
           keyboardType={"numeric"}
           label="주민등록번호"
           placeholder="주민등록번호"
-          onChangeText={setValue}
+          onChangeText={setValueWithState}
           fieldNm="userBirthDate"
           containerStyle={{
            marginLeft: 40,
@@ -291,7 +294,7 @@ export default ({ navigation }) => {
           <FloatingLabelInput
            maxLength={1}
            keyboardType={"numeric"}
-           onChangeText={setValue}
+           onChangeText={setValueWithState}
            fieldNm="userSex"
            containerStyle={{
             marginLeft: 10,
@@ -330,7 +333,8 @@ export default ({ navigation }) => {
         <DataValue>본인인증을 위한 약관에 동의</DataValue>
         <DataValueBtn
          onPress={() => {
-          if (!userRegistInfo?.userHPAuthAgree) {
+          const userHPAuthAgreeTmp = getValues("userHPAuthAgree");
+          if (!userHPAuthAgreeTmp) {
            setUserRegistInfoProp({ ...userRegistInfo, userHPAuthAgree: "Y" });
            setValue("userHPAuthAgree", "Y");
           } else {

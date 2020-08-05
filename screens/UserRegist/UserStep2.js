@@ -135,6 +135,11 @@ const DataValueRed = styled.Text`
  border-radius: 10px;
 `;
 export default ({ navigation }) => {
+ const { register, getValues, setValue, handleSubmit, errors } = useForm();
+ const [userRegistInfo, setUserRegistInfoProp] = useState(null);
+ const getUserRegistInfo = useGetUserRegistInfo();
+ const setUserRegistInfo = useSetUserRegistInfo();
+
  const goStep1 = () => {
   navigation.navigate("UserStep1");
  };
@@ -150,11 +155,11 @@ export default ({ navigation }) => {
  const goToHPA4 = () => {
   navigation.push("UserStep1HPA4");
  };
- const { register, getValues, setValue, handleSubmit, errors } = useForm();
- const [userRegistInfo, setUserRegistInfoProp] = useState(null);
- const getUserRegistInfo = useGetUserRegistInfo();
- const setUserRegistInfo = useSetUserRegistInfo();
-
+ const setValueWithState = async (fildNm, value) => {
+  //console.log(v1, v2, v3, this);
+  await setValue(fildNm, value);
+  await setUserRegistInfo({ ...userRegistInfo, [fildNm]: value });
+ };
  const requestPHAuthNumber = () => {
   setValue("userPHAuthNumber", "123456");
   setUserRegistInfoProp({ ...userRegistInfo, userPHAuthNumber: "123456" });
@@ -168,7 +173,6 @@ export default ({ navigation }) => {
  };
 
  const fetchData = async () => {
-  console.log("fetch!");
   const data = await getUserRegistInfo();
   setUserRegistInfoProp(data);
   setValue("userPHAuthNumber", null);
@@ -273,7 +277,7 @@ export default ({ navigation }) => {
           keyboardType={"phone-pad"}
           label="휴대폰 번호 입력"
           placeholder="휴대폰 번호 입력"
-          onChangeText={setValue}
+          onChangeText={setValueWithState}
           fieldNm="userPHNumber"
           containerStyle={{
            height: 50,
@@ -334,7 +338,7 @@ export default ({ navigation }) => {
           keyboardType={"numeric"}
           label="인증번호 입력"
           placeholder="인증번호 입력"
-          onChangeText={setValue}
+          onChangeText={setValueWithState}
           fieldNm="userPHAuthNumber"
           containerStyle={{
            height: 50,

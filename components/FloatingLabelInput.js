@@ -98,6 +98,7 @@ export default class FloatingLabelInput extends Component {
        }
        */
 
+       value = value.replace(/[^0-9]/g, "");
        const input = value.replace(/\D/g, "").substring(0, 11); // First ten digits of input only
        const zip = input.substring(0, 3);
        const middle = input.substring(3, 7);
@@ -114,7 +115,6 @@ export default class FloatingLabelInput extends Component {
       } else {
        this.setState({ value });
       }
-
       this.props.onChangeText(this.props.fieldNm, value);
      }}
      blurOnSubmit

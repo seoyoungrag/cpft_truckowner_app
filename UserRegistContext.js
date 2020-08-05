@@ -20,10 +20,10 @@ export const UserRegistProvider = ({
  const setUserRegistInfo = async (value) => {
   try {
    await AsyncStorage.setItem("userRegistInfo", JSON.stringify(value));
-   setUserRegistInfoProp(value);
+   await setUserRegistInfoProp(value);
   } catch (e) {
    console.log(e);
-   setUserRegistInfoProp(null);
+   await setUserRegistInfoProp(null);
   }
  };
  return (

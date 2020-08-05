@@ -33,21 +33,25 @@ const CORRECT_UNLOCK_PATTERN = [
 const HINT_DELAY = 3000;
 
 export default ({ onMatchedPattern }) => {
+ const [patternContainerOpacity, setPatternContainerOpacity] = useState(1);
  const _patternContainerOpacity = new Animated.Value(0);
 
  const resetAnimation = () => {
+  /*
   Animated.timing(_patternContainerOpacity, {
    toValue: 0,
    duration: 0,
    useNativeDriver: true,
   }).start();
+  */
+  setPatternContainerOpacity(0);
  };
 
  const onBackPress = () => {
   if (showPatternLock) {
-   setShowPatternLock(false);
-   _patternContainerOpacity.setValue(0);
-   resetAnimation();
+   //setShowPatternLock(false);
+   setPatternContainerOpacity(0);
+   //resetAnimation();
    return true;
   } else {
    BackHandler.exitApp();
@@ -57,13 +61,16 @@ export default ({ onMatchedPattern }) => {
 
  useEffect(() => {
   BackHandler.addEventListener("hardwareBackPress", onBackPress);
+  /*
   Animated.parallel([
    Animated.timing(_patternContainerOpacity, {
     toValue: 1,
-    duration: 500,
+    duration: 0,
     useNativeDriver: true,
    }),
   ]).start();
+  */
+  setPatternContainerOpacity(1);
   return () => {
    resetAnimation();
    BackHandler.removeEventListener("hardwareBackPress", onBackPress);
@@ -73,8 +80,8 @@ export default ({ onMatchedPattern }) => {
  //console.log(showPatternLock, _panYCoordinate, patternLockScale, _patternContainerOpacity);
  return (
   <View style={styles.root}>
-   <Animated.View
-    style={[styles.patternContainer, { opacity: _patternContainerOpacity }]}
+   <View
+    style={[styles.patternContainer, { opacity: patternContainerOpacity }]}
    >
     <PatternLockPresenter
      containerDimension={PATTERN_DIMENSION}
@@ -96,7 +103,7 @@ export default ({ onMatchedPattern }) => {
       />
      </View>
     )}
-   </Animated.View>
+   </View>
   </View>
  );
 };

@@ -174,6 +174,10 @@ export default ({ navigation, route }) => {
   setValue("userAddress", data?.userAddress);
  };
 
+ const setValueWithState = async (fildNm, value) => {
+  await setValue(fildNm, value);
+  await setUserRegistInfo({ ...userRegistInfo, [fildNm]: value });
+ };
  useEffect(() => {
   const unsubscribe = navigation.addListener("focus", async () => {
    console.log("asdf", userRegistInfo);
@@ -263,7 +267,7 @@ export default ({ navigation, route }) => {
         maxLength={11}
         label="차량 번호"
         placeholder="차량 번호"
-        onChangeText={setValue}
+        onChangeText={setValueWithState}
         fieldNm="carNum"
         containerStyle={{
          marginLeft: 40,
@@ -285,7 +289,7 @@ export default ({ navigation, route }) => {
         keyboardType={"numeric"}
         label="사업자 번호"
         placeholder="사업자 번호"
-        onChangeText={setValue}
+        onChangeText={setValueWithState}
         fieldNm="corpNum"
         containerStyle={{
          marginLeft: 40,
@@ -305,7 +309,7 @@ export default ({ navigation, route }) => {
         maxLength={6}
         label="회사명"
         placeholder="회사명"
-        onChangeText={setValue}
+        onChangeText={setValueWithState}
         fieldNm="corpNm"
         containerStyle={{
          marginLeft: 40,
@@ -325,7 +329,7 @@ export default ({ navigation, route }) => {
         maxLength={6}
         label="대표자명"
         placeholder="대표자명"
-        onChangeText={setValue}
+        onChangeText={setValueWithState}
         fieldNm="corpRpresentNm"
         containerStyle={{
          marginLeft: 40,
@@ -345,7 +349,7 @@ export default ({ navigation, route }) => {
         maxLength={6}
         label="업태"
         placeholder="업태"
-        onChangeText={setValue}
+        onChangeText={setValueWithState}
         fieldNm="corpCategory"
         containerStyle={{
          marginLeft: 40,
@@ -365,7 +369,7 @@ export default ({ navigation, route }) => {
         maxLength={6}
         label="업종"
         placeholder="업종"
-        onChangeText={setValue}
+        onChangeText={setValueWithState}
         fieldNm="corpType"
         containerStyle={{
          marginLeft: 40,
@@ -386,7 +390,7 @@ export default ({ navigation, route }) => {
          editable={false}
          label="주소"
          placeholder="주소"
-         onChangeText={setValue}
+         onChangeText={setValueWithState}
          fieldNm="userAddress"
          containerStyle={{
           marginLeft: 40,
