@@ -1,9 +1,9 @@
 import React from "react";
-import { Dimensions } from "react-native";
+import { Dimensions, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 import { AntDesign } from "@expo/vector-icons";
+import Constants from "expo-constants";
 import ScrollContainer from "../../components/ScrollContainer";
-import { TouchableOpacity } from "react-native-gesture-handler";
 
 const screenWidth = Math.round(Dimensions.get("window").width);
 const screenHeight = Math.round(Dimensions.get("window").height);
@@ -19,10 +19,9 @@ const Modal = styled.View`
 `;
 
 const ModalHeader = styled.View`
- height: 40px;
  padding-left: 20px;
  padding-right: 20px;
- padding-top: 20px;
+ margin-top: ${Constants.statusBarHeight}px;
  align-items: center;
  flex-direction: row;
  justify-content: space-between;

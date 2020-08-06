@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components/native";
 import ScrollContainer from "../../components/ScrollContainer";
+import Constants from "expo-constants";
 
 const Header = styled.View`
  justify-content: flex-start;
@@ -76,8 +77,7 @@ const Modal = styled.View`
 `;
 
 const ModalHeader = styled.View`
- padding-top: 10px;
- height: 50px;
+ margin-top: ${Constants.statusBarHeight}px;
  align-items: flex-start;
 `;
 const ModalHeaderTitle = styled.Text`

@@ -6,7 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 import Poster from "./Poster";
 import Votes from "./Votes";
 import { trimText, formatDate, code } from "../utils";
-import {useIsModal, useSetIsModalProp} from "../ModalContext"
+import { useIsModal, useSetIsModalProp } from "../ModalContext";
 
 const Container = styled.View`
  flex: 1;
@@ -113,7 +113,8 @@ const Horizontal = ({
  tonType,
  dlvyPrdlst,
  payAmt,
- payFullType
+ payFullType,
+ goToOrderDetail,
 }) => {
  const navigation = useNavigation();
  const goToDetail = () => {
@@ -127,7 +128,11 @@ const Horizontal = ({
   });
  };
  return (
-  <TouchableOpacity disabled={useIsModal()} style={{ width: "100%" }} onPress={goToDetail}>
+  <TouchableOpacity
+   disabled={useIsModal()}
+   style={{ width: "100%" }}
+   onPress={goToOrderDetail}
+  >
    <Container>
     <Data>
      <DataHeader>

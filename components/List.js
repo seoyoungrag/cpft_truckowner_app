@@ -4,9 +4,9 @@ import Title from "./Title";
 import { View } from "react-native";
 
 const Container = styled.View`
-flex:1;
-margin-top: 10px;
-padding-top: 35px;
+ flex: 1;
+ margin-top: 10px;
+ padding-top: 35px;
  margin-bottom: 45px;
 `;
 const ListTitle = styled.View`
@@ -16,17 +16,18 @@ const ListTitle = styled.View`
  margin-left: 15px;
 `;
 
-const HeaderView = styled.View`
-`;
-const BodyView = styled.View`
-`;
-const List = ({ title, filter, children }) => (
- <View style={{flex:1, 
-    backgroundColor: 'white'}}>
+const HeaderView = styled.View``;
+const BodyView = styled.View``;
+const List = ({ title, filter, children }) => {
+ return (
+  <View style={{ flex: 1, backgroundColor: "white" }}>
    <Title title={title} />
-   <Container>{children}
-   {filter ? filter : null}</Container>
- </View>
-);
+   <Container>
+    {children}
+    {filter}
+   </Container>
+  </View>
+ );
+};
 
 export default List;

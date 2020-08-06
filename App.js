@@ -2,10 +2,19 @@ import React, { useState, useEffect } from "react";
 import { Provider } from "react-redux";
 import store from "./store/configure";
 import ReactStore from "./ReactStore";
+import {
+ SafeAreaView,
+ SafeAreaProvider,
+ SafeAreaInsetsContext,
+ useSafeAreaInsets,
+ initialWindowMetrics,
+} from "react-native-safe-area-context";
 import { AppLoading } from "expo";
+import * as Updates from "expo-updates";
 import * as Font from "expo-font";
 import { Asset } from "expo-asset";
-import { Image, StatusBar, AsyncStorage } from "react-native";
+import { Image, AsyncStorage, Alert, AppState, View, Text } from "react-native";
+import { StatusBar } from "expo-status-bar";
 import { NavigationContainer } from "@react-navigation/native";
 import { Ionicons, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import { ThemeProvider } from "styled-components";
@@ -20,6 +29,40 @@ import { UserRegistProvider } from "./UserRegistContext";
 import { ModalProvider } from "./ModalContext";
 import { codeApi } from "./api";
 
+const checkForUpdates = async () => {
+ try {
+  const update = await Updates.checkForUpdateAsync();
+  if (update.isAvailable) {
+   Alert.alert(
+    "알림!",
+    "새로운 버전이 있습니다. 업데이트 하시겠습니까?",
+    [
+     {
+      text: "Cancel",
+      onPress: () => console.log("Cancel Pressed"),
+      style: "cancel",
+     },
+     { text: "OK", onPress: () => runUpdate() },
+    ],
+    { cancelable: false }
+   );
+  }
+ } catch (e) {
+  console.log(e);
+  // handle or log error
+ }
+};
+
+const runUpdate = async () => {
+ console.log("asdf");
+ await Updates.fetchUpdateAsync(); //최신업데이트 동기화, 로컬 캐시에 저장
+ // ... notify user of update ...
+ Updates.reloadFromCache();
+
+ Alert.alert("업데이트 완료!", "업데이트가 완료되었습니다.", [{ text: "OK" }], {
+  cancelable: false,
+ });
+};
 const cacheImages = (images) =>
  images.map((image) => {
   if (typeof image == "string") {
@@ -52,10 +95,15 @@ export default function App() {
  const [permissions, setPermissions] = useState(null);
 
  const loadAssets = async () => {
+  checkForUpdates();
   const images = cacheImages([
    "https://images.unsplash.com/photo-1594782078968-2b07656d7bb2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
   ]);
-  const fonts = cacheFonts([Ionicons.font, FontAwesome.font, FontAwesome5.font]);
+  const fonts = cacheFonts([
+   Ionicons.font,
+   FontAwesome.font,
+   FontAwesome5.font,
+  ]);
   const codes = await cacheCodes();
   return Promise.all([...images, ...fonts, ...codes]);
  };
@@ -112,40 +160,45 @@ export default function App() {
   return status;
  };
  useEffect(() => {
-  //_requestCameraPermission();
+  AppState.addEventListener("change", checkForUpdates);
+  return AppState.removeEventListener("change", checkForUpdates);
  });
- return isReady ? (
-  <Provider store={store}>
-   <ReactStore.Provider>
-    <ThemeProvider theme={styles}>
-        <ModalProvider isModal={false}>
-     <CodeProvider codes={codes}>
-      <PermissionProvider
-       hasCameraPermission={permissions?.hasCameraPermission}
-       hasPhonePermission={permissions?.hasPhonePermission}
-       hasFilePermission={permissions?.hasFilePermission}
-      >
-       <UserRegistProvider userRegistInfo={userRegistInfo}>
-        <AuthProvider isLoggedIn={isLoggedIn}>
-         <TutorialProvider hasTutorialPass={hasTutorialPass}>
-          <NavigationContainer>
-           <Stack />
-          </NavigationContainer>
-          <StatusBar barStyle="light-content" />
-         </TutorialProvider>
-        </AuthProvider>
-       </UserRegistProvider>
-      </PermissionProvider>
-     </CodeProvider>
-     </ModalProvider>
-    </ThemeProvider>
-   </ReactStore.Provider>
-  </Provider>
- ) : (
-  <AppLoading
-   startAsync={loadAssets}
-   onFinish={onFinish}
-   onError={console.error}
-  />
+ return (
+  <>
+   {isReady ? (
+    <Provider store={store}>
+     <ReactStore.Provider>
+      <ThemeProvider theme={styles}>
+       <ModalProvider isModal={false}>
+        <CodeProvider codes={codes}>
+         <PermissionProvider
+          hasCameraPermission={permissions?.hasCameraPermission}
+          hasPhonePermission={permissions?.hasPhonePermission}
+          hasFilePermission={permissions?.hasFilePermission}
+         >
+          <UserRegistProvider userRegistInfo={userRegistInfo}>
+           <AuthProvider isLoggedIn={isLoggedIn}>
+            <TutorialProvider hasTutorialPass={hasTutorialPass}>
+             <NavigationContainer>
+              <Stack />
+             </NavigationContainer>
+            </TutorialProvider>
+           </AuthProvider>
+          </UserRegistProvider>
+         </PermissionProvider>
+        </CodeProvider>
+       </ModalProvider>
+      </ThemeProvider>
+     </ReactStore.Provider>
+    </Provider>
+   ) : (
+    <AppLoading
+     startAsync={loadAssets}
+     onFinish={onFinish}
+     onError={console.error}
+    />
+   )}
+   <StatusBar barStyle="light" />
+  </>
  );
 }

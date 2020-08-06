@@ -3,7 +3,7 @@ import {
  createStackNavigator,
  HeaderBackButton,
 } from "@react-navigation/stack";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import Detail from "../screens/Detail";
 import Filter from "../screens/Filter";
 import Tabs from "./Tabs";
@@ -65,40 +65,35 @@ export default () => {
    <PermissionNavigation />
   )
  ) : (
-  <>
-   <TouchableOpacity onPress={logOut}>
-    <Text>로그아웃</Text>
-   </TouchableOpacity>
-
-   <NavigationContainer independent={true}>
-    <Stack.Navigator
-     mode="modal"
-     screenOptions={{
-      gestureEnabled: true,
-      headerStyle: {
-       backgroundColor: "#3a99fc",
-       shadowColor: "#3a99fc",
-       borderBottomColor: "#3a99fc",
+  <NavigationContainer independent={true}>
+   <Stack.Navigator
+    mode="modal"
+    screenOptions={{
+     gestureEnabled: true,
+     headerStyle: {
+      backgroundColor: "#3a99fc",
+      shadowColor: "#3a99fc",
+      borderBottomColor: "#3a99fc",
+     },
+     headerTintColor: "white",
+     headerBackTitleVisible: false,
+     headerShown: false,
+    }}
+   >
+    <Stack.Screen name="Tabs" component={Tabs} />
+    <Stack.Screen name="Detail" component={Detail} />
+    <Stack.Screen
+     name="Filter"
+     component={Filter}
+     options={{
+      headerTitleStyle: {
+       textAlign: "center",
+       marginLeft: -20,
+       paddingLeft: 0,
+       fontSize: 24,
+       color: "white",
       },
-      headerTintColor: "white",
-      headerBackTitleVisible: false,
-      headerShown: false,
-     }}
-    >
-     <Stack.Screen name="Tabs" component={Tabs} />
-     <Stack.Screen name="Detail" component={Detail} />
-     <Stack.Screen
-      name="Filter"
-      component={Filter}
-      options={{
-       headerTitleStyle: {
-        textAlign: "center",
-        marginLeft: -20,
-        paddingLeft: 0,
-        fontSize: 24,
-        color: "white",
-       },
-       /*
+      /*
        headerLeft: (props) => (
         <HeaderBackButton
          {...props}
@@ -107,28 +102,27 @@ export default () => {
          }}
         ></HeaderBackButton>
        ),*/
-       headerTintColor: "white",
-       headerBackTitleVisible: false,
-       headerShown: true,
-       headerTitle: (props) => (
-        <Text {...props}>
-         필터{" "}
-         <FontAwesome5
-          name="filter"
-          size={24}
-          color="white"
-          style={{
-           marginLeft: 10,
-          }}
-         />
-        </Text>
-       ),
-      }}
-     />
-     <Stack.Screen name="PhotoNavigation" component={PhotoNavigation} />
-     <Stack.Screen name="MessageNavigation" component={MessageNavigation} />
-    </Stack.Navigator>
-   </NavigationContainer>
-  </>
+      headerTintColor: "white",
+      headerBackTitleVisible: false,
+      headerShown: true,
+      headerTitle: (props) => (
+       <Text {...props}>
+        필터{" "}
+        <FontAwesome5
+         name="filter"
+         size={24}
+         color="white"
+         style={{
+          marginLeft: 10,
+         }}
+        />
+       </Text>
+      ),
+     }}
+    />
+    <Stack.Screen name="PhotoNavigation" component={PhotoNavigation} />
+    <Stack.Screen name="MessageNavigation" component={MessageNavigation} />
+   </Stack.Navigator>
+  </NavigationContainer>
  );
 };

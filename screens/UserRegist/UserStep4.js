@@ -3,8 +3,8 @@ import { Dimensions, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 import { useForm } from "react-hook-form";
 import { AntDesign } from "@expo/vector-icons";
+import Constants from "expo-constants";
 import {
- useUserRegistInfo,
  useGetUserRegistInfo,
  useSetUserRegistInfo,
 } from "../../UserRegistContext";
@@ -25,10 +25,9 @@ const Modal = styled.View`
 `;
 
 const ModalHeader = styled.View`
- height: 40px;
  padding-left: 20px;
  padding-right: 20px;
- padding-top: 20px;
+ margin-top: ${Constants.statusBarHeight}px;
  align-items: center;
  flex-direction: row;
  justify-content: space-between;
@@ -133,6 +132,7 @@ const DataValueRed = styled.Text`
  border-radius: 10px;
 `;
 export default ({ navigation, route }) => {
+ const routeParams = route.params;
  const setAddress = async (addrData) => {
   const newValue = Object.assign({}, userRegistInfo, {
    ...getValues(),
@@ -146,7 +146,11 @@ export default ({ navigation, route }) => {
   navigation.push("UserStep4AddrFindView", { setAddress });
  };
  const goStep3 = () => {
-  navigation.navigate("UserStep3");
+  if (routeParams?.isFromOrder) {
+   navigation.pop();
+  } else {
+   navigation.navigate("UserStep3");
+  }
  };
  const { register, getValues, setValue, handleSubmit, errors } = useForm();
  const [userRegistInfo, setUserRegistInfoProp] = useState(null);
@@ -157,11 +161,14 @@ export default ({ navigation, route }) => {
  const confrimBtnClicked = async (userRegistInfoForm) => {
   const newValue = Object.assign({}, userRegistInfo, userRegistInfoForm);
   await setUserRegistInfo(newValue);
-  navigation.navigate("UserStep5");
+  if (routeParams?.isFromOrder) {
+   navigation.pop();
+  } else {
+   navigation.navigate("UserStep5");
+  }
  };
 
  const fetchData = async () => {
-  console.log("fetch!");
   const data = await getUserRegistInfo();
   setUserRegistInfoProp(data);
   setValue("carNum", data?.carNum);
@@ -180,7 +187,6 @@ export default ({ navigation, route }) => {
  };
  useEffect(() => {
   const unsubscribe = navigation.addListener("focus", async () => {
-   console.log("asdf", userRegistInfo);
    if (!userRegistInfo) {
     await fetchData();
    } else {
@@ -192,43 +198,43 @@ export default ({ navigation, route }) => {
   register(
    { name: "carNum" },
    {
-    required: true,
+    required: routeParams?.isFromOrder ? true : false,
    }
   );
   register(
    { name: "corpNum" },
    {
-    required: true,
+    required: routeParams?.isFromOrder ? true : false,
    }
   );
   register(
    { name: "corpNm" },
    {
-    required: true,
+    required: routeParams?.isFromOrder ? true : false,
    }
   );
   register(
    { name: "corpRpresentNm" },
    {
-    required: true,
+    required: routeParams?.isFromOrder ? true : false,
    }
   );
   register(
    { name: "corpCategory" },
    {
-    required: true,
+    required: routeParams?.isFromOrder ? true : false,
    }
   );
   register(
    { name: "corpType" },
    {
-    required: true,
+    required: routeParams?.isFromOrder ? true : false,
    }
   );
   register(
    { name: "userAddress" },
    {
-    required: true,
+    required: routeParams?.isFromOrder ? true : false,
    }
   );
  }, [register]);
@@ -247,7 +253,9 @@ export default ({ navigation, route }) => {
      >
       <AntDesign name={"leftcircle"} color={"black"} size={24} />
      </TouchableOpacity>
-     <ModalHeaderTitle>4/5</ModalHeaderTitle>
+     <ModalHeaderTitle>
+      {routeParams?.isFromOrder ? null : "4/5"}
+     </ModalHeaderTitle>
     </ModalHeader>
     <ScrollContainer
      loading={false}
