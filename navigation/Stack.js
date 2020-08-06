@@ -29,6 +29,7 @@ import {
 import { FontAwesome5 } from "@expo/vector-icons";
 import UserStep4 from "../screens/UserRegist/UserStep4";
 import UserStep4AddrFindView from "../screens/UserRegist/UserStep4AddrFindView";
+import OrderDetail from "../screens/OrderDetail";
 
 const Stack = createStackNavigator();
 
@@ -158,11 +159,13 @@ export default () => {
      name="UserStep4AddrFindView"
      component={UserStep4AddrFindView}
      options={{
-      transitionSpec: {
-       open: config,
-       close: config,
-      },
-      cardStyleInterpolator: forFade,
+      headerShown: false,
+     }}
+    />
+    <Stack.Screen
+     name="OrderDetail"
+     component={OrderDetail}
+     options={{
       headerShown: false,
      }}
     />

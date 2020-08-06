@@ -73,6 +73,7 @@ export const apiImage = (
 
 export const orderApi = {
  now: (status) => getAnythingCpft(`/v1/mobile/order/status/${status}`),
+ order: (orderSeq) => getOrderCpft(`/v1/mobile/order/${orderSeq}`),
 };
 
 export const codeApi = {

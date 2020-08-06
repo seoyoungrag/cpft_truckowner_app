@@ -88,7 +88,7 @@ export default ({ refreshFn, loading, now }) => {
   setUserRegistInfoProp(data);
  };
 
- const goToOrderDetail = (orderSeq) => {
+ const goToOrderDetail = () => {
   if (
    !(
     userRegistInfo.carNum &&
@@ -102,7 +102,6 @@ export default ({ refreshFn, loading, now }) => {
   ) {
    setModalVisible(true);
   } else {
-   navigation.navigate("OrderDetail", { orderSeq: orderSeq });
   }
  };
  useEffect(() => {
@@ -167,9 +166,7 @@ export default ({ refreshFn, loading, now }) => {
       dlvyPrdlst={n.dlvyPrdlst}
       payAmt={n.payAmt}
       payFullType={code(codes, n.payFullType)}
-      goToOrderDetail={() => {
-       goToOrderDetail(n.orderSeq);
-      }}
+      goToOrderDetail={goToOrderDetail}
      />
     ))}
     {now.map((n) => (
