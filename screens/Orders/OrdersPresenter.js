@@ -1,22 +1,13 @@
-import React, {
- useState,
- useEffect,
- useLayoutEffect,
- useCallback,
-} from "react";
-import styled from "styled-components/native";
+import React, { useState, useEffect } from "react";
 import {
  Dimensions,
  Text,
  TouchableOpacity,
- TouchableHighlight,
  Modal,
  View,
  StyleSheet,
- Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { FontAwesome5 } from "@expo/vector-icons";
 import HorizontalOrder from "../../components/HorizontalOrder";
 import ScrollContainer from "../../components/ScrollContainer";
 import List from "../../components/List";
@@ -95,6 +86,7 @@ export default ({ refreshFn, loading, now }) => {
  const fetchData = async () => {
   const data = await getUserRegistInfo();
   setUserRegistInfoProp(data);
+  console.log(data);
  };
 
  const goToOrderDetail = () => {
@@ -130,9 +122,6 @@ export default ({ refreshFn, loading, now }) => {
     transparent={true}
     statusBarTranslucent={true}
     visible={modalVisible}
-    onRequestClose={() => {
-     Alert.alert("Modal has been closed.");
-    }}
    >
     <View style={styles.centeredView}>
      <View style={styles.modalView}>
