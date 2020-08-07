@@ -8,12 +8,12 @@ import {
  StyleSheet,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import Constants from "expo-constants";
+import { AntDesign } from "@expo/vector-icons";
 import HorizontalOrder from "../../components/HorizontalOrder";
 import ScrollContainer from "../../components/ScrollContainer";
-import List from "../../components/List";
+import styled from "styled-components/native";
 import { code, trimText } from "../../utils";
-import { useIsModal, useSetIsModalProp } from "../../ModalContext";
-import OrderFilter from "./OrderFilter";
 import { useCodes } from "../../CodeContext";
 import {
  useUserRegistInfo,
@@ -21,16 +21,145 @@ import {
  useSetUserRegistInfo,
 } from "../../UserRegistContext";
 
-const { width, height } = Dimensions.get("screen");
+const screenWidth = Math.round(Dimensions.get("window").width);
+const screenHeight = Math.round(Dimensions.get("window").height);
 
+const OuterContainer = styled.SafeAreaView`
+ flex: 1;
+`;
+
+const Detail = styled.View`
+ flex: 1;
+ flex-direction: column;
+ background-color: white;
+`;
+
+const DetailHeader = styled.View`
+ padding-left: 20px;
+ padding-right: 20px;
+ margin-top: ${Constants.statusBarHeight}px;
+ align-items: center;
+ flex-direction: row;
+ justify-content: space-between;
+`;
+const DetailHeaderTitle = styled.Text`
+ color: black;
+ font-size: 20px;
+`;
+
+const DetailFooter = styled.View`
+ flex-direction: row;
+ justify-content: space-around;
+`;
+
+const CancelBtn = styled.TouchableOpacity`
+ flex: 0.3;
+ align-items: center;
+ justify-content: center;
+ background-color: whitesmoke;
+ height: 50px;
+`;
+const ConfirmBtn = styled.TouchableOpacity`
+ flex: 0.7;
+ align-items: center;
+ justify-content: center;
+ background-color: #3a99fc;
+ height: 50px;
+`;
+const CancelBtnText = styled.Text`
+ text-align: center;
+ color: white;
+ font-weight: bold;
+ font-size: 24px;
+`;
+const ConfirmBtnText = styled.Text`
+ text-align: center;
+ color: white;
+ font-weight: bold;
+ font-size: 24px;
+`;
+
+const Data = styled.View`
+ margin-top: 0px;
+ padding: 0px 0px;
+`;
+const Container = styled.View`
+ flex: 1;
+ flex-direction: column;
+ align-items: flex-start;
+`;
+
+const DataName = styled.Text`
+ margin-top: 30px;
+ color: black;
+ opacity: 0.8;
+ font-weight: bold;
+ font-size: 32px;
+ margin-left: 40px;
+`;
+
+const DataValue = styled.Text`
+ margin-left: 40px;
+ margin-right: 40px;
+ color: black;
+ opacity: 0.8;
+ font-weight: 500;
+ font-size: 16px;
+`;
+
+const DataValueBtn = styled.TouchableOpacity`
+ width: ${(screenWidth * 3) / 4}px;
+ border-width: 1px;
+ border-radius: 10px;
+ border-color: silver;
+ padding: 10px;
+ margin-top: 10px;
+ margin-left: 40px;
+ margin-right: 40px;
+ color: black;
+ opacity: 0.8;
+ font-weight: 500;
+ font-size: 16px;
+ flex-direction: row;
+ justify-content: space-between;
+ align-items: center;
+`;
+
+const DataValueBtnSec = styled.TouchableOpacity`
+ width: ${(screenWidth * 3) / 4}px;
+ border-width: 1px;
+ border-radius: 10px;
+ border-color: silver;
+ padding: 10px;
+ margin-top: 10px;
+ margin-left: 40px;
+ margin-right: 40px;
+ color: black;
+ opacity: 0.8;
+ font-weight: 500;
+ font-size: 16px;
+ flex-direction: row;
+ justify-content: space-between;
+ align-items: center;
+`;
+
+const DataValueRed = styled.Text`
+ width: 200px;
+ margin-left: 40px;
+ margin-right: 40px;
+ color: red;
+ opacity: 0.8;
+ font-weight: 500;
+ border-radius: 10px;
+`;
 const styles = StyleSheet.create({
  centeredView: {
   flex: 1,
   justifyContent: "center",
   alignItems: "center",
   marginTop: 22,
-  width: width,
-  height: height,
+  width: screenWidth,
+  height: screenHeight,
   backgroundColor: "rgba(0,0,0,0.5)",
  },
  modalView: {
@@ -77,7 +206,9 @@ const styles = StyleSheet.create({
  },
 });
 
-export default ({ refreshFn, loading, now }) => {
+export default ({ refreshFn, loading, order }) => {
+ //console.log(props);
+ //console.log(order);
  const navigation = useNavigation();
  const codes = useCodes();
  const getUserRegistInfo = useGetUserRegistInfo();
@@ -88,22 +219,6 @@ export default ({ refreshFn, loading, now }) => {
   setUserRegistInfoProp(data);
  };
 
- const goToOrderDetail = () => {
-  if (
-   !(
-    userRegistInfo.carNum &&
-    userRegistInfo.corpNum &&
-    userRegistInfo.corpNm &&
-    userRegistInfo.corpRpresentNm &&
-    userRegistInfo.corpCategory &&
-    userRegistInfo.corpType &&
-    userRegistInfo.userAddress
-   )
-  ) {
-   setModalVisible(true);
-  } else {
-  }
- };
  useEffect(() => {
   const unsubscribe = navigation.addListener("focus", async () => {
    if (!userRegistInfo) {
@@ -114,7 +229,7 @@ export default ({ refreshFn, loading, now }) => {
   return unsubscribe;
  }, [navigation]);
  return (
-  <List title="오더" filter={<OrderFilter />}>
+  <OuterContainer>
    <Modal
     animationType="fade"
     hardwareAccelerated={true}
@@ -144,83 +259,64 @@ export default ({ refreshFn, loading, now }) => {
      </View>
     </View>
    </Modal>
-   <ScrollContainer
-    refreshOn={true}
-    refreshFn={refreshFn}
-    loading={loading}
-    contentContainerStyle={{
-     backgroundColor: useIsModal() ? "rgba(0,0,0,0.5)" : "white",
-    }}
-   >
-    {now.map((n) => (
+
+   <Detail>
+    <DetailHeader>
+     <TouchableOpacity
+      style={{
+       width: 40,
+       height: 40,
+       justifyContent: "center",
+      }}
+      onPress={() => {
+       navigation.pop();
+      }}
+     >
+      <AntDesign name={"leftcircle"} color={"black"} size={24} />
+     </TouchableOpacity>
+     {/*<DetailHeaderTitle>1/5</DetailHeaderTitle>*/}
+    </DetailHeader>
+    <ScrollContainer
+     refreshFn={refreshFn}
+     loading={loading}
+     contentContainerStyle={{ paddingBottom: 80 }}
+    >
      <HorizontalOrder
-      key={n.orderSeq}
-      id={n.orderSeq}
-      opratSctn={n.opratSctn}
-      workingArea={n.workingArea}
-      rcritType={code(codes, n.rcritType)}
-      carTypes={n.carTypes.map((c) => {
+      key={order.orderSeq}
+      id={order.orderSeq}
+      opratSctn={order.opratSctn}
+      workingArea={order.workingArea}
+      rcritType={code(codes, order.rcritType)}
+      carTypes={order.carTypes.map((c) => {
        return code(codes, c) + " ";
       })}
-      tonType={code(codes, n.tonType)}
-      dlvyPrdlst={n.dlvyPrdlst}
-      payAmt={n.payAmt}
-      payFullType={code(codes, n.payFullType)}
-      goToOrderDetail={goToOrderDetail}
+      tonType={code(codes, order.tonType)}
+      dlvyPrdlst={order.dlvyPrdlst}
+      payAmt={order.payAmt}
+      payFullType={code(codes, order.payFullType)}
+      goToOrderDetail={() => {
+       console.log(this);
+      }}
      />
-    ))}
-    {now.map((n) => (
-     <HorizontalOrder
-      key={n.orderSeq}
-      id={n.orderSeq}
-      opratSctn={n.opratSctn}
-      workingArea={n.workingArea}
-      rcritType={code(codes, n.rcritType)}
-      carTypes={n.carTypes.map((c) => {
-       return code(codes, c) + " ";
-      })}
-      tonType={code(codes, n.tonType)}
-      dlvyPrdlst={n.dlvyPrdlst}
-      payAmt={n.payAmt}
-      payFullType={code(codes, n.payFullType)}
-      goToOrderDetail={goToOrderDetail}
-     />
-    ))}
-    {now.map((n) => (
-     <HorizontalOrder
-      key={n.orderSeq}
-      id={n.orderSeq}
-      opratSctn={n.opratSctn}
-      workingArea={n.workingArea}
-      rcritType={code(codes, n.rcritType)}
-      carTypes={n.carTypes.map((c) => {
-       return code(codes, c) + " ";
-      })}
-      tonType={code(codes, n.tonType)}
-      dlvyPrdlst={n.dlvyPrdlst}
-      payAmt={n.payAmt}
-      payFullType={code(codes, n.payFullType)}
-      goToOrderDetail={goToOrderDetail}
-     />
-    ))}
-    {now.map((n) => (
-     <HorizontalOrder
-      key={n.orderSeq}
-      id={n.orderSeq}
-      opratSctn={n.opratSctn}
-      workingArea={n.workingArea}
-      rcritType={code(codes, n.rcritType)}
-      carTypes={n.carTypes.map((c) => {
-       return code(codes, c) + " ";
-      })}
-      tonType={code(codes, n.tonType)}
-      dlvyPrdlst={n.dlvyPrdlst}
-      payAmt={n.payAmt}
-      payFullType={code(codes, n.payFullType)}
-      goToOrderDetail={goToOrderDetail}
-     />
-    ))}
-   </ScrollContainer>
-  </List>
+    </ScrollContainer>
+
+    <DetailFooter>
+     <CancelBtn
+      onPress={() => {
+       console.log(this);
+      }}
+     >
+      <Text style={{ fontSize: 24 }}>문의</Text>
+     </CancelBtn>
+     <ConfirmBtn
+      onPress={() => {
+       console.log(this);
+      }}
+     >
+      <ConfirmBtnText>다음</ConfirmBtnText>
+     </ConfirmBtn>
+    </DetailFooter>
+   </Detail>
+  </OuterContainer>
  );
 };

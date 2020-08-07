@@ -23,7 +23,8 @@ const getAnythingCpft = async (path, params = {}) => {
  try {
   const {
    data: { list },
-   data,
+   data: { data },
+   result,
   } = await makeRequestCpft(path, {
    headers: {
     "Content-Type": "application/json",
@@ -31,7 +32,7 @@ const getAnythingCpft = async (path, params = {}) => {
    },
    params: { ...params },
   });
-  return [list || data, null];
+  return [list || data || result, null];
  } catch (e) {
   return [null, e];
  }
@@ -73,7 +74,7 @@ export const apiImage = (
 
 export const orderApi = {
  now: (status) => getAnythingCpft(`/v1/mobile/order/status/${status}`),
- order: (orderSeq) => getOrderCpft(`/v1/mobile/order/${orderSeq}`),
+ order: (orderSeq) => getAnythingCpft(`/v1/mobile/order/${orderSeq}`),
 };
 
 export const codeApi = {

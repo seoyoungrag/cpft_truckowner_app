@@ -3,6 +3,7 @@ import { Dimensions, Text, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 import { useForm } from "react-hook-form";
 import { AntDesign } from "@expo/vector-icons";
+import Constants from "expo-constants";
 import {
  useGetUserRegistInfo,
  useSetUserRegistInfo,
@@ -10,7 +11,6 @@ import {
 import ScrollContainer from "../../components/ScrollContainer";
 import { View } from "react-native-animatable";
 import FloatingLabelInput from "../../components/FloatingLabelInput";
-import Constants from "expo-constants";
 
 const screenWidth = Math.round(Dimensions.get("window").width);
 const screenHeight = Math.round(Dimensions.get("window").height);

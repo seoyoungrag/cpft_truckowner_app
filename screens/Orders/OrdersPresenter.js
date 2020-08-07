@@ -88,7 +88,7 @@ export default ({ refreshFn, loading, now }) => {
   setUserRegistInfoProp(data);
  };
 
- const goToOrderDetail = (orderSeq) => {
+ const goToOrderDetail = (order) => {
   if (
    !(
     userRegistInfo.carNum &&
@@ -102,7 +102,17 @@ export default ({ refreshFn, loading, now }) => {
   ) {
    setModalVisible(true);
   } else {
-   navigation.navigate("OrderDetail", { orderSeq: orderSeq });
+   navigation.navigate("OrderDetail", {
+    orderSeq: order.orderSeq,
+    opratSctn: order.opratSctn,
+    workingArea: order.workingArea,
+    rcritType: order.rcritType,
+    carTypes: order.carTypes,
+    tonType: order.tonType,
+    dlvyPrdlst: order.dlvyPrdlst,
+    payAmt: order.payAmt,
+    payFullType: order.payFullType,
+   });
   }
  };
  useEffect(() => {
@@ -168,7 +178,7 @@ export default ({ refreshFn, loading, now }) => {
       payAmt={n.payAmt}
       payFullType={code(codes, n.payFullType)}
       goToOrderDetail={() => {
-       goToOrderDetail(n.orderSeq);
+       goToOrderDetail(n);
       }}
      />
     ))}
@@ -186,7 +196,9 @@ export default ({ refreshFn, loading, now }) => {
       dlvyPrdlst={n.dlvyPrdlst}
       payAmt={n.payAmt}
       payFullType={code(codes, n.payFullType)}
-      goToOrderDetail={goToOrderDetail}
+      goToOrderDetail={() => {
+       goToOrderDetail(n);
+      }}
      />
     ))}
     {now.map((n) => (
@@ -203,7 +215,9 @@ export default ({ refreshFn, loading, now }) => {
       dlvyPrdlst={n.dlvyPrdlst}
       payAmt={n.payAmt}
       payFullType={code(codes, n.payFullType)}
-      goToOrderDetail={goToOrderDetail}
+      goToOrderDetail={() => {
+       goToOrderDetail(n);
+      }}
      />
     ))}
     {now.map((n) => (
@@ -220,7 +234,9 @@ export default ({ refreshFn, loading, now }) => {
       dlvyPrdlst={n.dlvyPrdlst}
       payAmt={n.payAmt}
       payFullType={code(codes, n.payFullType)}
-      goToOrderDetail={goToOrderDetail}
+      goToOrderDetail={() => {
+       goToOrderDetail(n);
+      }}
      />
     ))}
    </ScrollContainer>

@@ -11,12 +11,14 @@ export const formatDate = (date) => {
 };
 
 export const code = (codes, code) => {
- return codes
-  .filter((e) => {
-   return e?.code == code;
-  })
-  .map((r) => {
-   //console.log(r.code, ":", r.codeValue);
-   return r?.codeValue;
-  })[0];
+ return (
+  codes
+   .filter((e) => {
+    return e?.code == code;
+   })
+   .map((r) => {
+    //console.log(r.code, ":", r.codeValue);
+    return r?.codeValue;
+   })[0] || code
+ );
 };
