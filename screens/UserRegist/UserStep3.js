@@ -146,7 +146,7 @@ export default ({ navigation }) => {
  const setUserRegistInfo = useSetUserRegistInfo();
 
  const fetchData = async () => {
-  console.log("fetch!");
+  //console.log("fetch!");
   const data = await getUserRegistInfo();
   setUserRegistInfoProp(data);
  };

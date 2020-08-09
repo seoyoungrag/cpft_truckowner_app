@@ -10,9 +10,9 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import Constants from "expo-constants";
 import { AntDesign } from "@expo/vector-icons";
-import HorizontalOrder from "../../components/HorizontalOrder";
-import ScrollContainer from "../../components/ScrollContainer";
 import styled from "styled-components/native";
+import HorizontalOrderDetail from "../../components/HorizontalOrderDetail";
+import ScrollContainer from "../../components/ScrollContainer";
 import { code, trimText } from "../../utils";
 import { useCodes } from "../../CodeContext";
 import {
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
 
 export default ({ refreshFn, loading, order }) => {
  //console.log(props);
- //console.log(order);
+ //console.log('orderDetail', order);
  const navigation = useNavigation();
  const codes = useCodes();
  const getUserRegistInfo = useGetUserRegistInfo();
@@ -281,7 +281,7 @@ export default ({ refreshFn, loading, order }) => {
      loading={loading}
      contentContainerStyle={{ paddingBottom: 80 }}
     >
-     <HorizontalOrder
+     <HorizontalOrderDetail
       key={order.orderSeq}
       id={order.orderSeq}
       opratSctn={order.opratSctn}
@@ -294,6 +294,10 @@ export default ({ refreshFn, loading, order }) => {
       dlvyPrdlst={order.dlvyPrdlst}
       payAmt={order.payAmt}
       payFullType={code(codes, order.payFullType)}
+      workHourStart={(order.workHourStart+"").padStart(2, '0')}
+      workMinuteStart={(order.workMinuteStart+"").padStart(2, '0')}
+      workHourEnd={(order.workHourEnd+"").padStart(2, '0')}
+      workMinuteEnd={(order.workMinuteEnd+"").padStart(2, '0')}
       goToOrderDetail={() => {
        console.log(this);
       }}

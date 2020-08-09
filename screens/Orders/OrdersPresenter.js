@@ -112,6 +112,10 @@ export default ({ refreshFn, loading, now }) => {
     dlvyPrdlst: order.dlvyPrdlst,
     payAmt: order.payAmt,
     payFullType: order.payFullType,
+    workHourStart: order.workHourStart,
+    workMinuteStart: order.workMinuteStart,
+    workHourEnd: order.workHourEnd,
+    workMinuteEnd: order.workMinuteEnd,
    });
   }
  };

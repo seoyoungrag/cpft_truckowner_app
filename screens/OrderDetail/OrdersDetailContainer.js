@@ -15,6 +15,10 @@ export default ({
    dlvyPrdlst,
    payAmt,
    payFullType,
+   workHourStart,
+   workMinuteStart,
+   workHourEnd,
+   workMinuteEnd
   },
  },
 }) => {
@@ -30,6 +34,10 @@ export default ({
    dlvyPrdlst,
    payAmt,
    payFullType,
+   workHourStart,
+   workMinuteStart,
+   workHourEnd,
+   workMinuteEnd
   },
   orderError: null,
  });
@@ -48,6 +56,10 @@ export default ({
     dlvyPrdlst: getOrder.dlvyPrdlst,
     payAmt: getOrder.payAmt,
     payFullType: getOrder.payFullType,
+    workHourStart: getOrder.workHourStart,
+    workMinuteStart: getOrder.workMinuteStart,
+    workHourEnd: getOrder.workHourEnd,
+    workMinuteEnd: getOrder.workMinuteEnd,
    },
    orderError: getOrderError,
   });
@@ -55,6 +67,6 @@ export default ({
  useEffect(() => {
   getData();
  }, [orderSeq]);
- console.log(orderProp);
+ //console.log('ff',orderProp);
  return <OrdersDetailPresenter refreshFn={getData} {...orderProp} />;
 };

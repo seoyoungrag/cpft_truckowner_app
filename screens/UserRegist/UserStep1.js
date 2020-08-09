@@ -163,7 +163,7 @@ export default ({ navigation }) => {
  };
  const fetchData = async () => {
   const data = await getUserRegistInfo();
-  console.log(data);
+  //console.log(data);
   setUserRegistInfoProp(data);
   setValue("userNm", data?.userNm);
   setValue("userBirthDate", data?.userBirthDate);
