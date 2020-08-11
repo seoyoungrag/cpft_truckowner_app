@@ -8,6 +8,7 @@ const ScrollContainer = ({
  contentContainerStyle,
  refreshFn,
  refreshOn,
+ scrollEnabled,
 }) => {
  const [refreshing, setRefreshing] = useState(false);
  const onRefresh = async () => {
@@ -47,5 +48,6 @@ ScrollContainer.propTypes = {
  children: PropTypes.node,
  contentContainerStyle: PropTypes.object,
  refreshFn: PropTypes.func,
+ scrollEnabled: PropTypes.bool,
 };
 export default ScrollContainer;

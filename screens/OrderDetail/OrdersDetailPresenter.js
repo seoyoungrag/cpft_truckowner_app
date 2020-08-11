@@ -245,17 +245,34 @@ export default ({ refreshFn, loading, order }) => {
        차량정보 입력한 회원만 볼 수 있습니다. {"\r\n"}마저 등록하러
        가시겠습니까?
       </Text>
-      <TouchableOpacity
-       style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
-       onPress={() => {
-        navigation.navigate("추가정보입력", {
-         isFromOrder: true,
-        });
-        setModalVisible(!modalVisible);
-       }}
-      >
-       <Text style={styles.textStyle}>예</Text>
-      </TouchableOpacity>
+      <View style={{ flexDirection: "row" }}>
+       <TouchableOpacity
+        style={{
+         ...styles.openButton,
+         backgroundColor: "white",
+         marginRight: 10,
+        }}
+        onPress={() => {
+         setModalVisible(!modalVisible);
+        }}
+       >
+        <Text style={[styles.textStyle, { color: "#2196F3" }]}>아니오</Text>
+       </TouchableOpacity>
+       <TouchableOpacity
+        style={{
+         ...styles.openButton,
+         backgroundColor: "#2196F3",
+        }}
+        onPress={() => {
+         navigation.navigate("추가정보입력", {
+          isFromOrder: true,
+         });
+         setModalVisible(!modalVisible);
+        }}
+       >
+        <Text style={styles.textStyle}>예</Text>
+       </TouchableOpacity>
+      </View>
      </View>
     </View>
    </Modal>
@@ -276,34 +293,38 @@ export default ({ refreshFn, loading, order }) => {
      </TouchableOpacity>
      {/*<DetailHeaderTitle>1/5</DetailHeaderTitle>*/}
     </DetailHeader>
-    <ScrollContainer
+    <HorizontalOrderDetail
      refreshFn={refreshFn}
      loading={loading}
-     contentContainerStyle={{ paddingBottom: 80 }}
-    >
-     <HorizontalOrderDetail
-      key={order.orderSeq}
-      id={order.orderSeq}
-      opratSctn={order.opratSctn}
-      workingArea={order.workingArea}
-      rcritType={code(codes, order.rcritType)}
-      carTypes={order.carTypes.map((c) => {
+     key={order.orderSeq}
+     id={order.orderSeq}
+     opratSctn={order.opratSctn}
+     workingArea={order.workingArea}
+     rcritType={code(codes, order.rcritType)}
+     carTypes={order.carTypes
+      .map((c) => {
        return code(codes, c) + " ";
-      })}
-      tonType={code(codes, order.tonType)}
-      dlvyPrdlst={order.dlvyPrdlst}
-      payAmt={order.payAmt}
-      payFullType={code(codes, order.payFullType)}
-      workHourStart={(order.workHourStart+"").padStart(2, '0')}
-      workMinuteStart={(order.workMinuteStart+"").padStart(2, '0')}
-      workHourEnd={(order.workHourEnd+"").padStart(2, '0')}
-      workMinuteEnd={(order.workMinuteEnd+"").padStart(2, '0')}
-      goToOrderDetail={() => {
-       console.log(this);
-      }}
-     />
-    </ScrollContainer>
-
+      })
+      .join(" ")}
+     tonType={code(codes, order.tonType)}
+     dlvyPrdlst={order.dlvyPrdlst}
+     payAmt={order.payAmt}
+     payFullType={code(codes, order.payFullType)}
+     workHourStart={(order.workHourStart + "").padStart(2, "0")}
+     workMinuteStart={(order.workMinuteStart + "").padStart(2, "0")}
+     workHourEnd={(order.workHourEnd + "").padStart(2, "0")}
+     workMinuteEnd={(order.workMinuteEnd + "").padStart(2, "0")}
+     detailMatter={order.detailMatter}
+     workDays={
+      order?.workDays &&
+      order.workDays
+       .map((c) => {
+        return code(codes, c) + " ";
+       })
+       .join(",")
+     }
+     order={order}
+    />
     <DetailFooter>
      <CancelBtn
       onPress={() => {
@@ -314,10 +335,10 @@ export default ({ refreshFn, loading, order }) => {
      </CancelBtn>
      <ConfirmBtn
       onPress={() => {
-       console.log(this);
+       setModalVisible(true);
       }}
      >
-      <ConfirmBtnText>다음</ConfirmBtnText>
+      <ConfirmBtnText>지원하기</ConfirmBtnText>
      </ConfirmBtn>
     </DetailFooter>
    </Detail>

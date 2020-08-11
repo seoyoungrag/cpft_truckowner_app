@@ -18,7 +18,9 @@ export default ({
    workHourStart,
    workMinuteStart,
    workHourEnd,
-   workMinuteEnd
+   workMinuteEnd,
+   detailMatter,
+   workDays,
   },
  },
 }) => {
@@ -37,7 +39,9 @@ export default ({
    workHourStart,
    workMinuteStart,
    workHourEnd,
-   workMinuteEnd
+   workMinuteEnd,
+   detailMatter,
+   workDays,
   },
   orderError: null,
  });
@@ -60,6 +64,8 @@ export default ({
     workMinuteStart: getOrder.workMinuteStart,
     workHourEnd: getOrder.workHourEnd,
     workMinuteEnd: getOrder.workMinuteEnd,
+    detailMatter: getOrder.detailMatter,
+    workDays: getOrder.workDays,
    },
    orderError: getOrderError,
   });

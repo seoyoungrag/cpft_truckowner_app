@@ -116,6 +116,8 @@ export default ({ refreshFn, loading, now }) => {
     workMinuteStart: order.workMinuteStart,
     workHourEnd: order.workHourEnd,
     workMinuteEnd: order.workMinuteEnd,
+    detailMatter: order.detailMatter,
+    workDays: order.workDays,
    });
   }
  };
@@ -145,17 +147,34 @@ export default ({ refreshFn, loading, now }) => {
        차량정보 입력한 회원만 볼 수 있습니다. {"\r\n"}마저 등록하러
        가시겠습니까?
       </Text>
-      <TouchableOpacity
-       style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
-       onPress={() => {
-        navigation.navigate("추가정보입력", {
-         isFromOrder: true,
-        });
-        setModalVisible(!modalVisible);
-       }}
-      >
-       <Text style={styles.textStyle}>예</Text>
-      </TouchableOpacity>
+      <View style={{ flexDirection: "row" }}>
+       <TouchableOpacity
+        style={{
+         ...styles.openButton,
+         backgroundColor: "white",
+         marginRight: 10,
+        }}
+        onPress={() => {
+         setModalVisible(!modalVisible);
+        }}
+       >
+        <Text style={[styles.textStyle, { color: "#2196F3" }]}>아니오</Text>
+       </TouchableOpacity>
+       <TouchableOpacity
+        style={{
+         ...styles.openButton,
+         backgroundColor: "#2196F3",
+        }}
+        onPress={() => {
+         navigation.navigate("추가정보입력", {
+          isFromOrder: true,
+         });
+         setModalVisible(!modalVisible);
+        }}
+       >
+        <Text style={styles.textStyle}>예</Text>
+       </TouchableOpacity>
+      </View>
      </View>
     </View>
    </Modal>
