@@ -8,6 +8,7 @@ import {
  StyleSheet,
  TextInput,
  Alert,
+ KeyboardAvoidingView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Constants from "expo-constants";
@@ -162,8 +163,6 @@ const styles = StyleSheet.create({
   justifyContent: "flex-end",
   alignItems: "center",
   marginTop: 22,
-  width: screenWidth,
-  height: screenHeight,
   backgroundColor: "rgba(0,0,0,0.5)",
  },
  modalView: {
@@ -308,7 +307,11 @@ export default ({ refreshFn, loading, order }) => {
     statusBarTranslucent={true}
     visible={queryModalVisible}
    >
-    <View style={styles.centeredView}>
+    <KeyboardAvoidingView
+     behavior="padding"
+     enabled
+     style={styles.centeredView}
+    >
      <View style={styles.modalView}>
       <View style={styles.modalInnerView}>
        <DataHeader>
@@ -343,10 +346,6 @@ export default ({ refreshFn, loading, order }) => {
        <Text style={{ fontSize: 24 }}>취소</Text>
       </CancelBtn>
       <ConfirmBtn
-       style={{
-        ...styles.openButton,
-        backgroundColor: "#2196F3",
-       }}
        onPress={() => {
         Alert.alert(
          "문의완료!",
@@ -360,7 +359,7 @@ export default ({ refreshFn, loading, order }) => {
        <ConfirmBtnText>문의완료</ConfirmBtnText>
       </ConfirmBtn>
      </View>
-    </View>
+    </KeyboardAvoidingView>
    </Modal>
    <Modal
     animationType="fade"
@@ -369,7 +368,11 @@ export default ({ refreshFn, loading, order }) => {
     statusBarTranslucent={true}
     visible={applyModalVisible}
    >
-    <View style={styles.centeredView}>
+    <KeyboardAvoidingView
+     behavior="padding"
+     enabled
+     style={styles.centeredView}
+    >
      <View style={styles.modalView}>
       <View style={styles.modalInnerView}>
        <DataHeader>
@@ -426,10 +429,6 @@ export default ({ refreshFn, loading, order }) => {
        <Text style={{ fontSize: 24 }}>취소</Text>
       </CancelBtn>
       <ConfirmBtn
-       style={{
-        ...styles.openButton,
-        backgroundColor: "#2196F3",
-       }}
        onPress={() => {
         Alert.alert(
          "지원완료!",
@@ -443,7 +442,7 @@ export default ({ refreshFn, loading, order }) => {
        <ConfirmBtnText>지원완료</ConfirmBtnText>
       </ConfirmBtn>
      </View>
-    </View>
+    </KeyboardAvoidingView>
    </Modal>
 
    <Detail>
