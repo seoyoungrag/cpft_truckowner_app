@@ -58,7 +58,7 @@ const DataHeaderBottomInner = styled.View`
  margin-bottom: 5px;
 `;
 
-const DataBody = styled.ScrollView`
+const DataBody = styled.View`
  flex: 0.7;
  flex-direction: column;
  width: 100%;
