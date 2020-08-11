@@ -132,7 +132,7 @@ const Horizontal = ({
         {rcritType}
        </DataHeaderBottomTitle>
       </DataHeaderBottomTitleContainer>
-      <RcritType></RcritType>
+      <Text></Text>
      </DataHeaderBottomInner>
      <DataHeaderBottomInner>
       <DataHeaderBottomTitleContainer>
