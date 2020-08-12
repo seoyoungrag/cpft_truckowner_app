@@ -16,11 +16,11 @@ export default () => {
    screenOptions={{
     gestureEnabled: true,
     headerStyle: {
-     backgroundColor: "#3a99fc",
+     backgroundColor: "white",
      shadowColor: "black",
      borderBottomColor: "silver",
     },
-    headerTintColor: "white",
+    headerTintColor: "#3a99fc",
     headerBackTitleVisible: false,
    }}
   >
@@ -33,7 +33,7 @@ export default () => {
       <FontAwesome5
        name="truck-moving"
        size={24}
-       color="white"
+       color="#3a99fc"
        style={{
         marginLeft: 10,
         transform: [{ rotate: "-15deg" }],
@@ -45,7 +45,7 @@ export default () => {
        <FontAwesome5
         name="sign-out-alt"
         size={24}
-        color="white"
+        color="#3a99fc"
         style={{
          marginRight: 10,
         }}

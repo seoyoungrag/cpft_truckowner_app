@@ -1,37 +1,153 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React from "react";
+import { TouchableOpacity, StyleSheet } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { FontAwesome5 } from "@expo/vector-icons";
-import OrdersContainer from "./OrdersContainer";
+import styled from "styled-components/native";
+import TransContainer from "./TransContainer";
 import { useIsLoggedIn, useLogIn, useLogOut } from "../../AuthContext";
-import { TouchableOpacity, View, Dimensions, Text } from "react-native";
-import YearMonthPicker from "../../components/YearMonthPicker";
 
-const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
+const styles = StyleSheet.create({
+ centeredView: {
+  flex: 1,
+  justifyContent: "flex-end",
+  alignItems: "center",
+  marginTop: 22,
+  backgroundColor: "rgba(0,0,0,0.5)",
+ },
+ modalView: {
+  flex: 0,
+  width: "100%",
+  backgroundColor: "white",
+  padding: 5,
+  alignItems: "center",
+ },
+ modalInnerView: {
+  alignItems: "center",
+  borderWidth: 1,
+  width: "100%",
+ },
+ openButton: {
+  backgroundColor: "#F194FF",
+  borderRadius: 10,
+  paddingTop: 5,
+  paddingBottom: 5,
+  paddingLeft: 10,
+  paddingRight: 10,
+  elevation: 2,
+ },
+ textStyle: {
+  color: "white",
+  fontWeight: "bold",
+  textAlign: "center",
+  marginLeft: 20,
+  marginRight: 20,
+  marginTop: 5,
+  marginBottom: 5,
+ },
+ modalTItle: {
+  fontSize: 24,
+  marginBottom: 15,
+  textAlign: "center",
+ },
+ modalBody: {
+  textAlign: "center",
+ },
+});
+
+const CancelBtn = styled.TouchableOpacity`
+ flex: 0.3;
+ align-items: center;
+ justify-content: center;
+ background-color: whitesmoke;
+ height: 50px;
+`;
+const ConfirmBtn = styled.TouchableOpacity`
+ flex: 0.7;
+ align-items: center;
+ justify-content: center;
+ background-color: #3a99fc;
+ height: 50px;
+`;
+const ConfirmBtnText = styled.Text`
+ text-align: center;
+ color: white;
+ font-weight: bold;
+ font-size: 24px;
+`;
+
+const DataHeader = styled.View`
+ flex-direction: column;
+ justify-content: center;
+ align-items: center;
+ padding-top: 10px;
+ width: 100%;
+`;
+const DataBody = styled.View`
+ padding-left: 10px;
+ padding-right: 10px;
+ padding-bottom: 10px;
+ flex-direction: column;
+ justify-content: flex-start;
+ align-items: flex-start;
+ width: 100%;
+`;
+
+const EtcInput = styled.TextInput`
+ border-width: 1px;
+ border-color: grey;
+ text-align: left;
+ text-align-vertical: top;
+ height: 150px;
+ width: 100%;
+`;
+
 const Stack = createStackNavigator();
 
 export default () => {
- const [startYear, setStartYear] = useState(2020);
- const [endYear, setEndYear] = useState(2020);
- const [selectedYear, setSelectYear] = useState(2020);
- const [selectedMonth, setSelectedMonth] = useState(8);
- const showPicker = () => {
-  this.picker
-   .show({ startYear, endYear, selectedYear, selectedMonth })
-   .then(({ year, month }) => {
-    this.setState({
-     selectedYear: year,
-     selectedMonth: month,
-    });
-   });
- };
  const logOut = useLogOut();
  return (
-  <Stack.Navigator mode="modal">
+  <Stack.Navigator
+   mode="modal"
+   screenOptions={{
+    gestureEnabled: true,
+    headerStyle: {
+     backgroundColor: "white",
+     shadowColor: "black",
+     borderBottomColor: "silver",
+    },
+    headerTintColor: "#3a99fc",
+    headerBackTitleVisible: false,
+   }}
+  >
    <Stack.Screen
-    name="운송메인"
-    component={OrdersContainer}
+    name="용차블루"
+    component={TransContainer}
     options={{
-     headerTitleContainerStyle: {
+     headerTitleStyle: { marginLeft: -20, paddingLeft: 0 },
+     headerLeft: () => (
+      <FontAwesome5
+       name="truck-moving"
+       size={24}
+       color="#3a99fc"
+       style={{
+        marginLeft: 10,
+        transform: [{ rotate: "-15deg" }],
+       }}
+      />
+     ),
+     headerRight: () => (
+      <TouchableOpacity onPress={logOut}>
+       <FontAwesome5
+        name="sign-out-alt"
+        size={24}
+        color="#3a99fc"
+        style={{
+         marginRight: 10,
+        }}
+       />
+      </TouchableOpacity>
+     ),
+     /*headerTitleContainerStyle: {
       margin: 0,
       padding: 0,
       backgroundColor: "red",
@@ -54,7 +170,7 @@ export default () => {
         <Text
          style={{ color: "#3a99fc", fontSize: 13, textAlignVertical: "center" }}
         >
-         2020년
+         {selectedYear}년
         </Text>
        </View>
        <View
@@ -77,8 +193,13 @@ export default () => {
           alignItems: "center",
          }}
         >
-         <Text style={{ color: "white", fontSize: 24 }}>7월</Text>
-         <TouchableOpacity onPress={() => console.log(this)}>
+         <Text style={{ color: "white", fontSize: 24 }}>{selectedMonth}월</Text>
+         <TouchableOpacity
+          onPress={() => {
+           setMonthPickerModalVisible(true);
+           //showPicker();
+          }}
+         >
           <FontAwesome5
            name="calendar-alt"
            size={24}
@@ -86,7 +207,6 @@ export default () => {
            style={{ paddingHorizontal: 20 }}
           />
          </TouchableOpacity>
-         <YearMonthPicker ref={(picker) => (this.picker = picker)} />
         </View>
         <View>
          <TouchableOpacity onPress={logOut}>
@@ -94,8 +214,24 @@ export default () => {
          </TouchableOpacity>
         </View>
        </View>
+       <Modal
+        animationType="fade"
+        hardwareAccelerated={true}
+        transparent={true}
+        statusBarTranslucent={true}
+        visible={monthPickerModalVisible}
+       >
+        <View behavior="padding" enabled style={styles.centeredView}>
+         <YearMonthPicker
+          ref={monthPicker}
+          dismissFnc={() => {
+           setMonthPickerModalVisible(false);
+          }}
+         />
+        </View>
+       </Modal>
       </View>
-     ),
+     ),*/
     }}
    />
   </Stack.Navigator>

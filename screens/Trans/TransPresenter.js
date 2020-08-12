@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
  Dimensions,
  Text,
@@ -8,18 +8,19 @@ import {
  StyleSheet,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import HorizontalOrder from "../../components/HorizontalOrder";
+import { FontAwesome5 } from "@expo/vector-icons";
+import HorizontalTrans from "../../components/HorizontalTrans";
 import ScrollContainer from "../../components/ScrollContainer";
 import List from "../../components/List";
 import { code, trimText } from "../../utils";
 import { useIsModal, useSetIsModalProp } from "../../ModalContext";
-import OrderFilter from "./OrderFilter";
 import { useCodes } from "../../CodeContext";
 import {
  useUserRegistInfo,
  useGetUserRegistInfo,
  useSetUserRegistInfo,
 } from "../../UserRegistContext";
+import YearMonthPicker from "../../components/YearMonthPicker";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -83,44 +84,51 @@ export default ({ refreshFn, loading, now }) => {
  const getUserRegistInfo = useGetUserRegistInfo();
  const [userRegistInfo, setUserRegistInfoProp] = useState(null);
  const [modalVisible, setModalVisible] = useState(false);
+ const [monthPickerModalVisible, setMonthPickerModalVisible] = useState(false);
+ const [startYear, setStartYear] = useState(2020);
+ const [endYear, setEndYear] = useState(2020);
+ const [selectedYear, setSelectedYear] = useState(2020);
+ const [selectedMonth, setSelectedMonth] = useState(8);
+ const monthPicker = useRef();
  const fetchData = async () => {
   const data = await getUserRegistInfo();
   setUserRegistInfoProp(data);
  };
 
- const goToOrderDetail = (order) => {
-  if (
-   !(
-    userRegistInfo.carNum &&
-    userRegistInfo.corpNum &&
-    userRegistInfo.corpNm &&
-    userRegistInfo.corpRpresentNm &&
-    userRegistInfo.corpCategory &&
-    userRegistInfo.corpType &&
-    userRegistInfo.userAddress
-   )
-  ) {
-   setModalVisible(true);
-  } else {
-   navigation.navigate("OrderDetail", {
-    orderSeq: order.orderSeq,
-    opratSctn: order.opratSctn,
-    workingArea: order.workingArea,
-    rcritType: order.rcritType,
-    carTypes: order.carTypes,
-    tonType: order.tonType,
-    dlvyPrdlst: order.dlvyPrdlst,
-    payAmt: order.payAmt,
-    payFullType: order.payFullType,
-    workHourStart: order.workHourStart,
-    workMinuteStart: order.workMinuteStart,
-    workHourEnd: order.workHourEnd,
-    workMinuteEnd: order.workMinuteEnd,
-    detailMatter: order.detailMatter,
-    workDays: order.workDays,
-   });
-  }
+ const goToTransDetail = (order) => {
+  navigation.navigate("TransDetail", {
+   year: selectedYear,
+   month: selectedMonth,
+   orderSeq: order.orderSeq,
+   opratSctn: order.opratSctn,
+   workingArea: order.workingArea,
+   rcritType: order.rcritType,
+   carTypes: order.carTypes,
+   tonType: order.tonType,
+   dlvyPrdlst: order.dlvyPrdlst,
+   payAmt: order.payAmt,
+   payFullType: order.payFullType,
+   workHourStart: order.workHourStart,
+   workMinuteStart: order.workMinuteStart,
+   workHourEnd: order.workHourEnd,
+   workMinuteEnd: order.workMinuteEnd,
+   detailMatter: order.detailMatter,
+   workDays: order.workDays,
+  });
  };
+ const showPicker = () => {
+  monthPicker.current
+   .show({ startYear, endYear, selectedYear, selectedMonth })
+   .then(({ year, month }) => {
+    setSelectedYear(year);
+    setSelectedMonth(month);
+   });
+ };
+ useEffect(() => {
+  if (monthPickerModalVisible) {
+   showPicker();
+  }
+ }, [monthPickerModalVisible]);
  useEffect(() => {
   const unsubscribe = navigation.addListener("focus", async () => {
    if (!userRegistInfo) {
@@ -131,7 +139,7 @@ export default ({ refreshFn, loading, now }) => {
   return unsubscribe;
  }, [navigation]);
  return (
-  <List title="오더" filter={<OrderFilter />}>
+  <>
    <Modal
     animationType="fade"
     hardwareAccelerated={true}
@@ -178,16 +186,85 @@ export default ({ refreshFn, loading, now }) => {
      </View>
     </View>
    </Modal>
+   <View>
+    <View
+     style={{
+      alignItems: "center",
+      flexDirection: "row",
+      backgroundColor: "white",
+      width: width,
+      paddingLeft: 20,
+     }}
+    >
+     <Text
+      style={{ color: "#3a99fc", fontSize: 13, textAlignVertical: "center" }}
+     >
+      {selectedYear}년
+     </Text>
+    </View>
+    <View
+     style={{
+      alignItems: "center",
+      flexDirection: "row",
+      backgroundColor: "#3a99fc",
+      width: width,
+      paddingLeft: 20,
+      paddingRight: 20,
+      paddingVertical: 3,
+      justifyContent: "space-between",
+     }}
+    >
+     <View
+      style={{
+       flexDirection: "row",
+       justifyContent: "space-between",
+       alignItems: "center",
+      }}
+     >
+      <Text style={{ color: "white", fontSize: 24 }}>{selectedMonth}월</Text>
+      <TouchableOpacity
+       onPress={() => {
+        setMonthPickerModalVisible(true);
+        //showPicker();
+       }}
+      >
+       <FontAwesome5
+        name="calendar-alt"
+        size={24}
+        color="white"
+        style={{ paddingHorizontal: 20 }}
+       />
+      </TouchableOpacity>
+     </View>
+    </View>
+    <Modal
+     animationType="fade"
+     hardwareAccelerated={true}
+     transparent={true}
+     statusBarTranslucent={true}
+     visible={monthPickerModalVisible}
+    >
+     <View behavior="padding" enabled style={styles.centeredView}>
+      <YearMonthPicker
+       ref={monthPicker}
+       dismissFnc={() => {
+        setMonthPickerModalVisible(false);
+       }}
+      />
+     </View>
+    </Modal>
+   </View>
    <ScrollContainer
     refreshOn={true}
     refreshFn={refreshFn}
     loading={loading}
     contentContainerStyle={{
      backgroundColor: useIsModal() ? "rgba(0,0,0,0.5)" : "white",
+     paddingTop: 10,
     }}
    >
     {now.map((n) => (
-     <HorizontalOrder
+     <HorizontalTrans
       key={n.orderSeq}
       id={n.orderSeq}
       opratSctn={n.opratSctn}
@@ -200,13 +277,13 @@ export default ({ refreshFn, loading, now }) => {
       dlvyPrdlst={n.dlvyPrdlst}
       payAmt={n.payAmt}
       payFullType={code(codes, n.payFullType)}
-      goToOrderDetail={() => {
-       goToOrderDetail(n);
+      goToTransDetail={() => {
+       goToTransDetail(n);
       }}
      />
     ))}
     {now.map((n) => (
-     <HorizontalOrder
+     <HorizontalTrans
       key={n.orderSeq}
       id={n.orderSeq}
       opratSctn={n.opratSctn}
@@ -219,13 +296,13 @@ export default ({ refreshFn, loading, now }) => {
       dlvyPrdlst={n.dlvyPrdlst}
       payAmt={n.payAmt}
       payFullType={code(codes, n.payFullType)}
-      goToOrderDetail={() => {
-       goToOrderDetail(n);
+      goToTransDetail={() => {
+       goToTransDetail(n);
       }}
      />
     ))}
     {now.map((n) => (
-     <HorizontalOrder
+     <HorizontalTrans
       key={n.orderSeq}
       id={n.orderSeq}
       opratSctn={n.opratSctn}
@@ -238,13 +315,13 @@ export default ({ refreshFn, loading, now }) => {
       dlvyPrdlst={n.dlvyPrdlst}
       payAmt={n.payAmt}
       payFullType={code(codes, n.payFullType)}
-      goToOrderDetail={() => {
-       goToOrderDetail(n);
+      goToTransDetail={() => {
+       goToTransDetail(n);
       }}
      />
     ))}
     {now.map((n) => (
-     <HorizontalOrder
+     <HorizontalTrans
       key={n.orderSeq}
       id={n.orderSeq}
       opratSctn={n.opratSctn}
@@ -257,12 +334,12 @@ export default ({ refreshFn, loading, now }) => {
       dlvyPrdlst={n.dlvyPrdlst}
       payAmt={n.payAmt}
       payFullType={code(codes, n.payFullType)}
-      goToOrderDetail={() => {
-       goToOrderDetail(n);
+      goToTransDetail={() => {
+       goToTransDetail(n);
       }}
      />
     ))}
    </ScrollContainer>
-  </List>
+  </>
  );
 };

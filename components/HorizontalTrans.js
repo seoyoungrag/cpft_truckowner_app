@@ -3,8 +3,7 @@ import styled from "styled-components/native";
 import PropTypes from "prop-types";
 import { TouchableOpacity, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import Poster from "./Poster";
-import Votes from "./Votes";
+import { Entypo } from "@expo/vector-icons";
 import { trimText, formatDate, code } from "../utils";
 import { useIsModal, useSetIsModalProp } from "../ModalContext";
 
@@ -17,25 +16,42 @@ const Container = styled.View`
 
 const Data = styled.View`
  flex: 1;
- width: 100%;
  align-items: flex-start;
- border-top-width: 1px;
+ border-width: 1px;
  padding: 10px;
+ margin: 5px;
 `;
 
+const CarrierNm = styled.Text`
+ flex: 1;
+ text-align: left;
+ font-size: 20px;
+`;
 const OpratSctn = styled.Text`
  flex: 1;
  text-align: left;
  font-size: 20px;
 `;
+
 const RcritType = styled.Text`
  flex: 1;
  text-align: right;
+ align-self: flex-end;
+ padding-right: 10px;
+`;
+
+const TransProgress = styled.View`
+ flex: 1;
+ width: 100%;
+ padding-horizontal: 15px;
+ justify-content: space-between;
+ flex-direction: row;
+ font-size: 18px;
 `;
 
 const WorkingArea = styled.Text`
  flex: 1;
- text-align: right;
+ text-align: left;
 `;
 
 const TonType = styled.Text`
@@ -88,6 +104,16 @@ const PayInfo = styled.View`
  flex: 1;
  flex-direction: row;
 `;
+
+const DataBottomBtn = styled.TouchableOpacity`
+ flex: 1;
+ align-items: center;
+ justify-content: center;
+ background-color: #3a99fc;
+ border-color: white;
+ height: 50px;
+`;
+
 const Horizontal = ({
  id,
  opratSctn,
@@ -98,7 +124,7 @@ const Horizontal = ({
  dlvyPrdlst,
  payAmt,
  payFullType,
- goToOrderDetail,
+ goToTransDetail,
 }) => {
  const navigation = useNavigation();
  const goToDetail = () => {
@@ -115,29 +141,66 @@ const Horizontal = ({
   <TouchableOpacity
    disabled={useIsModal()}
    style={{ width: "100%" }}
-   onPress={goToOrderDetail}
+   onPress={goToTransDetail}
   >
    <Container>
+    <RcritType>{rcritType}</RcritType>
     <Data>
      <DataHeader>
-      <OpratSctn>{opratSctn}</OpratSctn>
-      <RcritType>{rcritType}</RcritType>
-     </DataHeader>
-     <DataBody>
-      <WorkingArea>{workingArea}</WorkingArea>
-      <CarInfo>
-       <TonType>{tonType}</TonType>
-       <CarType>{carTypes}</CarType>
-      </CarInfo>
-     </DataBody>
-     <DataBottom>
-      <DlvyPrdlst>{dlvyPrdlst}</DlvyPrdlst>
+      <CarrierNm>팀프레시</CarrierNm>
       <PayInfo>
        <PayAmt>{payAmt}</PayAmt>
        <PayFullType>{payFullType}</PayFullType>
       </PayInfo>
+     </DataHeader>
+     <DataBody>
+      <OpratSctn>{opratSctn}</OpratSctn>
+      <WorkingArea>
+       {workingArea.split(" ").slice(0, 2).join(" ")} 배송
+      </WorkingArea>
+     </DataBody>
+     <DataBottom>
+      <DataBottomBtn onPress={() => {}}>
+       <Text style={{ fontSize: 24, color: "white" }}>명세서</Text>
+      </DataBottomBtn>
+      <DataBottomBtn
+       onPress={() => {
+        Alert.alert(
+         "문의완료!",
+         "문의가 완료되었습니다.",
+         [{ text: "네", onPress: () => {} }],
+         { cancelable: false }
+        );
+       }}
+      >
+       <Text style={{ fontSize: 24, color: "white" }}>세금계산서</Text>
+      </DataBottomBtn>
      </DataBottom>
     </Data>
+    <TransProgress>
+     <Text style={{ textAlignVertical: "center" }}>
+      명세서{" "}
+      <Entypo name="chevron-with-circle-down" size={18} color="#3a99fc" />{" "}
+     </Text>
+     <Text>
+      <Entypo name="dot-single" size={18} color="#3a99fc" />{" "}
+      <Entypo name="dot-single" size={18} color="#3a99fc" />{" "}
+      <Entypo name="dot-single" size={18} color="#3a99fc" />{" "}
+     </Text>
+     <Text style={{ textAlignVertical: "center" }}>
+      세금계산서{" "}
+      <Entypo name="chevron-with-circle-down" size={18} color="#3a99fc" />{" "}
+     </Text>
+     <Text>
+      <Entypo name="dot-single" size={18} color="black" />{" "}
+      <Entypo name="dot-single" size={18} color="black" />{" "}
+      <Entypo name="dot-single" size={18} color="black" />{" "}
+     </Text>
+     <Text style={{ textAlignVertical: "center" }}>
+      입금대기{" "}
+      <Entypo name="chevron-with-circle-down" size={18} color="black" />{" "}
+     </Text>
+    </TransProgress>
    </Container>
   </TouchableOpacity>
  );

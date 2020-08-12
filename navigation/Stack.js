@@ -30,6 +30,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import UserStep4 from "../screens/UserRegist/UserStep4";
 import UserStep4AddrFindView from "../screens/UserRegist/UserStep4AddrFindView";
 import OrderDetail from "../screens/OrderDetail";
+import TransDetail from "../screens/TransDetail";
 
 const Stack = createStackNavigator();
 
@@ -165,6 +166,13 @@ export default () => {
     <Stack.Screen
      name="OrderDetail"
      component={OrderDetail}
+     options={{
+      headerShown: false,
+     }}
+    />
+    <Stack.Screen
+     name="TransDetail"
+     component={TransDetail}
      options={{
       headerShown: false,
      }}

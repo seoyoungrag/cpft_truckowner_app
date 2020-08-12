@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import OrdersPresenter from "./OrdersPresenter";
+import TransPresenter from "./TransPresenter";
 import { orderApi } from "../../api";
 
 export default () => {
@@ -20,5 +20,5 @@ export default () => {
   getData();
  }, []);
 
- return <OrdersPresenter refreshFn={getData} {...orders} />;
+ return <TransPresenter refreshFn={getData} {...orders} />;
 };

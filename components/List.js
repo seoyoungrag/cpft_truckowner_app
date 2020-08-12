@@ -22,7 +22,7 @@ const List = ({ title, filter, children }) => {
  return (
   <View style={{ flex: 1, backgroundColor: "white" }}>
    <Title title={title} />
-   <Container>
+   <Container style={{ paddingTop: filter ? 35 : 0 }}>
     {children}
     {filter}
    </Container>

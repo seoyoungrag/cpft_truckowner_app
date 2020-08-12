@@ -6,7 +6,6 @@ import {
  Modal,
  View,
  StyleSheet,
- TextInput,
  Alert,
  KeyboardAvoidingView,
 } from "react-native";
@@ -15,10 +14,8 @@ import Constants from "expo-constants";
 import { AntDesign } from "@expo/vector-icons";
 import styled from "styled-components/native";
 import HorizontalOrderDetail from "../../components/HorizontalOrderDetail";
-import ScrollContainer from "../../components/ScrollContainer";
 import { code, trimText } from "../../utils";
 import { useCodes } from "../../CodeContext";
-import DataBodyRow from "../../components/DataBodyRow";
 import {
  useUserRegistInfo,
  useGetUserRegistInfo,
@@ -47,11 +44,6 @@ const DetailHeader = styled.View`
  flex-direction: row;
  justify-content: space-between;
 `;
-const DetailHeaderTitle = styled.Text`
- color: black;
- font-size: 20px;
-`;
-
 const DetailFooter = styled.View`
  flex-direction: row;
  justify-content: space-around;
@@ -71,12 +63,6 @@ const ConfirmBtn = styled.TouchableOpacity`
  background-color: #3a99fc;
  height: 50px;
 `;
-const CancelBtnText = styled.Text`
- text-align: center;
- color: white;
- font-weight: bold;
- font-size: 24px;
-`;
 const ConfirmBtnText = styled.Text`
  text-align: center;
  color: white;
@@ -84,79 +70,6 @@ const ConfirmBtnText = styled.Text`
  font-size: 24px;
 `;
 
-const Data = styled.View`
- margin-top: 0px;
- padding: 0px 0px;
-`;
-const Container = styled.View`
- flex: 1;
- flex-direction: column;
- align-items: flex-start;
-`;
-
-const DataName = styled.Text`
- margin-top: 30px;
- color: black;
- opacity: 0.8;
- font-weight: bold;
- font-size: 32px;
- margin-left: 40px;
-`;
-
-const DataValue = styled.Text`
- margin-left: 40px;
- margin-right: 40px;
- color: black;
- opacity: 0.8;
- font-weight: 500;
- font-size: 16px;
-`;
-
-const DataValueBtn = styled.TouchableOpacity`
- width: ${(screenWidth * 3) / 4}px;
- border-width: 1px;
- border-radius: 10px;
- border-color: silver;
- padding: 10px;
- margin-top: 10px;
- margin-left: 40px;
- margin-right: 40px;
- color: black;
- opacity: 0.8;
- font-weight: 500;
- font-size: 16px;
- flex-direction: row;
- justify-content: space-between;
- align-items: center;
-`;
-
-const DataValueBtnSec = styled.TouchableOpacity`
- width: ${(screenWidth * 3) / 4}px;
- border-width: 1px;
- border-radius: 10px;
- border-color: silver;
- padding: 10px;
- margin-top: 10px;
- margin-left: 40px;
- margin-right: 40px;
- color: black;
- opacity: 0.8;
- font-weight: 500;
- font-size: 16px;
- flex-direction: row;
- justify-content: space-between;
- align-items: center;
-`;
-
-const DataValueRed = styled.Text`
- width: 200px;
- margin-left: 40px;
- margin-right: 40px;
- color: red;
- opacity: 0.8;
- font-weight: 500;
- border-radius: 10px;
-`;
 const styles = StyleSheet.create({
  centeredView: {
   flex: 1,

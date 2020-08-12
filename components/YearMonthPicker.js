@@ -59,6 +59,9 @@ export default class YearMonthPicker extends Component {
  };
 
  dismiss = () => {
+  if (this.props.dismissFnc) {
+   this.props.dismissFnc();
+  }
   this.setState({
    visiable: false,
   });
@@ -104,64 +107,55 @@ export default class YearMonthPicker extends Component {
   const { years, months, selectedYear, selectedMonth, visiable } = this.state;
   if (!visiable) return null;
   return (
-   <TouchableOpacity style={styles.modal} onPress={this.onCancelPress}>
-    <View style={styles.outerContainer}>
-     <View style={styles.toolBar}>
-      <TouchableOpacity
-       style={styles.toolBarButton}
-       onPress={this.onCancelPress}
-      >
-       <Text style={styles.toolBarButtonText}>取消</Text>
-      </TouchableOpacity>
-      <View style={{ flex: 1 }} />
-      <TouchableOpacity
-       style={styles.toolBarButton}
-       onPress={this.onConfirmPress}
-      >
-       <Text style={styles.toolBarButtonText}>确定</Text>
-      </TouchableOpacity>
-     </View>
-     <View style={styles.innerContainer}>
-      <Picker
-       style={styles.picker}
-       selectedValue={selectedYear}
-       onValueChange={(itemValue, itemIndex) =>
-        this.setState({ selectedYear: itemValue })
-       }
-      >
-       {this.renderPickerItems(years)}
-      </Picker>
-      <Picker
-       style={styles.picker}
-       selectedValue={selectedMonth}
-       onValueChange={(itemValue, itemIndex) =>
-        this.setState({ selectedMonth: itemValue })
-       }
-      >
-       {this.renderPickerItems(months)}
-      </Picker>
-     </View>
+   <View style={styles.outerContainer}>
+    <View style={styles.toolBar}>
+     <TouchableOpacity
+      style={styles.toolBarButton}
+      onPress={this.onCancelPress}
+     >
+      <Text style={styles.toolBarButtonText}>취소</Text>
+     </TouchableOpacity>
+     <View style={{ flex: 1 }} />
+     <TouchableOpacity
+      style={styles.toolBarButton}
+      onPress={this.onConfirmPress}
+     >
+      <Text style={styles.toolBarButtonText}>확인</Text>
+     </TouchableOpacity>
     </View>
-   </TouchableOpacity>
+    <View style={styles.innerContainer}>
+     <Picker
+      style={styles.picker}
+      selectedValue={selectedYear}
+      onValueChange={(itemValue, itemIndex) =>
+       this.setState({ selectedYear: itemValue })
+      }
+     >
+      {this.renderPickerItems(years)}
+     </Picker>
+     <Picker
+      style={styles.picker}
+      selectedValue={selectedMonth}
+      onValueChange={(itemValue, itemIndex) =>
+       this.setState({ selectedMonth: itemValue })
+      }
+     >
+      {this.renderPickerItems(months)}
+     </Picker>
+    </View>
+   </View>
   );
  }
 }
 
 const styles = StyleSheet.create({
- modal: {
-  position: "absolute",
-  top: 0,
-  left: 0,
-  right: 0,
-  bottom: 0,
-  backgroundColor: "rgba(0, 0, 0, 0.5)",
- },
+ modal: {},
  outerContainer: {
-  backgroundColor: "white",
-  position: "absolute",
-  left: 0,
-  right: 0,
-  bottom: 0,
+  flex: 1,
+  width: ScreenWidth,
+  backgroundColor: "rgba(0,0,0,0)",
+  justifyContent: "center",
+  alignItems: "center",
  },
  toolBar: {
   flexDirection: "row",
@@ -170,6 +164,7 @@ const styles = StyleSheet.create({
   height: 44,
   borderBottomWidth: 1,
   borderColor: "#EBECED",
+  backgroundColor: "white",
  },
  toolBarButton: {
   height: 44,
@@ -181,8 +176,9 @@ const styles = StyleSheet.create({
   color: "#2d4664",
  },
  innerContainer: {
-  flex: 1,
+  flex: 0,
   flexDirection: "row",
+  backgroundColor: "white",
  },
  picker: {
   flex: 1,
