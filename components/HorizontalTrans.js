@@ -160,7 +160,11 @@ const Horizontal = ({
       </WorkingArea>
      </DataBody>
      <DataBottom>
-      <DataBottomBtn onPress={() => {}}>
+      <DataBottomBtn
+       onPress={() => {
+        navigation.navigate("DtStmn");
+       }}
+      >
        <Text style={{ fontSize: 24, color: "white" }}>명세서</Text>
       </DataBottomBtn>
       <DataBottomBtn

@@ -151,7 +151,6 @@ export default function App() {
    setHasTutorialPass(true);
   }
   setIsReady(true);
-  checkForUpdates();
  };
 
  const getCameraPermission = async () => {
@@ -167,12 +166,13 @@ export default function App() {
   const { status } = await Permissions.getAsync(Permissions.CAMERA_ROLL);
   return status;
  };
- /*
+
  useEffect(() => {
-  AppState.addEventListener("change", checkForUpdates);
-  return AppState.removeEventListener("change", checkForUpdates);
+  checkForUpdates();
+  //AppState.addEventListener("change", checkForUpdates);
+  //return AppState.removeEventListener("change", checkForUpdates);
  });
- */
+
  return (
   <>
    {isReady ? (

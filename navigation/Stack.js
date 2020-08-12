@@ -31,6 +31,7 @@ import UserStep4 from "../screens/UserRegist/UserStep4";
 import UserStep4AddrFindView from "../screens/UserRegist/UserStep4AddrFindView";
 import OrderDetail from "../screens/OrderDetail";
 import TransDetail from "../screens/TransDetail";
+import DtStmn from "../screens/DtStmn";
 
 const Stack = createStackNavigator();
 
@@ -177,6 +178,7 @@ export default () => {
       headerShown: false,
      }}
     />
+    <Stack.Screen name="DtStmn" component={DtStmn} />
    </Stack.Navigator>
   </NavigationContainer>
  );
