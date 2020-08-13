@@ -169,12 +169,9 @@ const Horizontal = ({
       </DataBottomBtn>
       <DataBottomBtn
        onPress={() => {
-        Alert.alert(
-         "문의완료!",
-         "문의가 완료되었습니다.",
-         [{ text: "네", onPress: () => {} }],
-         { cancelable: false }
-        );
+        navigation.navigate("TaxInvoice", {
+         mgtKey: "7a7a2bg97o2w8oei93j5d18n",
+        });
        }}
       >
        <Text style={{ fontSize: 24, color: "white" }}>세금계산서</Text>

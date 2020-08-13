@@ -32,6 +32,7 @@ import UserStep4AddrFindView from "../screens/UserRegist/UserStep4AddrFindView";
 import OrderDetail from "../screens/OrderDetail";
 import TransDetail from "../screens/TransDetail";
 import DtStmn from "../screens/DtStmn";
+import TaxInvoice from "../screens/TaxInvoice";
 
 const Stack = createStackNavigator();
 
@@ -179,6 +180,7 @@ export default () => {
      }}
     />
     <Stack.Screen name="DtStmn" component={DtStmn} />
+    <Stack.Screen name="TaxInvoice" component={TaxInvoice} />
    </Stack.Navigator>
   </NavigationContainer>
  );

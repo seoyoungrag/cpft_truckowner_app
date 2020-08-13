@@ -38,6 +38,28 @@ const getAnythingCpft = async (path, params = {}) => {
  }
 };
 
+const postAnythingCpft = async (path, params = {}) => {
+ try {
+  const {
+   data: { list },
+   data: { data },
+   result,
+  } = await makePostRequestCpft(path, {
+   headers: {
+    "Content-Type": "application/json",
+    "X-AUTH-TOKEN": jwtToken,
+   },
+   params: { ...params },
+  });
+  return [list || data || result, null];
+ } catch (e) {
+  return [null, e];
+ }
+};
+
+const makePostRequestCpft = (path, config) =>
+ axios.post(`http://52.78.103.218${path}`, config);
+
 const getAnything = async (path, params = {}) => {
  try {
   const {
@@ -77,6 +99,10 @@ export const orderApi = {
  order: (orderSeq) => getAnythingCpft(`/v1/mobile/order/${orderSeq}`),
 };
 
+export const barobillApi = {
+ getTaxInvoicePopUpURLUsingPOST: (mgtKey) =>
+  postAnythingCpft(`/v1/barobill/getTaxInvoicePopUpURL?mgtKey=${mgtKey}`),
+};
 export const codeApi = {
  codes: () => getAnythingCpft(`/v1/mobile/code`),
 };

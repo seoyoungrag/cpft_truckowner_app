@@ -18,6 +18,7 @@ import List from "../../components/List";
 import { useCodes } from "../../CodeContext";
 import { code, trimText } from "../../utils";
 import DataQueryBox from "../../components/DataQueryBox";
+import { WebView } from "react-native-webview";
 
 import {
  useUserRegistInfo,
@@ -192,7 +193,7 @@ const BG = styled.Image`
  opacity: 0.4;
 `;
 
-export default ({ refreshFn, loading, images }) => {
+export default ({ refreshFn, loading, url }) => {
  //console.log(props);
  //console.log('orderDetail', order);
  const navigation = useNavigation();
@@ -207,6 +208,7 @@ export default ({ refreshFn, loading, images }) => {
  };
 
  useEffect(() => {
+  console.log(url);
   const unsubscribe = navigation.addListener("focus", async () => {
    if (!userRegistInfo) {
     await fetchData();
@@ -374,7 +376,8 @@ export default ({ refreshFn, loading, images }) => {
      </TouchableOpacity>
      {/*<DetailHeaderTitle>1/5</DetailHeaderTitle>*/}
     </DetailHeader>
-    <BG source={{ uri: images[0] }} />
+    <WebView source={{ uri: url }} />
+    {/**
     <DetailFooter>
      <CancelBtn
       onPress={() => {
@@ -390,7 +393,7 @@ export default ({ refreshFn, loading, images }) => {
      >
       <ConfirmBtnText>확인</ConfirmBtnText>
      </ConfirmBtn>
-    </DetailFooter>
+    </DetailFooter> */}
    </Detail>
   </OuterContainer>
  );
