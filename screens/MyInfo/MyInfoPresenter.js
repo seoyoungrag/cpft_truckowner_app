@@ -331,8 +331,8 @@ export default ({ refreshFn, loading, truckOwnerOrders }) => {
      <TouchableOpacity
       onPress={() => {
        navigation.navigate("MyInfoDocuments", {
-        screen: "photoTabs",
-        params: { screen: "SelectPhoto" },
+        screen: "MyInfoEditTabs",
+        params: { screen: "MyDtstmnList" },
        });
       }}
      >
@@ -351,8 +351,8 @@ export default ({ refreshFn, loading, truckOwnerOrders }) => {
      <TouchableOpacity
       onPress={() => {
        navigation.navigate("MyInfoDocuments", {
-        screen: "photoTabs",
-        params: { screen: "TakePhoto" },
+        screen: "MyInfoEditTabs",
+        params: { screen: "MyTaxInvoiceList" },
        });
       }}
      >

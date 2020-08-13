@@ -1,12 +1,10 @@
 import React from "react";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
-import SelectPhoto from "../screens/Photo/SelectPhoto";
-import TakePhoto from "../screens/Photo/TakePhoto";
-import UploadPhoto from "../screens/Photo/UploadPhoto";
+import MyDtstmnList from "../screens/MyInfoDocuments/MyDtstmnList";
+import MyTaxInvoiceList from "../screens/MyInfoDocuments/MyTaxInvoiceList";
 import { Text } from "react-native";
 import { FontAwesome5, Entypo } from "@expo/vector-icons";
-import { NavigationContainer } from "@react-navigation/native";
 
 const MyInfoEditTabs = createMaterialTopTabNavigator();
 const MyInfoEditStacks = createStackNavigator();
@@ -18,15 +16,15 @@ const MyInfoEditTabsImpl = ({ navigation, route }) => {
    screenOptions={({ route }) => ({
     tabBarLabel: ({ focused }) => {
      let label;
-     if (route.name === "SelectPhoto") {
+     if (route.name === "MyDtstmnList") {
       label = "명세서";
-     } else if (route.name === "TakePhoto") {
+     } else if (route.name === "MyTaxInvoiceList") {
       label = "세금계산서";
      }
      let iconName = "";
-     if (route.name === "SelectPhoto") {
+     if (route.name === "MyDtstmnList") {
       iconName += "truck";
-     } else if (route.name === "TakePhoto") {
+     } else if (route.name === "MyTaxInvoiceList") {
       iconName += "dolly";
      }
      return (
@@ -52,8 +50,11 @@ const MyInfoEditTabsImpl = ({ navigation, route }) => {
    }}
    tabBarPosition="bottom"
   >
-   <MyInfoEditTabs.Screen name="SelectPhoto" component={SelectPhoto} />
-   <MyInfoEditTabs.Screen name="TakePhoto" component={TakePhoto} />
+   <MyInfoEditTabs.Screen name="MyDtstmnList" component={MyDtstmnList} />
+   <MyInfoEditTabs.Screen
+    name="MyTaxInvoiceList"
+    component={MyTaxInvoiceList}
+   />
   </MyInfoEditTabs.Navigator>
  );
 };
@@ -76,7 +77,7 @@ export default ({ navigation, route }) => {
    }}
   >
    <MyInfoEditStacks.Screen
-    name="photoTabs"
+    name="MyInfoEditTabs"
     component={MyInfoEditTabsImpl}
     options={{
      headerTitleStyle: {
@@ -96,7 +97,6 @@ export default ({ navigation, route }) => {
      ),
     }}
    />
-   <MyInfoEditStacks.Screen name="UploadPhoto" component={UploadPhoto} />
   </MyInfoEditStacks.Navigator>
  );
 };
