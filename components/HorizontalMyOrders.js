@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components/native";
 import PropTypes from "prop-types";
-import { TouchableOpacity, Text } from "react-native";
+import { TouchableOpacity, Text, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useCodes } from "../CodeContext";
 import { Entypo } from "@expo/vector-icons";
@@ -35,7 +35,7 @@ const OpratSctn = styled.Text`
 `;
 
 const RcritType = styled.Text`
- padding-vertical: 5px;
+ padding-bottom: 5px;
 `;
 
 const TransProgress = styled.View`
@@ -104,12 +104,11 @@ const PayInfo = styled.View`
 `;
 
 const DataBottomBtn = styled.TouchableOpacity`
- flex: 1;
+ flex: 0.5;
  align-items: center;
  justify-content: center;
  background-color: #3a99fc;
  border-color: white;
- height: 50px;
 `;
 
 const Horizontal = ({
@@ -124,6 +123,7 @@ const Horizontal = ({
  payFullType,
  goToTransDetail,
  order,
+ status,
 }) => {
  const navigation = useNavigation();
  const goToDetail = () => {
@@ -138,52 +138,45 @@ const Horizontal = ({
  };
  const codes = useCodes();
  return (
-  <TouchableOpacity
-   disabled={useIsModal()}
-   style={{ width: "100%" }}
-   onPress={goToTransDetail}
-  >
-   <Container>
-    <Data>
-     <DataHeader>
-      <CarrierNm>팀프레시</CarrierNm>
-      <PayInfo>
-       <PayAmt>{payAmt}</PayAmt>
-       <PayFullType>{payFullType}</PayFullType>
-      </PayInfo>
-     </DataHeader>
-     <DataBody>
-      <OpratSctn>{opratSctn}</OpratSctn>
-      <WorkingArea>
-       {workingArea?.split(" ").slice(0, 2).join(" ")} 배송
-      </WorkingArea>
-
-      <RcritType>
-       {rcritType} / {code(codes, order.tonType)} / {payAmt} {payFullType}
-      </RcritType>
-      <RcritType>{dlvyPrdlst}</RcritType>
-     </DataBody>
-     <DataBottom>
+  <Container>
+   <Data>
+    <DataHeader>
+     <OpratSctn>{opratSctn}</OpratSctn>
+     {status === "채용확정" ? (
+      <Text style={{ fontSize: 20, color: "grey" }}>최종합격</Text>
+     ) : (
       <DataBottomBtn
        onPress={() => {
-        navigation.navigate("DtStmn");
+        Alert.alert(
+         "지원취소",
+         "지원을 취소 하시겠습니까?",
+         [
+          {
+           text: "아니오",
+           onPress: () => console.log("Cancel Pressed"),
+           style: "cancel",
+          },
+          { text: "네", onPress: () => console.log("confirm Pressed") },
+         ],
+         { cancelable: false }
+        );
        }}
       >
-       <Text style={{ fontSize: 24, color: "white" }}>명세서</Text>
+       <Text style={{ fontSize: 20, color: "white" }}>지원취소</Text>
       </DataBottomBtn>
-      <DataBottomBtn
-       onPress={() => {
-        navigation.navigate("TaxInvoice", {
-         mgtKey: "7a7a2bg97o2w8oei93j5d18n",
-        });
-       }}
-      >
-       <Text style={{ fontSize: 24, color: "white" }}>세금계산서</Text>
-      </DataBottomBtn>
-     </DataBottom>
-    </Data>
-   </Container>
-  </TouchableOpacity>
+     )}
+    </DataHeader>
+    <DataBody>
+     <WorkingArea>
+      {workingArea?.split(" ").slice(0, 2).join(" ")} 배송
+     </WorkingArea>
+     <RcritType>
+      {rcritType} / {code(codes, order.tonType)} / {payAmt} {payFullType}
+     </RcritType>
+     <RcritType>{dlvyPrdlst}</RcritType>
+    </DataBody>
+   </Data>
+  </Container>
  );
 };
 

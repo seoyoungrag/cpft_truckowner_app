@@ -9,21 +9,22 @@ import {
  Alert,
  KeyboardAvoidingView,
 } from "react-native";
-import styled from "styled-components/native";
-import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import Constants from "expo-constants";
-import ScrollContainer from "../../components/ScrollContainer";
-import List from "../../components/List";
-import { useCodes } from "../../CodeContext";
+import { AntDesign } from "@expo/vector-icons";
+import styled from "styled-components/native";
+import HorizontalOrderDetail from "../../components/HorizontalOrderDetail";
 import { code, trimText } from "../../utils";
-import DataQueryBox from "../../components/DataQueryBox";
-
+import { useCodes } from "../../CodeContext";
 import {
  useUserRegistInfo,
  useGetUserRegistInfo,
  useSetUserRegistInfo,
 } from "../../UserRegistContext";
+import DataQueryBox from "../../components/DataQueryBox";
+
+const screenWidth = Math.round(Dimensions.get("window").width);
+const screenHeight = Math.round(Dimensions.get("window").height);
 
 const OuterContainer = styled.SafeAreaView`
  flex: 1;
@@ -33,6 +34,7 @@ const Detail = styled.View`
  flex: 1;
  flex-direction: column;
  background-color: white;
+ justify-content: space-between;
 `;
 
 const DetailHeader = styled.View`
@@ -46,10 +48,11 @@ const DetailHeader = styled.View`
 const DetailFooter = styled.View`
  flex-direction: row;
  justify-content: space-around;
+ padding-bottom: 15px;
 `;
 
 const CancelBtn = styled.TouchableOpacity`
- flex: 0.5;
+ flex: 0.3;
  align-items: center;
  justify-content: center;
  background-color: whitesmoke;
@@ -187,18 +190,14 @@ const DataBodyContentText = styled.Text`
  padding-bottom: 10px;
 `;
 
-const BG = styled.Image`
- flex: 1;
- opacity: 0.4;
-`;
-
-export default ({ refreshFn, loading, images }) => {
+export default ({ refreshFn, loading, order }) => {
  //console.log(props);
  //console.log('orderDetail', order);
  const navigation = useNavigation();
  const codes = useCodes();
  const getUserRegistInfo = useGetUserRegistInfo();
  const [userRegistInfo, setUserRegistInfoProp] = useState(null);
+ const [applyModalVisible, setApplyModalVisible] = useState(false);
  const [queryModalVisible, setQueryModalVisible] = useState(false);
  const fetchData = async () => {
   const data = await getUserRegistInfo();
@@ -231,7 +230,11 @@ export default ({ refreshFn, loading, images }) => {
      <View style={styles.modalView}>
       <View style={styles.modalInnerView}>
        <DataHeader>
-        <Text style={{ fontSize: 24 }}>재요청</Text>
+        <DataQueryBox
+         title="배송지는 어떻게 되나요?"
+         date="20.08.07"
+         reply="RE: 운송사의 답변은 어쩌고저쩌고"
+        />
        </DataHeader>
        <DataBody style={{ paddingTop: 10 }}>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
@@ -240,7 +243,7 @@ export default ({ refreshFn, loading, images }) => {
         </View>
         <EtcInput
          underlineColorAndroid="transparent"
-         placeholder="재요청 이유를 작성해주세요."
+         placeholder="문의사항을 입력해주세요."
          placeholderTextColor="grey"
          numberOfLines={10}
          multiline={true}
@@ -260,19 +263,27 @@ export default ({ refreshFn, loading, images }) => {
       <ConfirmBtn
        onPress={() => {
         Alert.alert(
-         "제출완료!",
-         "명세서 확인이 완료되었습니다.",
+         "문의완료!",
+         "문의가 완료되었습니다.",
          [{ text: "네", onPress: () => {} }],
          { cancelable: false }
         );
         setQueryModalVisible(!queryModalVisible);
        }}
       >
-       <ConfirmBtnText>제출</ConfirmBtnText>
+       <ConfirmBtnText>문의완료</ConfirmBtnText>
       </ConfirmBtn>
      </View>
     </KeyboardAvoidingView>
    </Modal>
+   <Modal
+    animationType="fade"
+    hardwareAccelerated={true}
+    transparent={true}
+    statusBarTranslucent={true}
+    visible={applyModalVisible}
+   ></Modal>
+
    <Detail>
     <DetailHeader>
      <TouchableOpacity
@@ -289,21 +300,79 @@ export default ({ refreshFn, loading, images }) => {
      </TouchableOpacity>
      {/*<DetailHeaderTitle>1/5</DetailHeaderTitle>*/}
     </DetailHeader>
-    <BG source={{ uri: images[0] }} />
+
+    <KeyboardAvoidingView behavior="position" enabled>
+     <View style={styles.modalView}>
+      <View style={styles.modalInnerView}>
+       <TouchableOpacity
+        style={{ position: "absolute", right: 0, top: 0, padding: 5 }}
+       >
+        <Text style={{ borderWidth: 1, padding: 5, fontSize: 20 }}>수정</Text>
+       </TouchableOpacity>
+       <DataHeader>
+        <DataHeaderBottomTitleContainer>
+         <DataHeaderBottomTitle>{userRegistInfo?.userNm}</DataHeaderBottomTitle>
+        </DataHeaderBottomTitleContainer>
+        <Text style={styles.modalTItle}>{userRegistInfo?.userNm} 님</Text>
+        <Text>{userRegistInfo?.userPHNumber}</Text>
+        <Text>경력 3년</Text>
+       </DataHeader>
+       <DataBody>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+         <View style={{ flex: 1 }}>
+          <DataBodyColumn>
+           <DataBodyTitle>
+            <DataBodyTitleText>차량 정보</DataBodyTitleText>
+           </DataBodyTitle>
+           <DataBodyContent>
+            <DataBodyContentText>{userRegistInfo?.carNum}</DataBodyContentText>
+            <DataBodyContentText>냉탑 1t</DataBodyContentText>
+           </DataBodyContent>
+          </DataBodyColumn>
+          <DataBodyColumn>
+           <DataBodyTitle>
+            <DataBodyTitleText>사업자 정보</DataBodyTitleText>
+           </DataBodyTitle>
+           <DataBodyContent>
+            <DataBodyContentText>00 운수</DataBodyContentText>
+            <DataBodyContentText>{userRegistInfo?.corpNum}</DataBodyContentText>
+           </DataBodyContent>
+          </DataBodyColumn>
+         </View>
+         <View style={{ flex: 1, alignItems: "flex-end" }}>
+          <Text>(30세)</Text>
+         </View>
+        </View>
+        <EtcInput
+         underlineColorAndroid="transparent"
+         placeholder="상세 경력이나 메세지를 적어주세요."
+         placeholderTextColor="grey"
+         numberOfLines={10}
+         multiline={true}
+        />
+       </DataBody>
+      </View>
+     </View>
+    </KeyboardAvoidingView>
     <DetailFooter>
-     <CancelBtn
-      onPress={() => {
-       setQueryModalVisible(true);
-      }}
-     >
-      <Text style={{ fontSize: 24 }}>재요청</Text>
-     </CancelBtn>
      <ConfirmBtn
       onPress={() => {
-       navigation.pop();
+       Alert.alert(
+        "저장",
+        "저장하시겠습니까?",
+        [
+         {
+          text: "아니오",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+         },
+         { text: "네", onPress: () => console.log("confirm Pressed") },
+        ],
+        { cancelable: false }
+       );
       }}
      >
-      <ConfirmBtnText>확인</ConfirmBtnText>
+      <ConfirmBtnText>저장</ConfirmBtnText>
      </ConfirmBtn>
     </DetailFooter>
    </Detail>

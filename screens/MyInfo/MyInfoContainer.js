@@ -13,7 +13,7 @@ export default () => {
    truckOwnerOrders,
    truckOwnerOrdersError,
   ] = await orderApi.truckOwnerOrders("all", "2");
-  console.log(truckOwnerOrders);
+  //console.log(truckOwnerOrders);
   setOrders({
    loading: false,
    truckOwnerOrders,

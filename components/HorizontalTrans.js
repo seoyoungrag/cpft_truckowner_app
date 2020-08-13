@@ -41,7 +41,6 @@ const RcritType = styled.Text`
 `;
 
 const TransProgress = styled.View`
- flex: 1;
  width: 100%;
  padding-horizontal: 15px;
  justify-content: space-between;

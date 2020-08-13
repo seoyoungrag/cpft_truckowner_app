@@ -25,7 +25,7 @@ export default ({ navigation, route }) => {
  });
  const getData = async () => {
   _loadAssetsAsync().then((images) => {
-   console.log(images);
+   //console.log(images);
    setDtStmn({
     loading: false,
     images: ["http://52.78.103.218/spec_example1.jpg"],

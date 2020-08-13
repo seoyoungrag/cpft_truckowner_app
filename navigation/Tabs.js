@@ -161,6 +161,7 @@ export default ({ navigation, route }) => {
       tabBarVisible: getTabBarVisibility(route),
      })}
     />
+    {/**
     <Tabs.Screen
      name="Movies"
      component={Movies}
@@ -220,7 +221,7 @@ export default ({ navigation, route }) => {
         <TouchableOpacity activeOpacity={1} {...props} />
        ),
      }}
-    />
+    /> */}
    </Tabs.Navigator>
   </>
  );

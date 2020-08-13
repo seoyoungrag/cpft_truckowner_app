@@ -33,6 +33,8 @@ import OrderDetail from "../screens/OrderDetail";
 import TransDetail from "../screens/TransDetail";
 import DtStmn from "../screens/DtStmn";
 import TaxInvoice from "../screens/TaxInvoice";
+import MyInfoEdit from "../screens/MyInfoEdit";
+import MyInfoDocumentsNavigation from "./MyInfoDocumentsNavigation";
 
 const Stack = createStackNavigator();
 
@@ -181,6 +183,11 @@ export default () => {
     />
     <Stack.Screen name="DtStmn" component={DtStmn} />
     <Stack.Screen name="TaxInvoice" component={TaxInvoice} />
+    <Stack.Screen name="MyInfoEdit" component={MyInfoEdit} />
+    <Stack.Screen
+     name="MyInfoDocuments"
+     component={MyInfoDocumentsNavigation}
+    />
    </Stack.Navigator>
   </NavigationContainer>
  );

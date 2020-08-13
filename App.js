@@ -84,6 +84,8 @@ export default function App() {
     console.log(e);
     // handle or log error
    }
+  } else {
+   console.log("dev mode");
   }
  };
 
@@ -166,11 +168,9 @@ export default function App() {
   const { status } = await Permissions.getAsync(Permissions.CAMERA_ROLL);
   return status;
  };
-
  useEffect(() => {
-  checkForUpdates();
-  //AppState.addEventListener("change", checkForUpdates);
-  //return AppState.removeEventListener("change", checkForUpdates);
+  AppState.addEventListener("focus", checkForUpdates);
+  return AppState.removeEventListener("focus", checkForUpdates);
  });
 
  return (

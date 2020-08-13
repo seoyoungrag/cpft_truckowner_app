@@ -6,9 +6,11 @@ import {
  Modal,
  View,
  StyleSheet,
+ KeyboardAvoidingView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { FontAwesome5 } from "@expo/vector-icons";
+import Constants from "expo-constants";
+import { Entypo } from "@expo/vector-icons";
 import HorizontalMyOrders from "../../components/HorizontalMyOrders";
 import ScrollContainer from "../../components/ScrollContainer";
 import { code, trimText } from "../../utils";
@@ -69,7 +71,7 @@ const styles = StyleSheet.create({
  },
  modalTItle: {
   fontSize: 24,
-  marginBottom: 15,
+  marginLeft: 5,
   textAlign: "center",
  },
  modalBody: {
@@ -83,6 +85,133 @@ const Container = styled.View`
  margin-top: 10px;
  padding-top: 35px;
  margin-bottom: 45px;
+`;
+
+const EtcInput = styled.TextInput`
+ border-width: 1px;
+ border-color: grey;
+ text-align: left;
+ text-align-vertical: top;
+ height: 150px;
+ width: 100%;
+`;
+
+const titleFontSize = "16";
+const titleBorderWidth = "1";
+const DataHeaderBottomTitleContainer = styled.View`
+ align-items: center;
+ justify-content: center;
+ background-color: #3a99fc;
+ border-color: #3a99fc;
+ width: ${titleFontSize * 3}px;
+ height: ${titleFontSize * 3}px;
+ border-radius: ${titleFontSize * 3}px;
+ border-width: ${titleBorderWidth}px;
+`;
+const DataHeaderBottomTitle = styled.Text`
+ text-align: center;
+ color: white;
+ font-size: ${titleFontSize - 2 * titleBorderWidth}px;
+ line-height: ${titleFontSize -
+ (Platform.OS === "ios" ? 2 * titleBorderWidth : titleBorderWidth)}px;
+`;
+
+const DataHeader = styled.View`
+ flex-direction: row;
+
+ justify-content: flex-start;
+ align-items: center;
+ padding-top: 10px;
+ padding-left: 15px;
+`;
+const DataBody = styled.View`
+ padding-left: 15px;
+ padding-right: 10px;
+ padding-bottom: 10px;
+ flex-direction: column;
+ justify-content: flex-start;
+ align-items: flex-start;
+`;
+
+const DataBodyColumn = styled.View`
+ flex-direction: column;
+ justify-content: flex-start;
+ align-items: flex-start;
+`;
+
+const DataBodyTitle = styled.View`
+ padding-bottom: 10px;
+`;
+
+const DataBodyTitleText = styled.Text`
+ font-size: 18px;
+ color: grey;
+`;
+
+const DataBodyContent = styled.View`
+ padding-bottom: 10px;
+`;
+
+const DataBodyContentText = styled.Text`
+ font-size: 16px;
+ padding-bottom: 10px;
+`;
+
+const OuterContainer = styled.SafeAreaView`
+ flex: 1;
+`;
+
+const Detail = styled.View`
+ flex: 1;
+ flex-direction: column;
+ background-color: white;
+`;
+
+const DetailHeader = styled.View`
+ padding-left: 20px;
+ padding-right: 20px;
+ margin-top: ${Constants.statusBarHeight}px;
+ align-items: center;
+ flex-direction: row;
+ justify-content: space-between;
+`;
+const DetailFooter = styled.View`
+ flex-direction: row;
+ justify-content: space-around;
+`;
+
+const CancelBtn = styled.TouchableOpacity`
+ flex: 0.3;
+ align-items: center;
+ justify-content: center;
+ background-color: whitesmoke;
+ height: 50px;
+`;
+const ConfirmBtn = styled.TouchableOpacity`
+ flex: 0.7;
+ align-items: center;
+ justify-content: center;
+ background-color: #3a99fc;
+ height: 50px;
+`;
+const ConfirmBtnText = styled.Text`
+ text-align: center;
+ color: white;
+ font-weight: bold;
+ font-size: 24px;
+`;
+
+const TransProgress = styled.View`
+ width: 100%;
+ padding-horizontal: 15px;
+ justify-content: space-between;
+ flex-direction: row;
+ font-size: 18px;
+`;
+
+const UserPRComment = styled.Text`
+ font-size: 24px;
+ text-decoration-line: underline;
 `;
 
 export default ({ refreshFn, loading, truckOwnerOrders }) => {
@@ -156,6 +285,90 @@ export default ({ refreshFn, loading, truckOwnerOrders }) => {
    </Modal>
    <View style={{ flex: 1, backgroundColor: "white" }}>
     <Title title="MY" />
+    <TouchableOpacity
+     onPress={() => {
+      navigation.navigate("MyInfoEdit");
+     }}
+    >
+     <KeyboardAvoidingView
+      behavior="padding"
+      enabled
+      style={{ flex: 0, borderWidth: 1, margin: 5 }}
+     >
+      <DataHeader>
+       <DataHeaderBottomTitleContainer>
+        <DataHeaderBottomTitle>{userRegistInfo?.userNm}</DataHeaderBottomTitle>
+       </DataHeaderBottomTitleContainer>
+       <Text style={styles.modalTItle}>{userRegistInfo?.userNm} 님</Text>
+      </DataHeader>
+      <DataBody>
+       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <View style={{ flex: 1 }}>
+         <UserPRComment>안전 정확 배송 합니다.</UserPRComment>
+        </View>
+       </View>
+      </DataBody>
+     </KeyboardAvoidingView>
+    </TouchableOpacity>
+    <TransProgress>
+     <TouchableOpacity
+      onPress={() => {
+       navigation.navigate("Trans");
+      }}
+     >
+      <Text
+       style={{
+        borderRadius: 7,
+        padding: 5,
+        textAlignVertical: "center",
+        backgroundColor: "#3a99fc",
+        color: "white",
+       }}
+      >
+       <Entypo name="text-document" size={18} color="white" /> 운송내역
+      </Text>
+     </TouchableOpacity>
+     <TouchableOpacity
+      onPress={() => {
+       navigation.navigate("MyInfoDocuments", {
+        screen: "photoTabs",
+        params: { screen: "SelectPhoto" },
+       });
+      }}
+     >
+      <Text
+       style={{
+        borderRadius: 7,
+        padding: 5,
+        textAlignVertical: "center",
+        backgroundColor: "#3a99fc",
+        color: "white",
+       }}
+      >
+       <Entypo name="text-document" size={18} color="white" /> 명세서
+      </Text>
+     </TouchableOpacity>
+     <TouchableOpacity
+      onPress={() => {
+       navigation.navigate("MyInfoDocuments", {
+        screen: "photoTabs",
+        params: { screen: "TakePhoto" },
+       });
+      }}
+     >
+      <Text
+       style={{
+        borderRadius: 7,
+        padding: 5,
+        textAlignVertical: "center",
+        backgroundColor: "#3a99fc",
+        color: "white",
+       }}
+      >
+       <Entypo name="text-document" size={18} color="white" /> 세금계산서
+      </Text>
+     </TouchableOpacity>
+    </TransProgress>
     <Container style={{ paddingTop: 0 }}>
      <ScrollContainer
       refreshOn={true}
@@ -168,24 +381,27 @@ export default ({ refreshFn, loading, truckOwnerOrders }) => {
      >
       <Title title="내가 지원한 오더" />
       {truckOwnerOrders.map((n) => (
-       <HorizontalMyOrders
-        key={n.order.orderSeq}
-        id={n.order.orderSeq}
-        opratSctn={n.order.opratSctn}
-        workingArea={n.order.workingArea}
-        rcritType={code(codes, n.order.rcritType)}
-        carTypes={n.order.carTypes?.map((c) => {
-         return code(codes, c) + " ";
-        })}
-        tonType={code(codes, n.order.tonType)}
-        dlvyPrdlst={n.order.dlvyPrdlst}
-        payAmt={n.order.payAmt}
-        payFullType={code(codes, n.order.payFullType)}
-        order={n.order}
-        goToTransDetail={() => {
-         goToTransDetail(n);
-        }}
-       />
+       <>
+        <HorizontalMyOrders
+         key={n.order.orderSeq}
+         id={n.order.orderSeq}
+         opratSctn={n.order.opratSctn}
+         workingArea={n.order.workingArea}
+         rcritType={code(codes, n.order.rcritType)}
+         carTypes={n.order.carTypes?.map((c) => {
+          return code(codes, c) + " ";
+         })}
+         tonType={code(codes, n.order.tonType)}
+         dlvyPrdlst={n.order.dlvyPrdlst}
+         payAmt={n.order.payAmt}
+         payFullType={code(codes, n.order.payFullType)}
+         order={n.order}
+         status={code(codes, n.status)}
+         goToTransDetail={() => {
+          goToTransDetail(n);
+         }}
+        />
+       </>
       ))}
      </ScrollContainer>
     </Container>
