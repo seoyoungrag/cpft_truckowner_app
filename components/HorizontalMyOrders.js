@@ -3,6 +3,7 @@ import styled from "styled-components/native";
 import PropTypes from "prop-types";
 import { TouchableOpacity, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useCodes } from "../CodeContext";
 import { Entypo } from "@expo/vector-icons";
 import { trimText, formatDate, code } from "../utils";
 import { useIsModal, useSetIsModalProp } from "../ModalContext";
@@ -34,10 +35,7 @@ const OpratSctn = styled.Text`
 `;
 
 const RcritType = styled.Text`
- flex: 1;
- text-align: right;
- align-self: flex-end;
- padding-right: 10px;
+ padding-vertical: 5px;
 `;
 
 const TransProgress = styled.View`
@@ -125,6 +123,7 @@ const Horizontal = ({
  payAmt,
  payFullType,
  goToTransDetail,
+ order,
 }) => {
  const navigation = useNavigation();
  const goToDetail = () => {
@@ -137,6 +136,7 @@ const Horizontal = ({
    releaseDate,
   });
  };
+ const codes = useCodes();
  return (
   <TouchableOpacity
    disabled={useIsModal()}
@@ -144,7 +144,6 @@ const Horizontal = ({
    onPress={goToTransDetail}
   >
    <Container>
-    <RcritType>{rcritType}</RcritType>
     <Data>
      <DataHeader>
       <CarrierNm>팀프레시</CarrierNm>
@@ -158,6 +157,11 @@ const Horizontal = ({
       <WorkingArea>
        {workingArea?.split(" ").slice(0, 2).join(" ")} 배송
       </WorkingArea>
+
+      <RcritType>
+       {rcritType} / {code(codes, order.tonType)} / {payAmt} {payFullType}
+      </RcritType>
+      <RcritType>{dlvyPrdlst}</RcritType>
      </DataBody>
      <DataBottom>
       <DataBottomBtn
@@ -178,30 +182,6 @@ const Horizontal = ({
       </DataBottomBtn>
      </DataBottom>
     </Data>
-    <TransProgress>
-     <Text style={{ textAlignVertical: "center" }}>
-      명세서{" "}
-      <Entypo name="chevron-with-circle-down" size={18} color="#3a99fc" />{" "}
-     </Text>
-     <Text>
-      <Entypo name="dot-single" size={18} color="#3a99fc" />{" "}
-      <Entypo name="dot-single" size={18} color="#3a99fc" />{" "}
-      <Entypo name="dot-single" size={18} color="#3a99fc" />{" "}
-     </Text>
-     <Text style={{ textAlignVertical: "center" }}>
-      세금계산서{" "}
-      <Entypo name="chevron-with-circle-down" size={18} color="#3a99fc" />{" "}
-     </Text>
-     <Text>
-      <Entypo name="dot-single" size={18} color="black" />{" "}
-      <Entypo name="dot-single" size={18} color="black" />{" "}
-      <Entypo name="dot-single" size={18} color="black" />{" "}
-     </Text>
-     <Text style={{ textAlignVertical: "center" }}>
-      입금대기{" "}
-      <Entypo name="chevron-with-circle-down" size={18} color="black" />{" "}
-     </Text>
-    </TransProgress>
    </Container>
   </TouchableOpacity>
  );

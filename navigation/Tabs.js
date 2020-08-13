@@ -7,6 +7,7 @@ import Search from "../screens/Search";
 import Favs from "../screens/Favs";
 import Orders from "../screens/Orders";
 import Trans from "../screens/Trans";
+import MyInfo from "../screens/MyInfo";
 import { Ionicons } from "@expo/vector-icons";
 import { Dimensions, TouchableOpacity, TouchableHighlight } from "react-native";
 import PhotoNavigation from "./PhotoNavigation";
@@ -58,6 +59,8 @@ export default ({ navigation, route }) => {
        iconName += "dolly";
       } else if (route.name === "Movies") {
        iconName += "film";
+      } else if (route.name === "MyInfo") {
+       iconName += "user-alt";
       } else if (route.name === "TV") {
        iconName += "tv";
       } else if (route.name === "Search") {
@@ -81,6 +84,8 @@ export default ({ navigation, route }) => {
        label = "오더";
       } else if (route.name === "Trans") {
        label = "운송";
+      } else if (route.name === "MyInfo") {
+       label = "My";
       } else if (route.name === "Movies") {
        label = "film";
       } else if (route.name === "TV") {
@@ -129,6 +134,21 @@ export default ({ navigation, route }) => {
     <Tabs.Screen
      name="Trans"
      component={Trans}
+     options={{
+      tabBarButton: (props) =>
+       useIsModal() ? (
+        <TouchableOpacity {...props} disabled={true} />
+       ) : (
+        <TouchableOpacity activeOpacity={1} {...props} />
+       ),
+     }}
+     options={({ route }) => ({
+      tabBarVisible: getTabBarVisibility(route),
+     })}
+    />
+    <Tabs.Screen
+     name="MyInfo"
+     component={MyInfo}
      options={{
       tabBarButton: (props) =>
        useIsModal() ? (

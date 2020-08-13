@@ -97,6 +97,8 @@ export const apiImage = (
 export const orderApi = {
  now: (status) => getAnythingCpft(`/v1/mobile/order/status/${status}`),
  order: (orderSeq) => getAnythingCpft(`/v1/mobile/order/${orderSeq}`),
+ truckOwnerOrders: (status, userSeq) =>
+  getAnythingCpft(`/v1/mobile/order/status/${status}/truckOwner/${userSeq}`),
 };
 
 export const barobillApi = {

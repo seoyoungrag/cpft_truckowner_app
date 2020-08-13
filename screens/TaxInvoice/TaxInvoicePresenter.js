@@ -208,7 +208,7 @@ export default ({ refreshFn, loading, url }) => {
  };
 
  useEffect(() => {
-  console.log(url);
+  //console.log(url);
   const unsubscribe = navigation.addListener("focus", async () => {
    if (!userRegistInfo) {
     await fetchData();
