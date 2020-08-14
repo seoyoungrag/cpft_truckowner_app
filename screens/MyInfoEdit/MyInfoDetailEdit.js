@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Dimensions, TouchableOpacity, Text } from "react-native";
+import { Dimensions, TouchableOpacity, Text, View } from "react-native";
 import styled from "styled-components/native";
 import { useForm } from "react-hook-form";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, Entypo } from "@expo/vector-icons";
 import Constants from "expo-constants";
+import { Camera } from "expo-camera";
 import {
  useGetUserRegistInfo,
  useSetUserRegistInfo,
@@ -298,217 +299,41 @@ export default ({ navigation, route }) => {
      }}
      refreshOn={false}
     >
-     <DataName>추가정보를 입력해주세요.</DataName>
-     <FilterBody>
-      <FilterHeader>
-       <Text>모집유형</Text>
-      </FilterHeader>
-      <FilterBtnList>
-       {codes.map((code) => {
-        return (
-         code.codeCtgryNm === "모집유형" && (
-          <FilterBtn
-           activeOpacity={1}
-           style={{
-            borderColor:
-             filterBtnSelected1 === code.code ? "#3a99fc" : "silver",
-           }}
-           key={code.code}
-           onPress={() => {
-            var cd = `${code.code}`;
-            setFilterBtnSelected1(cd);
-           }}
-          >
-           <Text>{code.codeValue}</Text>
-          </FilterBtn>
-         )
-        );
-       })}
-      </FilterBtnList>
-     </FilterBody>
-     <FloatingLabelInput
-      maxLength={11}
-      label="차량 번호"
-      placeholder="차량 번호"
-      onChangeText={setValueWithState}
-      fieldNm="carNum"
-      containerStyle={{
-       marginLeft: 40,
-       marginRight: 40,
-      }}
-      style={{
-       color: "black",
-       opacity: 0.8,
-       fontWeight: 500,
-       fontSize: 32,
-       borderBottomWidth: 1,
-      }}
-      defaultValue={userRegistInfo?.carNum}
-     />
-     {errors.carNum && <DataValueRed>필수 값 입니다.</DataValueRed>}
-     <FilterBody>
-      <FilterHeader>
-       <Text>차종</Text>
-      </FilterHeader>
-      <FilterBtnList>
-       {codes.map((code) => {
-        return (
-         code.codeCtgryNm === "차종" && (
-          <FilterBtn
-           activeOpacity={1}
-           style={{
-            borderColor:
-             filterBtnSelected1 === code.code ? "#3a99fc" : "silver",
-           }}
-           key={code.code}
-           onPress={() => {
-            var cd = `${code.code}`;
-            setFilterBtnSelected1(cd);
-           }}
-          >
-           <Text>{code.codeValue}</Text>
-          </FilterBtn>
-         )
-        );
-       })}
-      </FilterBtnList>
-     </FilterBody>
-     <FilterBody>
-      <FilterHeader>
-       <Text>톤수</Text>
-      </FilterHeader>
-      <FilterBtnList>
-       {codes.map((code) => {
-        return (
-         code.codeCtgryNm === "톤수" && (
-          <FilterBtn
-           activeOpacity={1}
-           style={{
-            borderColor:
-             filterBtnSelected1 === code.code ? "#3a99fc" : "silver",
-           }}
-           key={code.code}
-           onPress={() => {
-            var cd = `${code.code}`;
-            setFilterBtnSelected1(cd);
-           }}
-          >
-           <Text>{code.codeValue}</Text>
-          </FilterBtn>
-         )
-        );
-       })}
-      </FilterBtnList>
-     </FilterBody>
-     <FloatingLabelInput
-      maxLength={12}
-      keyboardTypeAddOn={"corpNum"}
-      keyboardType={"numeric"}
-      label="사업자 번호"
-      placeholder="사업자 번호"
-      onChangeText={setValueWithState}
-      fieldNm="corpNum"
-      containerStyle={{
-       marginLeft: 40,
-       marginRight: 40,
-      }}
-      style={{
-       color: "black",
-       opacity: 0.8,
-       fontWeight: 500,
-       fontSize: 32,
-       borderBottomWidth: 1,
-      }}
-      defaultValue={userRegistInfo?.corpNum}
-     />
-     {errors.corpNum && <DataValueRed>필수 값 입니다.</DataValueRed>}
-     <FloatingLabelInput
-      maxLength={6}
-      label="회사명"
-      placeholder="회사명"
-      onChangeText={setValueWithState}
-      fieldNm="corpNm"
-      containerStyle={{
-       marginLeft: 40,
-       marginRight: 40,
-      }}
-      style={{
-       color: "black",
-       opacity: 0.8,
-       fontWeight: 500,
-       fontSize: 32,
-       borderBottomWidth: 1,
-      }}
-      defaultValue={userRegistInfo?.corpNm}
-     />
-     {errors.corpNm && <DataValueRed>필수 값 입니다.</DataValueRed>}
-     <FloatingLabelInput
-      maxLength={6}
-      label="대표자명"
-      placeholder="대표자명"
-      onChangeText={setValueWithState}
-      fieldNm="corpRpresentNm"
-      containerStyle={{
-       marginLeft: 40,
-       marginRight: 40,
-      }}
-      style={{
-       color: "black",
-       opacity: 0.8,
-       fontWeight: 500,
-       fontSize: 32,
-       borderBottomWidth: 1,
-      }}
-      defaultValue={userRegistInfo?.corpRpresentNm}
-     />
-     {errors.corpRpresentNm && <DataValueRed>필수 값 입니다.</DataValueRed>}
-     <FloatingLabelInput
-      maxLength={6}
-      label="업태"
-      placeholder="업태"
-      onChangeText={setValueWithState}
-      fieldNm="corpCategory"
-      containerStyle={{
-       marginLeft: 40,
-       marginRight: 40,
-      }}
-      style={{
-       color: "black",
-       opacity: 0.8,
-       fontWeight: 500,
-       fontSize: 32,
-       borderBottomWidth: 1,
-      }}
-      defaultValue={userRegistInfo?.corpCategory}
-     />
-     {errors.corpCategory && <DataValueRed>필수 값 입니다.</DataValueRed>}
-     <FloatingLabelInput
-      maxLength={6}
-      label="업종"
-      placeholder="업종"
-      onChangeText={setValueWithState}
-      fieldNm="corpType"
-      containerStyle={{
-       marginLeft: 40,
-       marginRight: 40,
-      }}
-      style={{
-       color: "black",
-       opacity: 0.8,
-       fontWeight: 500,
-       fontSize: 32,
-       borderBottomWidth: 1,
-      }}
-      defaultValue={userRegistInfo?.corpType}
-     />
-     {errors.corpType && <DataValueRed>필수 값 입니다.</DataValueRed>}
-     <TouchableOpacity onPress={goAddrFindView}>
+     <Container style={{ flex: 1, justifyContent: "flex-start", marginTop: 0 }}>
+      <DataName>추가정보를 입력해주세요.</DataName>
+      <FilterBody>
+       <FilterHeader>
+        <Text>모집유형</Text>
+       </FilterHeader>
+       <FilterBtnList>
+        {codes.map((code) => {
+         return (
+          code.codeCtgryNm === "모집유형" && (
+           <FilterBtn
+            activeOpacity={1}
+            style={{
+             borderColor:
+              filterBtnSelected1 === code.code ? "#3a99fc" : "silver",
+            }}
+            key={code.code}
+            onPress={() => {
+             var cd = `${code.code}`;
+             setFilterBtnSelected1(cd);
+            }}
+           >
+            <Text>{code.codeValue}</Text>
+           </FilterBtn>
+          )
+         );
+        })}
+       </FilterBtnList>
+      </FilterBody>
       <FloatingLabelInput
-       editable={false}
-       label="주소"
-       placeholder="주소"
+       maxLength={11}
+       label="차량 번호"
+       placeholder="차량 번호"
        onChangeText={setValueWithState}
-       fieldNm="userAddress"
+       fieldNm="carNum"
        containerStyle={{
         marginLeft: 40,
         marginRight: 40,
@@ -520,10 +345,252 @@ export default ({ navigation, route }) => {
         fontSize: 32,
         borderBottomWidth: 1,
        }}
-       defaultValue={userRegistInfo?.userAddress}
+       defaultValue={userRegistInfo?.carNum}
       />
-     </TouchableOpacity>
-     {errors.userAddress && <DataValueRed>필수 값 입니다.</DataValueRed>}
+      {errors.carNum && <DataValueRed>필수 값 입니다.</DataValueRed>}
+      <FilterBody>
+       <FilterHeader>
+        <Text>차종</Text>
+       </FilterHeader>
+       <FilterBtnList>
+        {codes.map((code) => {
+         return (
+          code.codeCtgryNm === "차종" && (
+           <FilterBtn
+            activeOpacity={1}
+            style={{
+             borderColor:
+              filterBtnSelected1 === code.code ? "#3a99fc" : "silver",
+            }}
+            key={code.code}
+            onPress={() => {
+             var cd = `${code.code}`;
+             setFilterBtnSelected1(cd);
+            }}
+           >
+            <Text>{code.codeValue}</Text>
+           </FilterBtn>
+          )
+         );
+        })}
+       </FilterBtnList>
+      </FilterBody>
+      <FilterBody>
+       <FilterHeader>
+        <Text>톤수</Text>
+       </FilterHeader>
+       <FilterBtnList>
+        {codes.map((code) => {
+         return (
+          code.codeCtgryNm === "톤수" && (
+           <FilterBtn
+            activeOpacity={1}
+            style={{
+             borderColor:
+              filterBtnSelected1 === code.code ? "#3a99fc" : "silver",
+            }}
+            key={code.code}
+            onPress={() => {
+             var cd = `${code.code}`;
+             setFilterBtnSelected1(cd);
+            }}
+           >
+            <Text>{code.codeValue}</Text>
+           </FilterBtn>
+          )
+         );
+        })}
+       </FilterBtnList>
+      </FilterBody>
+      <FloatingLabelInput
+       maxLength={12}
+       keyboardTypeAddOn={"corpNum"}
+       keyboardType={"numeric"}
+       label="사업자 번호"
+       placeholder="사업자 번호"
+       onChangeText={setValueWithState}
+       fieldNm="corpNum"
+       containerStyle={{
+        marginLeft: 40,
+        marginRight: 40,
+       }}
+       style={{
+        color: "black",
+        opacity: 0.8,
+        fontWeight: 500,
+        fontSize: 32,
+        borderBottomWidth: 1,
+       }}
+       defaultValue={userRegistInfo?.corpNum}
+      />
+      {errors.corpNum && <DataValueRed>필수 값 입니다.</DataValueRed>}
+      <FloatingLabelInput
+       maxLength={6}
+       label="회사명"
+       placeholder="회사명"
+       onChangeText={setValueWithState}
+       fieldNm="corpNm"
+       containerStyle={{
+        marginLeft: 40,
+        marginRight: 40,
+       }}
+       style={{
+        color: "black",
+        opacity: 0.8,
+        fontWeight: 500,
+        fontSize: 32,
+        borderBottomWidth: 1,
+       }}
+       defaultValue={userRegistInfo?.corpNm}
+      />
+      {errors.corpNm && <DataValueRed>필수 값 입니다.</DataValueRed>}
+      <FloatingLabelInput
+       maxLength={6}
+       label="대표자명"
+       placeholder="대표자명"
+       onChangeText={setValueWithState}
+       fieldNm="corpRpresentNm"
+       containerStyle={{
+        marginLeft: 40,
+        marginRight: 40,
+       }}
+       style={{
+        color: "black",
+        opacity: 0.8,
+        fontWeight: 500,
+        fontSize: 32,
+        borderBottomWidth: 1,
+       }}
+       defaultValue={userRegistInfo?.corpRpresentNm}
+      />
+      {errors.corpRpresentNm && <DataValueRed>필수 값 입니다.</DataValueRed>}
+      <FloatingLabelInput
+       maxLength={6}
+       label="업태"
+       placeholder="업태"
+       onChangeText={setValueWithState}
+       fieldNm="corpCategory"
+       containerStyle={{
+        marginLeft: 40,
+        marginRight: 40,
+       }}
+       style={{
+        color: "black",
+        opacity: 0.8,
+        fontWeight: 500,
+        fontSize: 32,
+        borderBottomWidth: 1,
+       }}
+       defaultValue={userRegistInfo?.corpCategory}
+      />
+      {errors.corpCategory && <DataValueRed>필수 값 입니다.</DataValueRed>}
+      <FloatingLabelInput
+       maxLength={6}
+       label="업종"
+       placeholder="업종"
+       onChangeText={setValueWithState}
+       fieldNm="corpType"
+       containerStyle={{
+        marginLeft: 40,
+        marginRight: 40,
+       }}
+       style={{
+        color: "black",
+        opacity: 0.8,
+        fontWeight: 500,
+        fontSize: 32,
+        borderBottomWidth: 1,
+       }}
+       defaultValue={userRegistInfo?.corpType}
+      />
+      {errors.corpType && <DataValueRed>필수 값 입니다.</DataValueRed>}
+      <TouchableOpacity onPress={goAddrFindView}>
+       <FloatingLabelInput
+        editable={false}
+        label="주소"
+        placeholder="주소"
+        onChangeText={setValueWithState}
+        fieldNm="userAddress"
+        containerStyle={{
+         marginLeft: 40,
+         marginRight: 40,
+        }}
+        style={{
+         color: "black",
+         opacity: 0.8,
+         fontWeight: 500,
+         fontSize: 32,
+         borderBottomWidth: 1,
+        }}
+        defaultValue={userRegistInfo?.userAddress}
+       />
+      </TouchableOpacity>
+      {errors.userAddress && <DataValueRed>필수 값 입니다.</DataValueRed>}
+     </Container>
+     <DataName>관련 서류를 업로드해주세요.</DataName>
+
+     <View
+      style={{
+       paddingTop: 10,
+       paddingBottom: 10,
+       marginHorizontal: screenWidth / 4,
+       flexDirection: "row",
+       flexWrap: "wrap",
+      }}
+     >
+      <TouchableOpacity
+       style={{
+        backgroundColor: "#3a99fc",
+        width: screenWidth / 4,
+        height: screenWidth / 4,
+        alignItems: "center",
+        justifyContent: "center",
+       }}
+      >
+       <Entypo name="text-document" size={24} color="white" style={{}} />
+       <Text style={{ color: "white", textAlign: "center" }}>사업자등록증</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+       style={{
+        backgroundColor: "#3a99fc",
+        width: screenWidth / 4,
+        height: screenWidth / 4,
+        alignItems: "center",
+        justifyContent: "center",
+       }}
+      >
+       <Entypo name="text-document" size={24} color="white" style={{}} />
+       <Text style={{ color: "white", textAlign: "center" }}>
+        화물운송종사{"\r\n"}자격증
+       </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+       style={{
+        backgroundColor: "#3a99fc",
+        width: screenWidth / 4,
+        height: screenWidth / 4,
+        alignItems: "center",
+        justifyContent: "center",
+       }}
+      >
+       <Entypo name="text-document" size={24} color="white" style={{}} />
+       <Text style={{ color: "white", textAlign: "center" }}>
+        자동차 등록증
+       </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+       style={{
+        backgroundColor: "#3a99fc",
+        width: screenWidth / 4,
+        height: screenWidth / 4,
+        alignItems: "center",
+        justifyContent: "center",
+       }}
+      >
+       <Entypo name="text-document" size={24} color="white" style={{}} />
+       <Text style={{ color: "white", textAlign: "center" }}>통장 사본</Text>
+      </TouchableOpacity>
+     </View>
     </ScrollContainer>
 
     <ModalFooter>
