@@ -105,6 +105,7 @@ export default function App() {
   //setIsReady(true);
  };
  const loadAssets = async () => {
+  await checkForUpdates();
   const images = cacheImages([
    "https://images.unsplash.com/photo-1594782078968-2b07656d7bb2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
   ]);
@@ -168,11 +169,12 @@ export default function App() {
   const { status } = await Permissions.getAsync(Permissions.CAMERA_ROLL);
   return status;
  };
+ /*
  useEffect(() => {
   AppState.addEventListener("change", checkForUpdates);
   return AppState.removeEventListener("change", checkForUpdates);
  });
-
+*/
  return (
   <>
    {isReady ? (
