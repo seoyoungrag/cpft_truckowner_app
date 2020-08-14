@@ -97,12 +97,12 @@ export default function App() {
   Alert.alert(
    "업데이트 완료!",
    "업데이트가 완료되었습니다.",
-   [{ text: "OK" }],
+   [{ text: "네", onPress: () => runUpdate() }],
    {
     cancelable: false,
    }
   );
-  setIsReady(true);
+  //setIsReady(true);
  };
  const loadAssets = async () => {
   const images = cacheImages([
@@ -169,8 +169,8 @@ export default function App() {
   return status;
  };
  useEffect(() => {
-  AppState.addEventListener("focus", checkForUpdates);
-  return AppState.removeEventListener("focus", checkForUpdates);
+  AppState.addEventListener("change", checkForUpdates);
+  return AppState.removeEventListener("change", checkForUpdates);
  });
 
  return (

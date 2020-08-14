@@ -5,6 +5,7 @@ import { Text, View } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import { useCodes } from "../CodeContext";
 import { code, trimText } from "../utils";
+import { useNavigation } from "@react-navigation/native";
 
 const Container = styled.View`
  flex: 1;
@@ -114,6 +115,7 @@ const Horizontal = ({
  order,
 }) => {
  const codes = useCodes();
+ const navigation = useNavigation();
  return (
   <Container>
    <Data>
@@ -160,17 +162,18 @@ const Horizontal = ({
      </View>
     </DataBody>
     <DataBottom>
-     <DataBottomBtn onPress={() => {}}>
+     <DataBottomBtn
+      onPress={() => {
+       navigation.navigate("DtStmn");
+      }}
+     >
       <Text style={{ fontSize: 24, color: "white" }}>명세서</Text>
      </DataBottomBtn>
      <DataBottomBtn
       onPress={() => {
-       Alert.alert(
-        "문의완료!",
-        "문의가 완료되었습니다.",
-        [{ text: "네", onPress: () => {} }],
-        { cancelable: false }
-       );
+       navigation.navigate("TaxInvoice", {
+        mgtKey: "7a7a2bg97o2w8oei93j5d18n",
+       });
       }}
      >
       <Text style={{ fontSize: 24, color: "white" }}>세금계산서</Text>

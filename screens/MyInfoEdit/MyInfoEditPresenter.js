@@ -306,6 +306,9 @@ export default ({ refreshFn, loading, order }) => {
       <View style={styles.modalInnerView}>
        <TouchableOpacity
         style={{ position: "absolute", right: 0, top: 0, padding: 5 }}
+        onPress={() => {
+         navigation.navigate("MyInfoDetailEdit");
+        }}
        >
         <Text style={{ borderWidth: 1, padding: 5, fontSize: 20 }}>수정</Text>
        </TouchableOpacity>

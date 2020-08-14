@@ -5,7 +5,7 @@ import React, {
  useCallback,
 } from "react";
 import styled from "styled-components/native";
-import { Dimensions, Text, TouchableOpacity } from "react-native";
+import { CheckBox, Dimensions, Text, View } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import HorizontalOrder from "../../components/HorizontalOrder";
 import ScrollContainer from "../../components/ScrollContainer";
@@ -119,6 +119,7 @@ const FilterBottomButtonCancel = styled.TouchableOpacity`
  height: 50px;
 `;
 const filter = (codes, navigation) => {
+ const [dayPicking, setDayPicking] = useState(false);
  const [filterBtnSelected1, setFilterBtnSelected1] = useState([]);
  const [filterBtnSelectedAll1, setFilterBtnSelectedAll1] = useState(false);
  const [filterBtnSelected2, setFilterBtnSelected2] = useState([]);
@@ -127,7 +128,15 @@ const filter = (codes, navigation) => {
  const [filterBtnSelectedAll3, setFilterBtnSelectedAll3] = useState(false);
  const [filterBtnSelected4, setFilterBtnSelected4] = useState([]);
  const [filterBtnSelectedAll4, setFilterBtnSelectedAll4] = useState(false);
-
+ const [filterBtnSelected5, setFilterBtnSelected5] = useState([]);
+ const [filterBtnSelectedAll5, setFilterBtnSelectedAll5] = useState(false);
+ const [filterBtnSelected6, setFilterBtnSelected6] = useState([]);
+ const [filterBtnSelectedAll6, setFilterBtnSelectedAll6] = useState(false);
+ const [filterBtnSelected7, setFilterBtnSelected7] = useState([]);
+ const [filterBtnSelectedAll7, setFilterBtnSelectedAll7] = useState(false);
+ const [filterBtnSelected8, setFilterBtnSelected8] = useState([]);
+ const [filterBtnSelectedAll8, setFilterBtnSelectedAll8] = useState(false);
+ const dayChecking = () => {};
  return (
   <FilterContainer>
    <FilterBody>
@@ -138,7 +147,7 @@ const filter = (codes, navigation) => {
      <FilterBtn
       activeOpacity={1}
       style={{
-       borderColor: filterBtnSelectedAll2 ? "#3a99fc" : "whitesmoke",
+       borderColor: filterBtnSelectedAll2 ? "#3a99fc" : "grey",
       }}
       onPress={() => {
        setFilterBtnSelectedAll2(true);
@@ -155,7 +164,7 @@ const filter = (codes, navigation) => {
          style={{
           borderColor: filterBtnSelected2.includes(code.code)
            ? "#3a99fc"
-           : "whitesmoke",
+           : "grey",
          }}
          key={code.code}
          onPress={() => {
@@ -187,7 +196,7 @@ const filter = (codes, navigation) => {
      <FilterBtn
       activeOpacity={1}
       style={{
-       borderColor: filterBtnSelectedAll1 ? "#3a99fc" : "whitesmoke",
+       borderColor: filterBtnSelectedAll1 ? "#3a99fc" : "grey",
       }}
       onPress={() => {
        setFilterBtnSelectedAll1(true);
@@ -204,7 +213,7 @@ const filter = (codes, navigation) => {
          style={{
           borderColor: filterBtnSelected1.includes(code.code)
            ? "#3a99fc"
-           : "whitesmoke",
+           : "grey",
          }}
          key={code.code}
          onPress={() => {
@@ -236,7 +245,7 @@ const filter = (codes, navigation) => {
      <FilterBtn
       activeOpacity={1}
       style={{
-       borderColor: filterBtnSelectedAll3 ? "#3a99fc" : "whitesmoke",
+       borderColor: filterBtnSelectedAll3 ? "#3a99fc" : "grey",
       }}
       onPress={() => {
        setFilterBtnSelectedAll3(true);
@@ -253,7 +262,7 @@ const filter = (codes, navigation) => {
          style={{
           borderColor: filterBtnSelected4.includes(code.code)
            ? "#3a99fc"
-           : "whitesmoke",
+           : "grey",
          }}
          key={code.code}
          onPress={() => {
@@ -285,7 +294,7 @@ const filter = (codes, navigation) => {
      <FilterBtn
       activeOpacity={1}
       style={{
-       borderColor: filterBtnSelectedAll3 ? "#3a99fc" : "whitesmoke",
+       borderColor: filterBtnSelectedAll3 ? "#3a99fc" : "grey",
       }}
       onPress={() => {
        setFilterBtnSelectedAll3(true);
@@ -302,7 +311,7 @@ const filter = (codes, navigation) => {
          style={{
           borderColor: filterBtnSelected3.includes(code.code)
            ? "#3a99fc"
-           : "whitesmoke",
+           : "grey",
          }}
          key={code.code}
          onPress={() => {
@@ -330,19 +339,168 @@ const filter = (codes, navigation) => {
     <FilterHeader>
      <Text>급여</Text>
     </FilterHeader>
-    <FilterBtnList></FilterBtnList>
+    <FilterBtnList>
+     {codes.map((code) => {
+      return (
+       code.codeCtgryNm === "급여" && (
+        <FilterBtn
+         activeOpacity={1}
+         style={{
+          borderColor: filterBtnSelected4 == code.code ? "#3a99fc" : "grey",
+         }}
+         key={code.code}
+         onPress={() => {
+          var cd = `${code.code}`;
+          setFilterBtnSelected4(cd);
+         }}
+        >
+         <Text>{code.codeValue}</Text>
+        </FilterBtn>
+       )
+      );
+     })}
+    </FilterBtnList>
+   </FilterBody>
+   <FilterBody>
+    <FilterHeader>
+     <Text>완/무제</Text>
+    </FilterHeader>
+    <FilterBtnList>
+     {codes.map((code) => {
+      return (
+       code.codeCtgryNm === "완제/무제" && (
+        <FilterBtn
+         activeOpacity={1}
+         style={{
+          borderColor: filterBtnSelected8 == code.code ? "#3a99fc" : "grey",
+         }}
+         key={code.code}
+         onPress={() => {
+          var cd = `${code.code}`;
+          setFilterBtnSelected8(cd);
+         }}
+        >
+         <Text>{code.codeValue}</Text>
+        </FilterBtn>
+       )
+      );
+     })}
+    </FilterBtnList>
    </FilterBody>
    <FilterBody>
     <FilterHeader>
      <Text>근무요일</Text>
     </FilterHeader>
-    <FilterBtnList></FilterBtnList>
+    <FilterBtnList style={{ borderBottomWidth: 0 }}>
+     {codes.map((code) => {
+      return (
+       code.codeCtgryNm === "근무요일" && (
+        <FilterBtn
+         activeOpacity={1}
+         style={{
+          borderColor: filterBtnSelected5 == code.code ? "#3a99fc" : "grey",
+         }}
+         key={code.code}
+         onPress={() => {
+          var cd = `${code.code}`;
+          setFilterBtnSelected5(cd);
+         }}
+        >
+         <Text>{code.codeValue}</Text>
+        </FilterBtn>
+       )
+      );
+     })}
+    </FilterBtnList>
    </FilterBody>
+   <FilterBody>
+    <FilterHeader></FilterHeader>
+    <FilterBtnList
+     style={{ borderTopWidth: 0, borderBottomWidth: 0, paddingBottom: 0 }}
+    >
+     <View
+      style={{
+       flex: 1,
+       flexDirection: "row",
+       alignItems: "center",
+       alignSelf: "flex-start",
+       paddingLeft: 15,
+      }}
+     >
+      <CheckBox
+       value={dayPicking}
+       onValueChange={() => {
+        setDayPicking(!dayPicking);
+       }}
+      />
+      <Text>직접 선택</Text>
+     </View>
+    </FilterBtnList>
+   </FilterBody>
+   {dayPicking ? (
+    <FilterBody>
+     <FilterHeader>
+      <Text></Text>
+     </FilterHeader>
+     <FilterBtnList style={{ borderTopWidth: 0 }}>
+      {codes.map((code) => {
+       return (
+        code.codeCtgryNm === "요일" && (
+         <FilterBtn
+          activeOpacity={1}
+          style={{
+           borderColor: filterBtnSelected6.includes(code.code)
+            ? "#3a99fc"
+            : "grey",
+          }}
+          key={code.code}
+          onPress={() => {
+           var cd = `${code.code}`;
+           setFilterBtnSelectedAll6(false);
+           if (
+            filterBtnSelected6.length > 1 &&
+            filterBtnSelected6.includes(cd)
+           ) {
+            var arr = filterBtnSelected6.filter((item) => item !== cd);
+            setFilterBtnSelected6(arr);
+           } else if (!filterBtnSelected6.includes(cd)) {
+            setFilterBtnSelected6([...filterBtnSelected6, cd]);
+           }
+          }}
+         >
+          <Text>{code.codeValue}</Text>
+         </FilterBtn>
+        )
+       );
+      })}
+     </FilterBtnList>
+    </FilterBody>
+   ) : null}
    <FilterBody>
     <FilterHeader>
      <Text>근무시간</Text>
     </FilterHeader>
-    <FilterBtnList></FilterBtnList>
+    <FilterBtnList>
+     {codes.map((code) => {
+      return (
+       code.codeCtgryNm === "근무시간" && (
+        <FilterBtn
+         activeOpacity={1}
+         style={{
+          borderColor: filterBtnSelected7 == code.code ? "#3a99fc" : "grey",
+         }}
+         key={code.code}
+         onPress={() => {
+          var cd = `${code.code}`;
+          setFilterBtnSelected7(cd);
+         }}
+        >
+         <Text>{code.codeValue}</Text>
+        </FilterBtn>
+       )
+      );
+     })}
+    </FilterBtnList>
    </FilterBody>
   </FilterContainer>
  );
