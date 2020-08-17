@@ -73,7 +73,7 @@ export default ({ navigation, route }) => {
     },
     headerTintColor: "white",
     headerBackTitleVisible: false,
-    headerShown: true,
+    headerShown: false,
    }}
   >
    <MyInfoEditStacks.Screen

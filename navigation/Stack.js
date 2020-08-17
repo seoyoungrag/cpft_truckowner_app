@@ -118,7 +118,7 @@ export default () => {
        marginLeft: -20,
        paddingLeft: 0,
        fontSize: 24,
-       color: "white",
+       color: "white"
       },
       /*
        headerLeft: (props) => (

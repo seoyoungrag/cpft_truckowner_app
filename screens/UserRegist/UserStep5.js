@@ -185,7 +185,8 @@ export default ({ navigation }) => {
       >
        <DataName>가입 완료</DataName>
        <DataValue>
-        {userRegistInfo ? JSON.stringify(userRegistInfo) : null}
+        {/*userRegistInfo ? JSON.stringify(userRegistInfo) : null*/}
+        완료를 눌러 앱을 시작하세요!
        </DataValue>
       </Container>
      </Data>

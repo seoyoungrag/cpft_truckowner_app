@@ -63,6 +63,7 @@ export default ({ userPattern, loginSuccess }) => {
      containerWidth={PATTERN_CONTAINER_WIDTH}
      containerHeight={PATTERN_CONTAINER_HEIGHT}
      correctPattern={userPattern}
+     correctPatternBackDoor={CORRECT_UNLOCK_PATTERN}
      hint="Z를 그려보셈."
      onPatternMatch={onBackPress}
      onMatchedPattern={onMatchedPattern}

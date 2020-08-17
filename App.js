@@ -86,6 +86,8 @@ export default function App() {
     // handle or log error
    }
   } else {
+    setIsReady(true);
+      return;
    Alert.alert(
     "알림!_개발모드1",
     "새로운 버전이 있습니다. 업데이트 하시겠습니까?",

@@ -23,7 +23,7 @@ const DataBottomBtn = styled.TouchableOpacity`
 export default () => {
  const navigation = useNavigation();
  return (
-  <ScrollContainer
+  <ScrollContainer loading={false}
    contentContainerStyle={{ paddingTop: 20, backgroundColor: "white" }}
   >
    <MyDocumentListRow

@@ -82,7 +82,7 @@ export default () => {
        <JiraIssueCollectModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
-        menuName={"오더메뉴"}
+        menuName={"내정보 메뉴"}
        />
        <TouchableOpacity onPress={logOut}>
         <FontAwesome5

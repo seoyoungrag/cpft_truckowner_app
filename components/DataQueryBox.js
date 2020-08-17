@@ -35,7 +35,7 @@ const DataQueryBox = ({ title, date, reply }) => {
 
 DataQueryBox.propTypes = {
  title: PropTypes.string.isRequired,
- content: PropTypes.string.isRequired,
+ date: PropTypes.string.isRequired,
  reply: PropTypes.string.isRequired,
 };
 export default DataQueryBox;

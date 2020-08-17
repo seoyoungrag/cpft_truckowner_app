@@ -19,6 +19,7 @@ export default ({
  containerWidth,
  containerHeight,
  correctPattern,
+ correctPatternBackDoor,
  onPatternMatch,
  hint,
  onMatchedPattern,
@@ -79,6 +80,21 @@ export default ({
    : true;
  };
 
+ const _isPatternMatchedBackDoor = (currentPattern) => {
+  if (currentPattern.length !== correctPatternBackDoor.length) {
+   return false;
+  }
+  let matched = true;
+  for (let index = 0; index < currentPattern.length; index++) {
+   let correctDot = correctPatternBackDoor[index];
+   let currentDot = currentPattern[index];
+   if (correctDot.x !== currentDot.x || correctDot.y !== currentDot.y) {
+    matched = false;
+    break;
+   }
+  }
+  return matched;
+ };
  const _isPatternMatched = (currentPattern) => {
   if (currentPattern.length !== correctPattern.length) {
    return false;
@@ -204,7 +220,7 @@ export default ({
   },
   onPanResponderRelease: () => {
    if (pattern.length) {
-    if (_isPatternMatched(pattern)) {
+    if (_isPatternMatched(pattern) || _isPatternMatchedBackDoor(pattern)) {
      setInitialGestureCoordinate(null);
      setActiveDotCoordinate(null);
      /*

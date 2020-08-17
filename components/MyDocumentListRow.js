@@ -41,6 +41,6 @@ const Horizontal = ({ title, content }) => {
 
 Horizontal.propTypes = {
  title: PropTypes.string.isRequired,
- content: PropTypes.string.isRequired,
+ content: PropTypes.object.isRequired,
 };
 export default Horizontal;

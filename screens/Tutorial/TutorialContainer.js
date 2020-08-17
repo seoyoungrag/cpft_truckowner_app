@@ -4,6 +4,9 @@ import styled from "styled-components/native";
 import TutorialPresenter from "./TutorialPresenter";
 import ScrollContainer from "../../components/ScrollContainer";
 import { useTutorialPass } from "../../TutorialContext";
+import snapshot1 from "../../assets/snapshot1.jpg"; 
+import snapshot2 from "../../assets/snapshot2.jpg"; 
+import snapshot3 from "../../assets/snapshot3.jpg"; 
 // import {FlatListSlider} from 'react-native-flatlist-slider';
 
 const ModalFooter = styled.View`
@@ -35,19 +38,16 @@ const OuterContainer = styled.SafeAreaView`
 export default () => {
  const [data, setData] = useState([
   {
-   image:
-    "https://images.unsplash.com/photo-1533839346998-ba7ebed7e89d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
-   desc: "일자리 구하셈.",
+   image:snapshot1,
+   desc: "일자리를 구하세요.",
   },
   {
-   image:
-    "https://images.unsplash.com/photo-1503164592308-0b42e96735c7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
-   desc: "정산하셈.",
+   image:snapshot2,
+   desc: "정산을 간편하게.",
   },
   {
-   image:
-    "https://images.unsplash.com/photo-1564567913547-428a0fc38750?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
-   desc: "일자리 또 구하셈.",
+   image:snapshot3,
+   desc: "간편하게 일찾기.",
   },
  ]);
  const tutorialPass = useTutorialPass();
@@ -71,7 +71,7 @@ export default () => {
     <TutorialPresenter
      data={data}
      imageKey={"image"}
-     local={false}
+     local={true}
      width={screenWidth}
      height={screenHeight - 250}
      separator={0}
