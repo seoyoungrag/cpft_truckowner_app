@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
  },
 });
 
-export default ({ modalVisible, setModalVisible }) => {
+export default ({ modalVisible, setModalVisible, menuName }) => {
  const navigation = useNavigation();
  const getUserRegistInfo = useGetUserRegistInfo();
  const [userRegistInfo, setUserRegistInfoProp] = useState(null);
@@ -86,7 +86,7 @@ export default ({ modalVisible, setModalVisible }) => {
     document.querySelectorAll('.aui-button').forEach(e => e.style.fontSize="50px");
     document.querySelectorAll('.cancel').forEach(e => e.style.display="none");
     document.querySelector('#fullname').value="${userRegistInfo?.userNm}";
-    document.querySelector('#email').value="오더";
+    document.querySelector('#email').value="${menuName}";
     document.querySelector('#recordWebInfoConsent').checked = true;
     document.querySelector('#name-group').style.display="none";
     document.querySelector('#email-group').style.display="none";
@@ -103,6 +103,8 @@ export default ({ modalVisible, setModalVisible }) => {
     document.querySelectorAll('input[type=radio]').forEach(e => e.style.width="50px");
     document.querySelectorAll('input[type=radio]').forEach(e => e.style.height="50px");
     document.querySelectorAll('img').forEach(e => e.style.display="none");
+    jQuery(jQuery("span.rating-label")[2]).text("평균");
+    jQuery(".field-group").css("padding-top",'50px')
     jQuery('.content-body').append('<p>제출 후 창을 닫아주세요</p>')
     jQuery("#screenshot-group").parent().hide();
  }

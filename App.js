@@ -65,7 +65,6 @@ export default function App() {
    try {
     const update = await Updates.checkForUpdateAsync();
     if (update.isAvailable) {
-     setIsReady(false);
      Alert.alert(
       "알림!",
       "새로운 버전이 있습니다. 업데이트 하시겠습니까?",
@@ -79,33 +78,79 @@ export default function App() {
       ],
       { cancelable: false }
      );
+    } else {
+     setIsReady(true);
     }
    } catch (e) {
     console.log(e);
     // handle or log error
    }
   } else {
-   console.log("dev mode");
+   Alert.alert(
+    "알림!_개발모드1",
+    "새로운 버전이 있습니다. 업데이트 하시겠습니까?",
+    [
+     {
+      text: "네",
+      onPress: async () => {
+       console.log(1);
+       try {
+        const update = await Updates.fetchUpdateAsync();
+        Alert.alert(
+         "com",
+         JSON.stringify(update),
+         [
+          {
+           text: "네",
+           onPress: async () => {
+            console.log(update);
+            Updates.reloadFromCache();
+            console.log(2);
+            setIsReady(true);
+           },
+          },
+         ],
+         {
+          cancelable: false,
+         }
+        );
+       } catch (e) {
+        console.log(e);
+        setIsReady(true);
+       }
+      },
+     },
+    ],
+    {
+     cancelable: false,
+    }
+   );
   }
  };
 
  const runUpdate = async () => {
   await Updates.fetchUpdateAsync(); //최신업데이트 동기화, 로컬 캐시에 저장
   // ... notify user of update ...
-  Updates.reloadFromCache();
 
   Alert.alert(
    "업데이트 완료!",
    "업데이트가 완료되었습니다.",
-   [{ text: "네", onPress: () => runUpdate() }],
+   [
+    {
+     text: "네",
+     onPress: () => {
+      Updates.reloadFromCache();
+      console.log("update complete");
+      setIsReady(true);
+     },
+    },
+   ],
    {
     cancelable: false,
    }
   );
-  //setIsReady(true);
  };
  const loadAssets = async () => {
-  await checkForUpdates();
   const images = cacheImages([
    "https://images.unsplash.com/photo-1594782078968-2b07656d7bb2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
   ]);
@@ -153,7 +198,8 @@ export default function App() {
   } else {
    setHasTutorialPass(true);
   }
-  setIsReady(true);
+  await checkForUpdates();
+  //setIsReady(true);
  };
 
  const getCameraPermission = async () => {

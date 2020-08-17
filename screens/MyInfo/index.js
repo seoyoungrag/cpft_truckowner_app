@@ -1,110 +1,35 @@
-import React from "react";
-import { TouchableOpacity, StyleSheet } from "react-native";
+import React, { useState, useEffect } from "react";
+import { TouchableOpacity, View, Text } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { FontAwesome5 } from "@expo/vector-icons";
-import styled from "styled-components/native";
+import { MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 import MyInfoContainer from "./MyInfoContainer";
-import { useIsLoggedIn, useLogIn, useLogOut } from "../../AuthContext";
-
-const styles = StyleSheet.create({
- centeredView: {
-  flex: 1,
-  justifyContent: "flex-end",
-  alignItems: "center",
-  marginTop: 22,
-  backgroundColor: "rgba(0,0,0,0.5)",
- },
- modalView: {
-  flex: 0,
-  width: "100%",
-  backgroundColor: "white",
-  padding: 5,
-  alignItems: "center",
- },
- modalInnerView: {
-  alignItems: "center",
-  borderWidth: 1,
-  width: "100%",
- },
- openButton: {
-  backgroundColor: "#F194FF",
-  borderRadius: 10,
-  paddingTop: 5,
-  paddingBottom: 5,
-  paddingLeft: 10,
-  paddingRight: 10,
-  elevation: 2,
- },
- textStyle: {
-  color: "white",
-  fontWeight: "bold",
-  textAlign: "center",
-  marginLeft: 20,
-  marginRight: 20,
-  marginTop: 5,
-  marginBottom: 5,
- },
- modalTItle: {
-  fontSize: 24,
-  marginBottom: 15,
-  textAlign: "center",
- },
- modalBody: {
-  textAlign: "center",
- },
-});
-
-const CancelBtn = styled.TouchableOpacity`
- flex: 0.3;
- align-items: center;
- justify-content: center;
- background-color: whitesmoke;
- height: 50px;
-`;
-const ConfirmBtn = styled.TouchableOpacity`
- flex: 0.7;
- align-items: center;
- justify-content: center;
- background-color: #3a99fc;
- height: 50px;
-`;
-const ConfirmBtnText = styled.Text`
- text-align: center;
- color: white;
- font-weight: bold;
- font-size: 24px;
-`;
-
-const DataHeader = styled.View`
- flex-direction: column;
- justify-content: center;
- align-items: center;
- padding-top: 10px;
- width: 100%;
-`;
-const DataBody = styled.View`
- padding-left: 10px;
- padding-right: 10px;
- padding-bottom: 10px;
- flex-direction: column;
- justify-content: flex-start;
- align-items: flex-start;
- width: 100%;
-`;
-
-const EtcInput = styled.TextInput`
- border-width: 1px;
- border-color: grey;
- text-align: left;
- text-align-vertical: top;
- height: 150px;
- width: 100%;
-`;
+import { useLogOut } from "../../AuthContext";
+import { useGetUserRegistInfo } from "../../UserRegistContext";
+import { useNavigation } from "@react-navigation/native";
+import JiraIssueCollectModal from "../../components/JiraIssueCollectModal";
 
 const Stack = createStackNavigator();
 
 export default () => {
  const logOut = useLogOut();
+ const navigation = useNavigation();
+ const getUserRegistInfo = useGetUserRegistInfo();
+ const [userRegistInfo, setUserRegistInfoProp] = useState(null);
+ const fetchData = async () => {
+  const data = await getUserRegistInfo();
+  setUserRegistInfoProp(data);
+ };
+ const [modalVisible, setModalVisible] = useState(false);
+
+ useEffect(() => {
+  const unsubscribe = navigation.addListener("focus", async () => {
+   if (!userRegistInfo) {
+    await fetchData();
+   } else {
+   }
+  });
+  return unsubscribe;
+ }, [navigation]);
  return (
   <Stack.Navigator
    mode="modal"
@@ -136,16 +61,40 @@ export default () => {
       />
      ),
      headerRight: () => (
-      <TouchableOpacity onPress={logOut}>
-       <FontAwesome5
-        name="sign-out-alt"
-        size={24}
-        color="#3a99fc"
-        style={{
-         marginRight: 10,
+      <View style={{ flexDirection: "row", alignItems: "center" }}>
+       <TouchableOpacity
+        onPress={() => {
+         setModalVisible(true);
         }}
+       >
+        <Text style={{ marginRight: 20, color: "#3a99fc" }}>
+         테스트 피드백 보내기
+         <MaterialIcons
+          name="feedback"
+          size={24}
+          color="#3a99fc"
+          style={{
+           marginRight: 10,
+          }}
+         />
+        </Text>
+       </TouchableOpacity>
+       <JiraIssueCollectModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        menuName={"오더메뉴"}
        />
-      </TouchableOpacity>
+       <TouchableOpacity onPress={logOut}>
+        <FontAwesome5
+         name="sign-out-alt"
+         size={24}
+         color="#3a99fc"
+         style={{
+          marginRight: 10,
+         }}
+        />
+       </TouchableOpacity>
+      </View>
      ),
      /*headerTitleContainerStyle: {
       margin: 0,

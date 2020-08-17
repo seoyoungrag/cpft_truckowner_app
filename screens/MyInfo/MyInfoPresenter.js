@@ -381,27 +381,25 @@ export default ({ refreshFn, loading, truckOwnerOrders }) => {
      >
       <Title title="내가 지원한 오더" />
       {truckOwnerOrders.map((n) => (
-       <>
-        <HorizontalMyOrders
-         key={n.order.orderSeq}
-         id={n.order.orderSeq}
-         opratSctn={n.order.opratSctn}
-         workingArea={n.order.workingArea}
-         rcritType={code(codes, n.order.rcritType)}
-         carTypes={n.order.carTypes?.map((c) => {
-          return code(codes, c) + " ";
-         })}
-         tonType={code(codes, n.order.tonType)}
-         dlvyPrdlst={n.order.dlvyPrdlst}
-         payAmt={n.order.payAmt}
-         payFullType={code(codes, n.order.payFullType)}
-         order={n.order}
-         status={code(codes, n.status)}
-         goToTransDetail={() => {
-          goToTransDetail(n);
-         }}
-        />
-       </>
+       <HorizontalMyOrders
+        key={n.order.orderSeq}
+        id={n.order.orderSeq}
+        opratSctn={n.order.opratSctn}
+        workingArea={n.order.workingArea}
+        rcritType={code(codes, n.order.rcritType)}
+        carTypes={n.order.carTypes?.map((c) => {
+         return code(codes, c) + " ";
+        })}
+        tonType={code(codes, n.order.tonType)}
+        dlvyPrdlst={n.order.dlvyPrdlst}
+        payAmt={n.order.payAmt}
+        payFullType={code(codes, n.order.payFullType)}
+        order={n.order}
+        status={code(codes, n.status)}
+        goToTransDetail={() => {
+         goToTransDetail(n);
+        }}
+       />
       ))}
      </ScrollContainer>
     </Container>
