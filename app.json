@@ -2,7 +2,7 @@
  "expo": {
   "name": "플랫폼_차주앱",
   "slug": "cpft_truckowner_app",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "orientation": "portrait",
   "icon": "./assets/icon.png",
   "primaryColor": "#ffffff",
@@ -23,7 +23,7 @@
   },
   "android": {
    "package": "kr.co.teamfresh.cpft.android.test",
-   "versionCode": 4,
+   "versionCode": 5,
    "permissions": [
     "CAMERA",
     "CAMERA_ROLL",
