@@ -8,7 +8,7 @@ import { trimText, formatDate, code } from "../utils";
 import { useIsModal, useSetIsModalProp } from "../ModalContext";
 
 const Container = styled.View`
- flex: 1;
+ flex: 0;
  /*padding: 0px 30px;*/
  margin-bottom: 25px;
  align-items: flex-start;
@@ -33,7 +33,6 @@ const OpratSctn = styled.Text`
 `;
 
 const RcritType = styled.Text`
- flex: 1;
  text-align: right;
  align-self: flex-end;
  padding-right: 10px;
@@ -297,9 +296,7 @@ const Horizontal = ({
        <Entypo name="chevron-with-circle-down" size={18} color="black" />{" "}
       </Text>
      </TransProgress>
-    ) : (
-     <TransProgress></TransProgress>
-    )}
+    ) : null}
    </Container>
   </TouchableOpacity>
  );

@@ -131,138 +131,160 @@ export default ({ refreshFn, loading, now }) => {
   return unsubscribe;
  }, [navigation]);
  return (
-  <List title="오더" filter={<OrderFilter />}>
-   <Modal
-    animationType="fade"
-    hardwareAccelerated={true}
-    transparent={true}
-    statusBarTranslucent={true}
-    visible={modalVisible}
-   >
-    <View style={styles.centeredView}>
-     <View style={styles.modalView}>
-      <Text style={styles.modalTItle}>보기 권한</Text>
-
-      <Text style={styles.modalBody}>
-       차량정보 입력한 회원만 볼 수 있습니다. {"\r\n"}마저 등록하러
-       가시겠습니까?
-      </Text>
-      <View style={{ flexDirection: "row" }}>
-       <TouchableOpacity
-        style={{
-         ...styles.openButton,
-         backgroundColor: "white",
-         marginRight: 10,
-        }}
-        onPress={() => {
-         setModalVisible(!modalVisible);
-        }}
-       >
-        <Text style={[styles.textStyle, { color: "#2196F3" }]}>아니오</Text>
-       </TouchableOpacity>
-       <TouchableOpacity
-        style={{
-         ...styles.openButton,
-         backgroundColor: "#2196F3",
-        }}
-        onPress={() => {
-         navigation.navigate("추가정보입력", {
-          isFromOrder: true,
-         });
-         setModalVisible(!modalVisible);
-        }}
-       >
-        <Text style={styles.textStyle}>예</Text>
-       </TouchableOpacity>
-      </View>
-     </View>
-    </View>
-   </Modal>
-   <ScrollContainer
-    refreshOn={true}
-    refreshFn={refreshFn}
-    loading={loading}
-    contentContainerStyle={{
-     backgroundColor: useIsModal() ? "rgba(0,0,0,0.5)" : "white",
+  <>
+   <View
+    style={{
+     backgroundColor: "rgba(0,0,0,0.4)",
+     position: "absolute",
+     top: 0,
+     left: 0,
+     width: "100%",
+     height: "100%",
+     zIndex: 9999999,
+     justifyContent: "center",
     }}
    >
-    {now.map((n) => (
-     <HorizontalOrder
-      key={n.orderSeq}
-      id={n.orderSeq}
-      opratSctn={n.opratSctn}
-      workingArea={n.workingArea}
-      rcritType={code(codes, n.rcritType)}
-      carTypes={n.carTypes.map((c) => {
-       return code(codes, c) + " ";
-      })}
-      tonType={code(codes, n.tonType)}
-      dlvyPrdlst={n.dlvyPrdlst}
-      payAmt={n.payAmt}
-      payFullType={code(codes, n.payFullType)}
-      goToOrderDetail={() => {
-       goToOrderDetail(n);
-      }}
-     />
-    ))}
-    {now.map((n) => (
-     <HorizontalOrder
-      key={n.orderSeq}
-      id={n.orderSeq}
-      opratSctn={n.opratSctn}
-      workingArea={n.workingArea}
-      rcritType={code(codes, n.rcritType)}
-      carTypes={n.carTypes.map((c) => {
-       return code(codes, c) + " ";
-      })}
-      tonType={code(codes, n.tonType)}
-      dlvyPrdlst={n.dlvyPrdlst}
-      payAmt={n.payAmt}
-      payFullType={code(codes, n.payFullType)}
-      goToOrderDetail={() => {
-       goToOrderDetail(n);
-      }}
-     />
-    ))}
-    {now.map((n) => (
-     <HorizontalOrder
-      key={n.orderSeq}
-      id={n.orderSeq}
-      opratSctn={n.opratSctn}
-      workingArea={n.workingArea}
-      rcritType={code(codes, n.rcritType)}
-      carTypes={n.carTypes.map((c) => {
-       return code(codes, c) + " ";
-      })}
-      tonType={code(codes, n.tonType)}
-      dlvyPrdlst={n.dlvyPrdlst}
-      payAmt={n.payAmt}
-      payFullType={code(codes, n.payFullType)}
-      goToOrderDetail={() => {
-       goToOrderDetail(n);
-      }}
-     />
-    ))}
-    {now.map((n) => (
-     <HorizontalOrder
-      key={n.orderSeq}
-      id={n.orderSeq}
-      opratSctn={n.opratSctn}
-      workingArea={n.workingArea}
-      rcritType={code(codes, n.rcritType)}
-      carTypes={n.carTypes.map((c) => {
-       return code(codes, c) + " ";
-      })}
-      tonType={code(codes, n.tonType)}
-      dlvyPrdlst={n.dlvyPrdlst}
-      payAmt={n.payAmt}
-      payFullType={code(codes, n.payFullType)}
-      goToOrderDetail={() => {
-       goToOrderDetail(n);
-      }}
-     />
-    ))}
-   </ScrollContainer>
-  </List>
+    <View style={styles.modalView}>
+     <Text style={styles.modalTItle}>"오더 지원하기" 개발중</Text>
+
+     <Text style={styles.modalBody}>
+      이 기능은 이번 테스트에 포함되지 않았습니다.
+     </Text>
+    </View>
+   </View>
+   <List title="오더" filter={<OrderFilter />}>
+    <Modal
+     animationType="fade"
+     hardwareAccelerated={true}
+     transparent={true}
+     statusBarTranslucent={true}
+     visible={modalVisible}
+    >
+     <View style={styles.centeredView}>
+      <View style={styles.modalView}>
+       <Text style={styles.modalTItle}>보기 권한</Text>
+
+       <Text style={styles.modalBody}>
+        차량정보 입력한 회원만 볼 수 있습니다. {"\r\n"}마저 등록하러
+        가시겠습니까?
+       </Text>
+       <View style={{ flexDirection: "row" }}>
+        <TouchableOpacity
+         style={{
+          ...styles.openButton,
+          backgroundColor: "white",
+          marginRight: 10,
+         }}
+         onPress={() => {
+          setModalVisible(!modalVisible);
+         }}
+        >
+         <Text style={[styles.textStyle, { color: "#2196F3" }]}>아니오</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+         style={{
+          ...styles.openButton,
+          backgroundColor: "#2196F3",
+         }}
+         onPress={() => {
+          navigation.navigate("추가정보입력", {
+           isFromOrder: true,
+          });
+          setModalVisible(!modalVisible);
+         }}
+        >
+         <Text style={styles.textStyle}>예</Text>
+        </TouchableOpacity>
+       </View>
+      </View>
+     </View>
+    </Modal>
+    <ScrollContainer
+     refreshOn={true}
+     refreshFn={refreshFn}
+     loading={loading}
+     contentContainerStyle={{
+      backgroundColor: useIsModal() ? "rgba(0,0,0,0.5)" : "white",
+     }}
+    >
+     {now.map((n) => (
+      <HorizontalOrder
+       key={n.orderSeq}
+       id={n.orderSeq}
+       opratSctn={n.opratSctn}
+       workingArea={n.workingArea}
+       rcritType={code(codes, n.rcritType)}
+       carTypes={n.carTypes.map((c) => {
+        return code(codes, c) + " ";
+       })}
+       tonType={code(codes, n.tonType)}
+       dlvyPrdlst={n.dlvyPrdlst}
+       payAmt={n.payAmt}
+       payFullType={code(codes, n.payFullType)}
+       goToOrderDetail={() => {
+        goToOrderDetail(n);
+       }}
+      />
+     ))}
+     {now.map((n) => (
+      <HorizontalOrder
+       key={n.orderSeq}
+       id={n.orderSeq}
+       opratSctn={n.opratSctn}
+       workingArea={n.workingArea}
+       rcritType={code(codes, n.rcritType)}
+       carTypes={n.carTypes.map((c) => {
+        return code(codes, c) + " ";
+       })}
+       tonType={code(codes, n.tonType)}
+       dlvyPrdlst={n.dlvyPrdlst}
+       payAmt={n.payAmt}
+       payFullType={code(codes, n.payFullType)}
+       goToOrderDetail={() => {
+        goToOrderDetail(n);
+       }}
+      />
+     ))}
+     {now.map((n) => (
+      <HorizontalOrder
+       key={n.orderSeq}
+       id={n.orderSeq}
+       opratSctn={n.opratSctn}
+       workingArea={n.workingArea}
+       rcritType={code(codes, n.rcritType)}
+       carTypes={n.carTypes.map((c) => {
+        return code(codes, c) + " ";
+       })}
+       tonType={code(codes, n.tonType)}
+       dlvyPrdlst={n.dlvyPrdlst}
+       payAmt={n.payAmt}
+       payFullType={code(codes, n.payFullType)}
+       goToOrderDetail={() => {
+        goToOrderDetail(n);
+       }}
+      />
+     ))}
+     {now.map((n) => (
+      <HorizontalOrder
+       key={n.orderSeq}
+       id={n.orderSeq}
+       opratSctn={n.opratSctn}
+       workingArea={n.workingArea}
+       rcritType={code(codes, n.rcritType)}
+       carTypes={n.carTypes.map((c) => {
+        return code(codes, c) + " ";
+       })}
+       tonType={code(codes, n.tonType)}
+       dlvyPrdlst={n.dlvyPrdlst}
+       payAmt={n.payAmt}
+       payFullType={code(codes, n.payFullType)}
+       goToOrderDetail={() => {
+        goToOrderDetail(n);
+       }}
+      />
+     ))}
+    </ScrollContainer>
+   </List>
+  </>
  );
 };

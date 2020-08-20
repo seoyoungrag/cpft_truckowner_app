@@ -156,14 +156,17 @@ const Horizontal = ({
        {(order.workMinuteEnd + "").padStart(2, "0")}
       </RcritType>
      </View>
-     {/*<View flex={1} style={{ paddingLeft: 10 }}>
+     <View flex={1} style={{ paddingLeft: 10 }}>
       <RcritType>{detailMatter}</RcritType>
+      <RcritType>- 타코미터 필수</RcritType>
+      <RcritType>- 구로구 최대 46집</RcritType>
       <RcritType>운송사: 팀프레시</RcritType>
+      {/*
       <DataBottomBtn onPress={() => {}}>
        <Text style={{ fontSize: 24, color: "white" }}>계약서</Text>
       </DataBottomBtn>
-     </View>
       */}
+     </View>
     </DataBody>
     {tmpKey == 3 ? (
      <DataBottom>

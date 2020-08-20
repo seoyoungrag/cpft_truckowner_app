@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   backgroundColor: "rgba(0,0,0,0.5)",
  },
  modalView: {
-  margin: 20,
+  margin: 30,
   backgroundColor: "white",
   borderRadius: 20,
   padding: 35,
@@ -370,6 +370,26 @@ export default ({ refreshFn, loading, truckOwnerOrders }) => {
      </TouchableOpacity>
     </TransProgress>
     <Container style={{ paddingTop: 0 }}>
+     <View
+      style={{
+       backgroundColor: "rgba(0,0,0,0.4)",
+       position: "absolute",
+       top: 0,
+       left: 0,
+       width: "100%",
+       height: "100%",
+       zIndex: 9999999,
+       justifyContent: "center",
+      }}
+     >
+      <View style={styles.modalView}>
+       <Text style={styles.modalTItle}>"내가 지원한 오더" 개발중</Text>
+
+       <Text style={styles.modalBody}>
+        이 기능은 이번 테스트에 포함되지 않았습니다.
+       </Text>
+      </View>
+     </View>
      <ScrollContainer
       refreshOn={true}
       refreshFn={refreshFn}

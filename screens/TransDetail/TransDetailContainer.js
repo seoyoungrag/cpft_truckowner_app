@@ -27,7 +27,6 @@ export default ({
   },
  },
 }) => {
- console.log(tmpKey);
  const [orderProp, setOrder] = useState({
   loading: true,
   order: {
