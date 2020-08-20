@@ -144,7 +144,7 @@ const Horizontal = ({
 };
 
 Horizontal.propTypes = {
- id: PropTypes.string.isRequired,
+ id: PropTypes.number.isRequired,
  opratSctn: PropTypes.string.isRequired,
  workingArea: PropTypes.string.isRequired,
  rcritType: PropTypes.string.isRequired,

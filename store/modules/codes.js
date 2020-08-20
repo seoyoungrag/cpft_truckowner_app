@@ -204,7 +204,7 @@ export const codes = (state = initialState, action) => {
      return (function () {
       var rtn;
       var ctgry = action.payload.codes.filter((codeCtgry) => {
-       return codeCtgry.codeCtgryNm.includes("요일");
+       return codeCtgry.codeCtgryNm == "요일";
       });
       if (ctgry && ctgry.length > 0) {
        rtn = ctgry[0].codes.filter((code) => {

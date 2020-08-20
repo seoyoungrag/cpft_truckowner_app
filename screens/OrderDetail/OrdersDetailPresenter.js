@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {
- Dimensions,
  Text,
  TouchableOpacity,
  Modal,
@@ -16,15 +15,8 @@ import styled from "styled-components/native";
 import HorizontalOrderDetail from "../../components/HorizontalOrderDetail";
 import { code, trimText } from "../../utils";
 import { useCodes } from "../../CodeContext";
-import {
- useUserRegistInfo,
- useGetUserRegistInfo,
- useSetUserRegistInfo,
-} from "../../UserRegistContext";
+import { useGetUserRegistInfo } from "../../UserRegistContext";
 import DataQueryBox from "../../components/DataQueryBox";
-
-const screenWidth = Math.round(Dimensions.get("window").width);
-const screenHeight = Math.round(Dimensions.get("window").height);
 
 const OuterContainer = styled.SafeAreaView`
  flex: 1;

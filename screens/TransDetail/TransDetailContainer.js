@@ -23,9 +23,11 @@ export default ({
    workDays,
    year,
    month,
+   tmpKey,
   },
  },
 }) => {
+ console.log(tmpKey);
  const [orderProp, setOrder] = useState({
   loading: true,
   order: {
@@ -44,6 +46,7 @@ export default ({
    workMinuteEnd,
    detailMatter,
    workDays,
+   tmpKey,
   },
   year,
   month,
@@ -70,6 +73,7 @@ export default ({
     workMinuteEnd: getOrder.workMinuteEnd,
     detailMatter: getOrder.detailMatter,
     workDays: getOrder.workDays,
+    tmpKey,
    },
    year,
    month,

@@ -6,21 +6,16 @@ import {
  Modal,
  View,
  StyleSheet,
+ KeyboardAvoidingView,
+ Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Constants from "expo-constants";
 import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
 import YearMonthPicker from "../../components/YearMonthPicker";
-import HorizontalTrans from "../../components/HorizontalTrans";
-import ScrollContainer from "../../components/ScrollContainer";
 import { code, trimText } from "../../utils";
-import { useIsModal, useSetIsModalProp } from "../../ModalContext";
 import { useCodes } from "../../CodeContext";
-import {
- useUserRegistInfo,
- useGetUserRegistInfo,
- useSetUserRegistInfo,
-} from "../../UserRegistContext";
+import { useGetUserRegistInfo } from "../../UserRegistContext";
 import styled from "styled-components/native";
 import HorizontalTransDetail from "../../components/HorizontalTransDetail";
 
@@ -90,6 +85,75 @@ const Detail = styled.View`
  background-color: white;
 `;
 
+const EtcInput = styled.TextInput`
+ border-width: 1px;
+ border-color: grey;
+ text-align: left;
+ text-align-vertical: top;
+ height: 150px;
+ width: 100%;
+`;
+const titleFontSize = "16";
+const titleBorderWidth = "1";
+const DataHeaderBottomTitleContainer = styled.View`
+ align-items: center;
+ justify-content: center;
+ background-color: #3a99fc;
+ border-color: #3a99fc;
+ width: ${titleFontSize * 3}px;
+ height: ${titleFontSize * 3}px;
+ border-radius: ${titleFontSize * 3}px;
+ border-width: ${titleBorderWidth}px;
+`;
+const DataHeaderBottomTitle = styled.Text`
+ text-align: center;
+ color: white;
+ font-size: ${titleFontSize - 2 * titleBorderWidth}px;
+ line-height: ${titleFontSize -
+ (Platform.OS === "ios" ? 2 * titleBorderWidth : titleBorderWidth)}px;
+`;
+
+const DataHeader = styled.View`
+ flex-direction: column;
+ justify-content: center;
+ align-items: center;
+ padding-top: 10px;
+ width: 100%;
+`;
+const DataBody = styled.View`
+ padding-left: 10px;
+ padding-right: 10px;
+ padding-bottom: 10px;
+ flex-direction: column;
+ justify-content: flex-start;
+ align-items: flex-start;
+ width: 100%;
+`;
+
+const DataBodyColumn = styled.View`
+ flex-direction: column;
+ justify-content: flex-start;
+ align-items: flex-start;
+`;
+
+const DataBodyTitle = styled.View`
+ padding-bottom: 10px;
+`;
+
+const DataBodyTitleText = styled.Text`
+ font-size: 18px;
+ color: grey;
+`;
+
+const DataBodyContent = styled.View`
+ padding-bottom: 10px;
+`;
+
+const DataBodyContentText = styled.Text`
+ font-size: 16px;
+ padding-bottom: 10px;
+`;
+
 const DetailHeader = styled.View`
  padding-left: 20px;
  padding-right: 20px;
@@ -98,6 +162,31 @@ const DetailHeader = styled.View`
  flex-direction: row;
  justify-content: space-between;
 `;
+const DetailFooter = styled.View`
+ flex-direction: row;
+ justify-content: space-around;
+`;
+
+const CancelBtn = styled.TouchableOpacity`
+ flex: 0.5;
+ align-items: center;
+ justify-content: center;
+ background-color: whitesmoke;
+ height: 50px;
+`;
+const ConfirmBtn = styled.TouchableOpacity`
+ flex: 0.5;
+ align-items: center;
+ justify-content: center;
+ background-color: #3a99fc;
+ height: 50px;
+`;
+const ConfirmBtnText = styled.Text`
+ text-align: center;
+ color: white;
+ font-weight: bold;
+ font-size: 24px;
+`;
 
 export default ({ refreshFn, loading, order, year, month }) => {
  const navigation = useNavigation();
@@ -105,6 +194,8 @@ export default ({ refreshFn, loading, order, year, month }) => {
  const getUserRegistInfo = useGetUserRegistInfo();
  const [userRegistInfo, setUserRegistInfoProp] = useState(null);
  const [monthPickerModalVisible, setMonthPickerModalVisible] = useState(false);
+ const [applyModalVisible, setApplyModalVisible] = useState(false);
+ const [queryModalVisible, setQueryModalVisible] = useState(false);
  const [startYear, setStartYear] = useState(2020);
  const [endYear, setEndYear] = useState(2020);
  const [selectedYear, setSelectedYear] = useState(2020);
@@ -121,28 +212,6 @@ export default ({ refreshFn, loading, order, year, month }) => {
  const fetchData = async () => {
   const data = await getUserRegistInfo();
   setUserRegistInfoProp(data);
- };
-
- const goToTransDetail = (order) => {
-  navigation.navigate("TransDetail", {
-   year: selectedYear,
-   month: selectedMonth,
-   orderSeq: order.orderSeq,
-   opratSctn: order.opratSctn,
-   workingArea: order.workingArea,
-   rcritType: order.rcritType,
-   carTypes: order.carTypes,
-   tonType: order.tonType,
-   dlvyPrdlst: order.dlvyPrdlst,
-   payAmt: order.payAmt,
-   payFullType: order.payFullType,
-   workHourStart: order.workHourStart,
-   workMinuteStart: order.workMinuteStart,
-   workHourEnd: order.workHourEnd,
-   workMinuteEnd: order.workMinuteEnd,
-   detailMatter: order.detailMatter,
-   workDays: order.workDays,
-  });
  };
 
  useEffect(() => {
@@ -162,6 +231,145 @@ export default ({ refreshFn, loading, order, year, month }) => {
  }, [monthPickerModalVisible]);
  return (
   <OuterContainer>
+   <Modal
+    animationType="fade"
+    hardwareAccelerated={true}
+    transparent={true}
+    statusBarTranslucent={true}
+    visible={queryModalVisible}
+   >
+    <KeyboardAvoidingView
+     behavior="padding"
+     enabled
+     style={styles.centeredView}
+    >
+     <View style={styles.modalView}>
+      <View style={styles.modalInnerView}>
+       <DataHeader></DataHeader>
+       <DataBody style={{ paddingTop: 10 }}>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+         <View style={{ flex: 1 }}></View>
+         <View style={{ flex: 1, alignItems: "flex-end" }}></View>
+        </View>
+        <EtcInput
+         underlineColorAndroid="transparent"
+         placeholder="문의사항을 입력해주세요."
+         placeholderTextColor="grey"
+         numberOfLines={10}
+         multiline={true}
+        />
+       </DataBody>
+      </View>
+     </View>
+
+     <View style={{ flexDirection: "row", bottom: 0 }}>
+      <ConfirmBtn
+       onPress={() => {
+        Alert.alert(
+         "문의완료!",
+         "문의가 완료되었습니다.",
+         [{ text: "네", onPress: () => {} }],
+         { cancelable: false }
+        );
+        setQueryModalVisible(!queryModalVisible);
+       }}
+      >
+       <ConfirmBtnText>문의완료</ConfirmBtnText>
+      </ConfirmBtn>
+      <CancelBtn
+       onPress={() => {
+        setQueryModalVisible(!queryModalVisible);
+       }}
+      >
+       <Text style={{ fontSize: 24 }}>취소</Text>
+      </CancelBtn>
+     </View>
+    </KeyboardAvoidingView>
+   </Modal>
+   <Modal
+    animationType="fade"
+    hardwareAccelerated={true}
+    transparent={true}
+    statusBarTranslucent={true}
+    visible={applyModalVisible}
+   >
+    <KeyboardAvoidingView
+     behavior="padding"
+     enabled
+     style={styles.centeredView}
+    >
+     <View style={styles.modalView}>
+      <View style={styles.modalInnerView}>
+       <DataHeader>
+        <DataHeaderBottomTitleContainer>
+         <DataHeaderBottomTitle>{userRegistInfo?.userNm}</DataHeaderBottomTitle>
+        </DataHeaderBottomTitleContainer>
+        <Text style={styles.modalTItle}>{userRegistInfo?.userNm} 님</Text>
+        <Text>{userRegistInfo?.userPHNumber}</Text>
+        <Text>경력 3년</Text>
+       </DataHeader>
+       <DataBody>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+         <View style={{ flex: 1 }}>
+          <DataBodyColumn>
+           <DataBodyTitle>
+            <DataBodyTitleText>차량 정보</DataBodyTitleText>
+           </DataBodyTitle>
+           <DataBodyContent>
+            <DataBodyContentText>{userRegistInfo?.carNum}</DataBodyContentText>
+            <DataBodyContentText>냉탑 1t</DataBodyContentText>
+           </DataBodyContent>
+          </DataBodyColumn>
+          <DataBodyColumn>
+           <DataBodyTitle>
+            <DataBodyTitleText>사업자 정보</DataBodyTitleText>
+           </DataBodyTitle>
+           <DataBodyContent>
+            <DataBodyContentText>00 운수</DataBodyContentText>
+            <DataBodyContentText>{userRegistInfo?.corpNum}</DataBodyContentText>
+           </DataBodyContent>
+          </DataBodyColumn>
+         </View>
+         <View style={{ flex: 1, alignItems: "flex-end" }}>
+          <Text>(30세)</Text>
+         </View>
+        </View>
+        <EtcInput
+         underlineColorAndroid="transparent"
+         placeholder="상세 경력이나 메세지를 적어주세요."
+         placeholderTextColor="grey"
+         numberOfLines={10}
+         multiline={true}
+        />
+       </DataBody>
+      </View>
+     </View>
+
+     <View style={{ flexDirection: "row", bottom: 0 }}>
+      <CancelBtn
+       onPress={() => {
+        setApplyModalVisible(!applyModalVisible);
+       }}
+      >
+       <Text style={{ fontSize: 24 }}>취소</Text>
+      </CancelBtn>
+      <ConfirmBtn
+       onPress={() => {
+        Alert.alert(
+         "지원완료!",
+         "지원이 완료되었습니다.",
+         [{ text: "네", onPress: () => {} }],
+         { cancelable: false }
+        );
+        setApplyModalVisible(!applyModalVisible);
+       }}
+      >
+       <ConfirmBtnText>지원완료</ConfirmBtnText>
+      </ConfirmBtn>
+     </View>
+    </KeyboardAvoidingView>
+   </Modal>
+
    <Modal
     animationType="fade"
     hardwareAccelerated={true}
@@ -236,8 +444,51 @@ export default ({ refreshFn, loading, order, year, month }) => {
        .join(",")
      }
      order={order}
+     tmpKey={order.tmpKey}
     />
    </Detail>
+   {order.tmpKey != 1 && order.tmpKey != 2 && order.tmpKey != 3 ? (
+    <DetailFooter>
+     <CancelBtn
+      onPress={() => {
+       Alert.alert(
+        "오더 거절",
+        "이 오더를 거절하시겠습니까?",
+        [
+         {
+          text: "아니오",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+         },
+         { text: "네", onPress: () => console.log("Confirm Pressed") },
+        ],
+        { cancelable: false }
+       );
+      }}
+     >
+      <Text style={{ fontSize: 24 }}>오더 거절</Text>
+     </CancelBtn>
+     <ConfirmBtn
+      onPress={() => {
+       Alert.alert(
+        "오더 승인",
+        "이 오더를 승인하시겠습니까?",
+        [
+         {
+          text: "아니오",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+         },
+         { text: "네", onPress: () => console.log("Confirm Pressed") },
+        ],
+        { cancelable: false }
+       );
+      }}
+     >
+      <ConfirmBtnText>오더 승인</ConfirmBtnText>
+     </ConfirmBtn>
+    </DetailFooter>
+   ) : null}
   </OuterContainer>
  );
 };

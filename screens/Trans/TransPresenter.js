@@ -95,7 +95,7 @@ export default ({ refreshFn, loading, now }) => {
   setUserRegistInfoProp(data);
  };
 
- const goToTransDetail = (order) => {
+ const goToTransDetail = (order, tmpKey) => {
   navigation.navigate("TransDetail", {
    year: selectedYear,
    month: selectedMonth,
@@ -114,6 +114,7 @@ export default ({ refreshFn, loading, now }) => {
    workMinuteEnd: order.workMinuteEnd,
    detailMatter: order.detailMatter,
    workDays: order.workDays,
+   tmpKey,
   });
  };
  const showPicker = () => {
@@ -263,8 +264,9 @@ export default ({ refreshFn, loading, now }) => {
      paddingTop: 10,
     }}
    >
-    {now.map((n) => (
+    {now.map((n, i) => (
      <HorizontalTrans
+      tmpKey={i}
       key={n.orderSeq}
       id={n.orderSeq}
       opratSctn={n.opratSctn}
@@ -278,12 +280,13 @@ export default ({ refreshFn, loading, now }) => {
       payAmt={n.payAmt}
       payFullType={code(codes, n.payFullType)}
       goToTransDetail={() => {
-       goToTransDetail(n);
+       goToTransDetail(n, i);
       }}
      />
     ))}
-    {now.map((n) => (
+    {now.map((n, i) => (
      <HorizontalTrans
+      tmpKey={i}
       key={n.orderSeq}
       id={n.orderSeq}
       opratSctn={n.opratSctn}
@@ -297,45 +300,7 @@ export default ({ refreshFn, loading, now }) => {
       payAmt={n.payAmt}
       payFullType={code(codes, n.payFullType)}
       goToTransDetail={() => {
-       goToTransDetail(n);
-      }}
-     />
-    ))}
-    {now.map((n) => (
-     <HorizontalTrans
-      key={n.orderSeq}
-      id={n.orderSeq}
-      opratSctn={n.opratSctn}
-      workingArea={n.workingArea}
-      rcritType={code(codes, n.rcritType)}
-      carTypes={n.carTypes.map((c) => {
-       return code(codes, c) + " ";
-      })}
-      tonType={code(codes, n.tonType)}
-      dlvyPrdlst={n.dlvyPrdlst}
-      payAmt={n.payAmt}
-      payFullType={code(codes, n.payFullType)}
-      goToTransDetail={() => {
-       goToTransDetail(n);
-      }}
-     />
-    ))}
-    {now.map((n) => (
-     <HorizontalTrans
-      key={n.orderSeq}
-      id={n.orderSeq}
-      opratSctn={n.opratSctn}
-      workingArea={n.workingArea}
-      rcritType={code(codes, n.rcritType)}
-      carTypes={n.carTypes.map((c) => {
-       return code(codes, c) + " ";
-      })}
-      tonType={code(codes, n.tonType)}
-      dlvyPrdlst={n.dlvyPrdlst}
-      payAmt={n.payAmt}
-      payFullType={code(codes, n.payFullType)}
-      goToTransDetail={() => {
-       goToTransDetail(n);
+       goToTransDetail(n, i);
       }}
      />
     ))}

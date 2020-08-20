@@ -10,12 +10,11 @@ import { useIsModal, useSetIsModalProp } from "../ModalContext";
 const Container = styled.View`
  flex: 1;
  /*padding: 0px 30px;*/
- margin-bottom: 15px;
+ margin-bottom: 25px;
  align-items: flex-start;
 `;
 
 const Data = styled.View`
- flex: 1;
  align-items: flex-start;
  border-width: 1px;
  padding: 10px;
@@ -124,18 +123,10 @@ const Horizontal = ({
  payAmt,
  payFullType,
  goToTransDetail,
+ tmpKey,
 }) => {
  const navigation = useNavigation();
- const goToDetail = () => {
-  navigation.navigate("Detail", {
-   isTv,
-   id,
-   title,
-   poster,
-   overview,
-   releaseDate,
-  });
- };
+
  return (
   <TouchableOpacity
    disabled={useIsModal()}
@@ -158,56 +149,165 @@ const Horizontal = ({
        {workingArea?.split(" ").slice(0, 2).join(" ")} 배송
       </WorkingArea>
      </DataBody>
+
      <DataBottom>
-      <DataBottomBtn
-       onPress={() => {
-        navigation.navigate("DtStmn");
-       }}
-      >
-       <Text style={{ fontSize: 24, color: "white" }}>명세서</Text>
-      </DataBottomBtn>
-      <DataBottomBtn
-       onPress={() => {
-        navigation.navigate("TaxInvoice", {
-         mgtKey: "7a7a2bg97o2w8oei93j5d18n",
-        });
-       }}
-      >
-       <Text style={{ fontSize: 24, color: "white" }}>세금계산서</Text>
-      </DataBottomBtn>
+      {tmpKey == 3 ? (
+       <>
+        <DataBottomBtn
+         onPress={() => {
+          navigation.navigate("DtStmn", {
+           tmpKey,
+          });
+         }}
+        >
+         <Text style={{ fontSize: 24, color: "white" }}>명세서</Text>
+        </DataBottomBtn>
+        <DataBottomBtn
+         onPress={() => {
+          navigation.navigate("TaxInvoice", {
+           mgtKey: "7a7a2bg97o2w8oei93j5d18n",
+           tmpKey,
+          });
+         }}
+        >
+         <Text style={{ fontSize: 24, color: "white" }}>세금계산서</Text>
+        </DataBottomBtn>
+       </>
+      ) : tmpKey == 1 ? (
+       <>
+        <DataBottomBtn
+         activeOpacity={1}
+         onPress={() => {
+          navigation.navigate("DtStmn", {
+           tmpKey,
+          });
+         }}
+        >
+         <Text style={{ fontSize: 24, color: "white" }}>명세서</Text>
+        </DataBottomBtn>
+        <DataBottomBtn
+         activeOpacity={1}
+         style={{ backgroundColor: "silver" }}
+         onPress={() => {}}
+        >
+         <Text style={{ fontSize: 24, color: "white" }}>세금계산서</Text>
+        </DataBottomBtn>
+       </>
+      ) : tmpKey == 2 ? (
+       <>
+        <DataBottomBtn
+         activeOpacity={1}
+         style={{ backgroundColor: "silver" }}
+         onPress={() => {}}
+        >
+         <Text style={{ fontSize: 24, color: "white" }}>명세서</Text>
+        </DataBottomBtn>
+        <DataBottomBtn
+         activeOpacity={1}
+         style={{ backgroundColor: "silver" }}
+         onPress={() => {}}
+        >
+         <Text style={{ fontSize: 24, color: "white" }}>세금계산서</Text>
+        </DataBottomBtn>
+       </>
+      ) : (
+       <>
+        <DataBottomBtn
+         activeOpacity={1}
+         style={{ backgroundColor: "#3a99fc" }}
+         onPress={goToTransDetail}
+        >
+         <Text style={{ fontSize: 24, color: "white" }}>운송요청보기</Text>
+        </DataBottomBtn>
+       </>
+      )}
      </DataBottom>
     </Data>
-    <TransProgress>
-     <Text style={{ textAlignVertical: "center" }}>
-      명세서{" "}
-      <Entypo name="chevron-with-circle-down" size={18} color="#3a99fc" />{" "}
-     </Text>
-     <Text>
-      <Entypo name="dot-single" size={18} color="#3a99fc" />{" "}
-      <Entypo name="dot-single" size={18} color="#3a99fc" />{" "}
-      <Entypo name="dot-single" size={18} color="#3a99fc" />{" "}
-     </Text>
-     <Text style={{ textAlignVertical: "center" }}>
-      세금계산서{" "}
-      <Entypo name="chevron-with-circle-down" size={18} color="#3a99fc" />{" "}
-     </Text>
-     <Text>
-      <Entypo name="dot-single" size={18} color="black" />{" "}
-      <Entypo name="dot-single" size={18} color="black" />{" "}
-      <Entypo name="dot-single" size={18} color="black" />{" "}
-     </Text>
-     <Text style={{ textAlignVertical: "center" }}>
-      입금대기{" "}
-      <Entypo name="chevron-with-circle-down" size={18} color="black" />{" "}
-     </Text>
-    </TransProgress>
+    {tmpKey == 3 ? (
+     <TransProgress>
+      <Text style={{ textAlignVertical: "center" }}>
+       명세서{" "}
+       <Entypo name="chevron-with-circle-down" size={18} color="#3a99fc" />{" "}
+      </Text>
+      <Text>
+       <Entypo name="dot-single" size={18} color="#3a99fc" />{" "}
+       <Entypo name="dot-single" size={18} color="#3a99fc" />{" "}
+       <Entypo name="dot-single" size={18} color="#3a99fc" />{" "}
+      </Text>
+      <Text style={{ textAlignVertical: "center" }}>
+       세금계산서{" "}
+       <Entypo name="chevron-with-circle-down" size={18} color="#3a99fc" />{" "}
+      </Text>
+      <Text>
+       <Entypo name="dot-single" size={18} color="black" />{" "}
+       <Entypo name="dot-single" size={18} color="black" />{" "}
+       <Entypo name="dot-single" size={18} color="black" />{" "}
+      </Text>
+      <Text style={{ textAlignVertical: "center" }}>
+       입금대기{" "}
+       <Entypo name="chevron-with-circle-down" size={18} color="black" />{" "}
+      </Text>
+     </TransProgress>
+    ) : tmpKey == 2 ? (
+     <TransProgress>
+      <Text style={{ textAlignVertical: "center" }}>
+       명세서 <Entypo name="chevron-with-circle-down" size={18} color="black" />{" "}
+      </Text>
+      <Text>
+       <Entypo name="dot-single" size={18} color="black" />{" "}
+       <Entypo name="dot-single" size={18} color="black" />{" "}
+       <Entypo name="dot-single" size={18} color="black" />{" "}
+      </Text>
+      <Text style={{ textAlignVertical: "center" }}>
+       세금계산서{" "}
+       <Entypo name="chevron-with-circle-down" size={18} color="black" />{" "}
+      </Text>
+      <Text>
+       <Entypo name="dot-single" size={18} color="black" />{" "}
+       <Entypo name="dot-single" size={18} color="black" />{" "}
+       <Entypo name="dot-single" size={18} color="black" />{" "}
+      </Text>
+      <Text style={{ textAlignVertical: "center" }}>
+       입금대기{" "}
+       <Entypo name="chevron-with-circle-down" size={18} color="black" />{" "}
+      </Text>
+     </TransProgress>
+    ) : tmpKey == 1 ? (
+     <TransProgress>
+      <Text style={{ textAlignVertical: "center" }}>
+       명세서{" "}
+       <Entypo name="chevron-with-circle-down" size={18} color="#3a99fc" />{" "}
+      </Text>
+      <Text>
+       <Entypo name="dot-single" size={18} color="black" />{" "}
+       <Entypo name="dot-single" size={18} color="black" />{" "}
+       <Entypo name="dot-single" size={18} color="black" />{" "}
+      </Text>
+      <Text style={{ textAlignVertical: "center" }}>
+       세금계산서{" "}
+       <Entypo name="chevron-with-circle-down" size={18} color="black" />{" "}
+      </Text>
+      <Text>
+       <Entypo name="dot-single" size={18} color="black" />{" "}
+       <Entypo name="dot-single" size={18} color="black" />{" "}
+       <Entypo name="dot-single" size={18} color="black" />{" "}
+      </Text>
+      <Text style={{ textAlignVertical: "center" }}>
+       입금대기{" "}
+       <Entypo name="chevron-with-circle-down" size={18} color="black" />{" "}
+      </Text>
+     </TransProgress>
+    ) : (
+     <TransProgress></TransProgress>
+    )}
    </Container>
   </TouchableOpacity>
  );
 };
 
 Horizontal.propTypes = {
- id: PropTypes.string.isRequired,
+ tmpKey: PropTypes.number.isRequired,
+ id: PropTypes.number.isRequired,
  opratSctn: PropTypes.string.isRequired,
  workingArea: PropTypes.string.isRequired,
  rcritType: PropTypes.string.isRequired,
