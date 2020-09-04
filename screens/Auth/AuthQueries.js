@@ -13,7 +13,7 @@ axios.interceptors.request.use((request) => {
 export const LOG_IN = ({ userLoginId, userLoginPw }) => {
  return new Promise(function (resolve, reject) {
   axios
-   .post(`http://52.78.103.218/v1/signin/`, null, {
+   .post(`https://blueapi.teamfresh.co.kr/v1/signin/`, null, {
     params: {
      id: userLoginId,
      password: userLoginPw,

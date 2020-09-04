@@ -86,8 +86,8 @@ export default function App() {
     // handle or log error
    }
   } else {
-    setIsReady(true);
-      return;
+   setIsReady(true);
+   return;
    Alert.alert(
     "알림!_개발모드1",
     "새로운 버전이 있습니다. 업데이트 하시겠습니까?",
@@ -106,7 +106,7 @@ export default function App() {
            text: "네",
            onPress: async () => {
             console.log(update);
-            Updates.reloadFromCache();
+            Updates.reloadAsync();
             console.log(2);
             setIsReady(true);
            },
@@ -140,8 +140,8 @@ export default function App() {
    [
     {
      text: "네",
-     onPress: () => {
-      Updates.reloadFromCache();
+     onPress: async () => {
+      await Updates.reloadAsync();
       console.log("update complete");
       setIsReady(true);
      },

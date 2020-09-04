@@ -17,7 +17,7 @@ const makeRequest = (path, params) =>
   params: { ...params, api_key: TMDB_KEY },
  });
 const makeRequestCpft = (path, config) =>
- axios.get(`http://52.78.103.218${path}`, config);
+ axios.get(`https://blueapi.teamfresh.co.kr${path}`, config);
 
 const getAnythingCpft = async (path, params = {}) => {
  try {
@@ -58,7 +58,7 @@ const postAnythingCpft = async (path, params = {}) => {
 };
 
 const makePostRequestCpft = (path, config) =>
- axios.post(`http://52.78.103.218${path}`, config);
+ axios.post(`https://blueapi.teamfresh.co.kr${path}`, config);
 
 const getAnything = async (path, params = {}) => {
  try {

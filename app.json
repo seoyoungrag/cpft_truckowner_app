@@ -23,7 +23,7 @@
   },
   "android": {
    "package": "kr.co.teamfresh.cpft.android.test",
-   "versionCode": 5,
+   "versionCode": 6,
    "permissions": [
     "CAMERA",
     "CAMERA_ROLL",

@@ -14,7 +14,9 @@ export default ({ navigation, route }) => {
   });
 
  const _loadAssetsAsync = async () => {
-  const imageAssets = cacheImages(["http://52.78.103.218/spec_example1.jpg"]);
+  const imageAssets = cacheImages([
+   "https://blue.teamfresh.co.kr/spec_example1.jpg",
+  ]);
 
   await Promise.all([...imageAssets]);
  };
@@ -28,7 +30,7 @@ export default ({ navigation, route }) => {
    //console.log(images);
    setDtStmn({
     loading: false,
-    images: ["http://52.78.103.218/spec_example1.jpg"],
+    images: ["https://blue.teamfresh.co.kr/spec_example1.jpg"],
    });
   });
   /*

@@ -262,6 +262,7 @@ export default ({ refreshFn, loading, now }) => {
     contentContainerStyle={{
      backgroundColor: useIsModal() ? "rgba(0,0,0,0.5)" : "white",
      paddingTop: 10,
+     paddingBottom: 50,
     }}
    >
     {now.map((n, i) => (

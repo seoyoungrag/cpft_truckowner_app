@@ -533,7 +533,8 @@ export default ({ navigation, route }) => {
       style={{
        paddingTop: 10,
        paddingBottom: 10,
-       marginHorizontal: screenWidth / 4,
+       marginHorizontal: screenWidth / 5,
+       justifyContent: "center",
        flexDirection: "row",
        flexWrap: "wrap",
       }}

@@ -275,70 +275,71 @@ export default ({ navigation, route }) => {
      }}
      refreshOn={false}
     >
-    <DataName>관련 서류를 업로드해주세요.</DataName>
+     <DataName>관련 서류를 업로드해주세요.</DataName>
 
-    <View
-     style={{
-      paddingTop: 10,
-      paddingBottom: 10,
-      marginHorizontal: screenWidth / 4,
-      flexDirection: "row",
-      flexWrap: "wrap",
-     }}
-    >
-     <TouchableOpacity
+     <View
       style={{
-       backgroundColor: "#3a99fc",
-       width: screenWidth / 4,
-       height: screenWidth / 4,
-       alignItems: "center",
+       paddingTop: 10,
+       paddingBottom: 10,
+       marginHorizontal: screenWidth / 5,
        justifyContent: "center",
+       flexDirection: "row",
+       flexWrap: "wrap",
       }}
      >
-      <Entypo name="text-document" size={24} color="white" style={{}} />
-      <Text style={{ color: "white", textAlign: "center" }}>사업자등록증</Text>
-     </TouchableOpacity>
-     <TouchableOpacity
-      style={{
-       backgroundColor: "#3a99fc",
-       width: screenWidth / 4,
-       height: screenWidth / 4,
-       alignItems: "center",
-       justifyContent: "center",
-      }}
-     >
-      <Entypo name="text-document" size={24} color="white" style={{}} />
-      <Text style={{ color: "white", textAlign: "center" }}>
-       화물운송종사{"\r\n"}자격증
-      </Text>
-     </TouchableOpacity>
-     <TouchableOpacity
-      style={{
-       backgroundColor: "#3a99fc",
-       width: screenWidth / 4,
-       height: screenWidth / 4,
-       alignItems: "center",
-       justifyContent: "center",
-      }}
-     >
-      <Entypo name="text-document" size={24} color="white" style={{}} />
-      <Text style={{ color: "white", textAlign: "center" }}>
-       자동차 등록증
-      </Text>
-     </TouchableOpacity>
-     <TouchableOpacity
-      style={{
-       backgroundColor: "#3a99fc",
-       width: screenWidth / 4,
-       height: screenWidth / 4,
-       alignItems: "center",
-       justifyContent: "center",
-      }}
-     >
-      <Entypo name="text-document" size={24} color="white" style={{}} />
-      <Text style={{ color: "white", textAlign: "center" }}>통장 사본</Text>
-     </TouchableOpacity>
-    </View>
+      <TouchableOpacity
+       style={{
+        backgroundColor: "#3a99fc",
+        width: screenWidth / 4,
+        height: screenWidth / 4,
+        alignItems: "center",
+        justifyContent: "center",
+       }}
+      >
+       <Entypo name="text-document" size={24} color="white" style={{}} />
+       <Text style={{ color: "white", textAlign: "center" }}>사업자등록증</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+       style={{
+        backgroundColor: "#3a99fc",
+        width: screenWidth / 4,
+        height: screenWidth / 4,
+        alignItems: "center",
+        justifyContent: "center",
+       }}
+      >
+       <Entypo name="text-document" size={24} color="white" style={{}} />
+       <Text style={{ color: "white", textAlign: "center" }}>
+        화물운송종사{"\r\n"}자격증
+       </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+       style={{
+        backgroundColor: "#3a99fc",
+        width: screenWidth / 4,
+        height: screenWidth / 4,
+        alignItems: "center",
+        justifyContent: "center",
+       }}
+      >
+       <Entypo name="text-document" size={24} color="white" style={{}} />
+       <Text style={{ color: "white", textAlign: "center" }}>
+        자동차 등록증
+       </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+       style={{
+        backgroundColor: "#3a99fc",
+        width: screenWidth / 4,
+        height: screenWidth / 4,
+        alignItems: "center",
+        justifyContent: "center",
+       }}
+      >
+       <Entypo name="text-document" size={24} color="white" style={{}} />
+       <Text style={{ color: "white", textAlign: "center" }}>통장 사본</Text>
+      </TouchableOpacity>
+     </View>
      <Container style={{ flex: 1, justifyContent: "flex-start", marginTop: 0 }}>
       <DataName>추가정보를 입력해주세요.</DataName>
       <FloatingLabelInput
