@@ -11,6 +11,7 @@ import UserStep3 from "../screens/UserRegist/UserStep3";
 import UserStep4 from "../screens/UserRegist/UserStep4";
 import UserStep4AddrFindView from "../screens/UserRegist/UserStep4AddrFindView";
 import UserStep5 from "../screens/UserRegist/UserStep5";
+import UserStep6 from "../screens/UserRegist/UserStep6";
 
 const UserRegistlNavigation = createStackNavigator();
 
@@ -35,6 +36,7 @@ const forFade = ({ current, closing }) => ({
 export default () => (
  <NavigationContainer independent={true}>
   <UserRegistlNavigation.Navigator
+   initialRouteName="UserStep2"
    screenOptions={{
     headerShown: false,
    }}
@@ -106,6 +108,17 @@ export default () => (
    <UserRegistlNavigation.Screen
     name="UserStep5"
     component={UserStep5}
+    options={{
+     transitionSpec: {
+      open: config,
+      close: config,
+     },
+     cardStyleInterpolator: forFade,
+    }}
+   />
+   <UserRegistlNavigation.Screen
+    name="UserStep6"
+    component={UserStep6}
     options={{
      transitionSpec: {
       open: config,

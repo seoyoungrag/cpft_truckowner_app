@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "386604076049",
+    "firebase_url": "https://cpft-truckowner-test.firebaseio.com",
+    "project_id": "cpft-truckowner-test",
+    "storage_bucket": "cpft-truckowner-test.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:386604076049:android:4462ad0d6929d27c61b5b0",
+        "android_client_info": {
+          "package_name": "kr.co.teamfresh.cpft.android.test"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "386604076049-kjrjvhedf8buiv9gp7p3o5fl284hi71u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArT8AX2Y2dBb_hTg0pwPDYrwz9-0Nq2Mk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "386604076049-kjrjvhedf8buiv9gp7p3o5fl284hi71u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

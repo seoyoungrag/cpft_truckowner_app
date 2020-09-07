@@ -1,8 +1,10 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { Dimensions, Text, TouchableOpacity, Picker } from "react-native";
 import styled from "styled-components/native";
 import { useForm } from "react-hook-form";
 import { AntDesign } from "@expo/vector-icons";
+import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
+import firebase from "firebase";
 import {
  useUserRegistInfo,
  useGetUserRegistInfo,
@@ -13,6 +15,23 @@ import { View } from "react-native-animatable";
 import FloatingLabelInput from "../../components/FloatingLabelInput";
 import { TextInput } from "react-native-gesture-handler";
 import Constants from "expo-constants";
+
+try {
+ firebase.initializeApp({
+  apiKey: "AIzaSyCXR8WaYox4yk6OWUWG2Zw_2twtPfMPjcE",
+  /*authDomain: "cpft-truckowner-test.firebaseapp.com",*/
+  authDomain: "blue.teamfresh.co.kr",
+  databaseURL: "https://cpft-truckowner-test.firebaseio.com",
+  projectId: "cpft-truckowner-test",
+  storageBucket: "cpft-truckowner-test.appspot.com",
+  messagingSenderId: "386604076049",
+  appId: "1:386604076049:web:6992466c3970e0b261b5b0",
+  measurementId: "G-XKH2QH4ZPV",
+  lang: "kr",
+ });
+} catch (err) {
+ // ignore app already initialized error in snack
+}
 
 const screenWidth = Math.round(Dimensions.get("window").width);
 const screenHeight = Math.round(Dimensions.get("window").height);
@@ -136,9 +155,61 @@ const DataValueRed = styled.Text`
 `;
 export default ({ navigation }) => {
  const { register, getValues, setValue, handleSubmit, errors } = useForm();
+ const [errCode, setErrCode] = useState("");
+ const recaptchaVerifier = useRef(null);
+ const [verificationId, setVerificationId] = useState(null);
  const [userRegistInfo, setUserRegistInfoProp] = useState(null);
  const getUserRegistInfo = useGetUserRegistInfo();
  const setUserRegistInfo = useSetUserRegistInfo();
+
+ const requestPHAuthNumber = async () => {
+  const data = await getUserRegistInfo();
+  const phoneProvider = new firebase.auth.PhoneAuthProvider();
+  var phoneNumberNational = data?.userPHNumber;
+  if (phoneNumberNational) {
+   phoneNumberNational = phoneNumberNational.replace(/-/gi, "");
+  }
+  if (!phoneNumberNational.includes("+82")) {
+   phoneNumberNational = "+82" + phoneNumberNational;
+  }
+  console.log(phoneNumberNational);
+  phoneProvider
+   .verifyPhoneNumber(phoneNumberNational, recaptchaVerifier.current)
+   .then(setVerificationId);
+ };
+ const NOT_SENDED_VFCD = "auth/missing-verification-code";
+ const EXPIRED_CD = "auth/code-expired";
+ const INVALID_CD_VFCD = "auth/invalid-verification-code";
+ const confirmCode = () => {
+  try {
+   var code = getValues(["userPHAuthNumber"]).userPHAuthNumber;
+   code = code ? code : "";
+   const credential = firebase.auth.PhoneAuthProvider.credential(
+    verificationId,
+    code
+   );
+   //console.log(credential);
+   firebase
+    .auth()
+    .signInWithCredential(credential)
+    .then((result) => {
+     console.log(result);
+     // Do something with the results here
+     setErrCode(null);
+    })
+    .catch((e) => {
+     for (const [key, value] of Object.entries(e)) {
+      console.log(`${key}: ${value}`);
+     }
+     setErrCode(e.code);
+    });
+  } catch (e) {
+   for (const [key, value] of Object.entries(e)) {
+    console.log(`${key}: ${value}`);
+   }
+   setErrCode(e.code);
+  }
+ };
 
  const goStep1 = () => {
   navigation.navigate("UserStep1");
@@ -160,7 +231,7 @@ export default ({ navigation }) => {
   await setUserRegistInfoProp({ ...userRegistInfo, [fildNm]: value });
   await setUserRegistInfo({ ...userRegistInfo, [fildNm]: value });
  };
- const requestPHAuthNumber = () => {
+ const requestPHAuthNumberOld = () => {
   setValue("userPHAuthNumber", "123456");
   setUserRegistInfoProp({ ...userRegistInfo, userPHAuthNumber: "123456" });
   //setUserRegistInfoProp({...userRegistInfo, userPHAuthNumber: '123456'})
@@ -208,6 +279,7 @@ export default ({ navigation }) => {
   const unsubscribe = navigation.addListener("focus", async () => {
    await fetchData();
   });
+  fetchData();
   return unsubscribe;
  }, [navigation]);
  return (
@@ -249,6 +321,7 @@ export default ({ navigation }) => {
           alignItems: "flex-end",
          }}
         >
+         {/*}
          <Picker
           selectedValue={userRegistInfo?.userPHType}
           style={{
@@ -272,6 +345,7 @@ export default ({ navigation }) => {
           <Picker.Item label="KT" value="KT" />
           <Picker.Item label="LGT" value="LGT" />
          </Picker>
+        */}
          <FloatingLabelInput
           maxLength={13}
           keyboardType={"phone-pad"}
@@ -280,6 +354,7 @@ export default ({ navigation }) => {
           onChangeText={setValueWithState}
           fieldNm="userPHNumber"
           containerStyle={{
+           marginLeft: 40,
            height: 50,
            margin: 0,
           }}
@@ -292,28 +367,11 @@ export default ({ navigation }) => {
           }}
           defaultValue={userRegistInfo?.userPHNumber}
          />
-        </View>
-       </View>
-       {errors.userPHNumber?.type === "required" && (
-        <DataValueRed>필수 값 입니다.</DataValueRed>
-       )}
-       {(errors.userPHNumber?.type === "maxLength" ||
-        errors.userPHNumber?.type === "minLength") && (
-        <DataValueRed>올바르지 않은 휴대폰 번호입니다.</DataValueRed>
-       )}
-       <View style={{ flexDirection: "column" }}>
-        <View
-         style={{
-          flexDirection: "row",
-          justifyContent: "flex-end",
-          alignItems: "flex-end",
-         }}
-        >
          <TouchableOpacity
           style={{
            height: 35,
            width: 100,
-           marginLeft: 40,
+           marginLeft: 20,
            paddingLeft: 0,
            paddingTop: 0,
            borderWidth: 1,
@@ -332,29 +390,45 @@ export default ({ navigation }) => {
          >
           <Text>인증번호 받기</Text>
          </TouchableOpacity>
-         {/**
-         <FloatingLabelInput
-          maxLength={6}
-          keyboardType={"numeric"}
-          label="인증번호 입력"
-          placeholder="인증번호 입력"
-          onChangeText={setValueWithState}
-          fieldNm="userPHAuthNumber"
-          containerStyle={{
-           height: 50,
-           margin: 0,
-          }}
+        </View>
+       </View>
+       {errors.userPHNumber?.type === "required" && (
+        <DataValueRed>필수 값 입니다.</DataValueRed>
+       )}
+       {(errors.userPHNumber?.type === "maxLength" ||
+        errors.userPHNumber?.type === "minLength") && (
+        <DataValueRed>올바르지 않은 휴대폰 번호입니다.</DataValueRed>
+       )}
+       {verificationId ? (
+        <View style={{ flexDirection: "column" }}>
+         <View
           style={{
-           color: "black",
-           opacity: 0.8,
-           fontWeight: 500,
-           fontSize: 32,
-           borderBottomWidth: 1,
+           marginLeft: 40,
+           flexDirection: "row",
+           justifyContent: "flex-end",
+           alignItems: "flex-end",
           }}
-          value={userPHAuthNumber}
-          defaultValue={userPHAuthNumber}
-         /> */}
-         <TextInput
+         >
+          <FloatingLabelInput
+           maxLength={6}
+           keyboardType={"numeric"}
+           label="인증번호 입력"
+           placeholder="인증번호 입력"
+           onChangeText={setValueWithState}
+           fieldNm="userPHAuthNumber"
+           containerStyle={{
+            height: 50,
+            margin: 0,
+           }}
+           style={{
+            color: "black",
+            opacity: 0.8,
+            fontWeight: 500,
+            fontSize: 32,
+            borderBottomWidth: 1,
+           }}
+          />
+          {/*<TextInput
           maxLength={6}
           keyboardType={"numeric"}
           placeholder="인증번호 입력"
@@ -370,11 +444,44 @@ export default ({ navigation }) => {
           }}
           value={userRegistInfo?.userPHAuthNumber}
          />
+        */}
+          <TouchableOpacity
+           style={{
+            height: 35,
+            width: 100,
+            marginLeft: 20,
+            paddingLeft: 0,
+            paddingTop: 0,
+            borderWidth: 1,
+            borderRadius: 10,
+            borderColor: "silver",
+            color: verificationId ? "black" : "white",
+            opacity: 0.8,
+            fontWeight: 500,
+            fontSize: 16,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            justifyContent: "center",
+           }}
+           disabled={verificationId ? false : true}
+           onPress={confirmCode}
+          >
+           <Text>인증번호 체크</Text>
+          </TouchableOpacity>
+         </View>
         </View>
-       </View>
-       <DataValueRed style={{ color: "grey" }}>
-        프로토타입에서 휴대폰 본인 인증은 구현되지 않았습니다.
-       </DataValueRed>
+       ) : null}
+       <DataValueRed>{errCode}</DataValueRed>
+       {errCode === NOT_SENDED_VFCD && (
+        <DataValueRed>인증번호를 입력해주세요.</DataValueRed>
+       )}
+       {errCode === EXPIRED_CD && (
+        <DataValueRed>인증번호를 다시 받아주세요.</DataValueRed>
+       )}
+       {errCode === INVALID_CD_VFCD && (
+        <DataValueRed>인증번호가 틀렸습니다.</DataValueRed>
+       )}
        {errors.userPHAuthNumber?.type === "required" && (
         <DataValueRed>필수 값 입니다.</DataValueRed>
        )}
@@ -441,7 +548,13 @@ export default ({ navigation }) => {
       </Container>
      </Data>
     </ScrollContainer>
-
+    <Text>{JSON.stringify(firebase.app().options)}</Text>
+    <FirebaseRecaptchaVerifierModal
+     ref={recaptchaVerifier}
+     firebaseConfig={firebase.app().options}
+     title="사람 맞아여?"
+     cancelLabel="취소"
+    />
     <ModalFooter>
      <ConfirmBtn onPress={handleSubmit(confrimBtnClicked)}>
       <ConfirmBtnText>다음</ConfirmBtnText>
