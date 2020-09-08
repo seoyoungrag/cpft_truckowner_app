@@ -1,4 +1,6 @@
 rootProject.name = 'cpft_truckowner_app'
+include ':iamport-react-native'
+project(':iamport-react-native').projectDir = new File(rootProject.projectDir, '../node_modules/iamport-react-native/android')
 
 apply from: '../node_modules/react-native-unimodules/gradle.groovy'
 includeUnimodulesProjects()

@@ -9,10 +9,8 @@ public class BasePackageList {
     return Arrays.<Package>asList(
         new expo.modules.camera.CameraPackage(),
         new expo.modules.constants.ConstantsPackage(),
-        new expo.modules.device.DevicePackage(),
         new expo.modules.errorrecovery.ErrorRecoveryPackage(),
         new expo.modules.filesystem.FileSystemPackage(),
-        new expo.modules.firebase.core.FirebaseCorePackage(),
         new expo.modules.font.FontLoaderPackage(),
         new expo.modules.imageloader.ImageLoaderPackage(),
         new expo.modules.keepawake.KeepAwakePackage(),

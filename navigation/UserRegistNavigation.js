@@ -11,7 +11,8 @@ import UserStep3 from "../screens/UserRegist/UserStep3";
 import UserStep4 from "../screens/UserRegist/UserStep4";
 import UserStep4AddrFindView from "../screens/UserRegist/UserStep4AddrFindView";
 import UserStep5 from "../screens/UserRegist/UserStep5";
-import UserStep6 from "../screens/UserRegist/UserStep6";
+import PhoneCertificate from "../screens/UserRegist/PhoneCertificate";
+import PhoneCertificateResult from "../screens/UserRegist/PhoneCertificateResult";
 
 const UserRegistlNavigation = createStackNavigator();
 
@@ -117,8 +118,19 @@ export default () => (
     }}
    />
    <UserRegistlNavigation.Screen
-    name="UserStep6"
-    component={UserStep6}
+    name="PhoneCertificate"
+    component={PhoneCertificate}
+    options={{
+     transitionSpec: {
+      open: config,
+      close: config,
+     },
+     cardStyleInterpolator: forFade,
+    }}
+   />
+   <UserRegistlNavigation.Screen
+    name="PhoneCertificateResult"
+    component={PhoneCertificateResult}
     options={{
      transitionSpec: {
       open: config,
