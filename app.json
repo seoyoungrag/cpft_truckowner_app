@@ -1,60 +1,67 @@
 {
- "expo": {
-  "name": "플랫폼_차주앱",
-  "slug": "cpft_truckowner_app",
-  "version": "1.0.3",
-  "orientation": "portrait",
-  "icon": "./assets/icon.png",
-  "primaryColor": "#ffffff",
-  "backgroundColor": "#ffffff",
-  "splash": {
-   "image": "./assets/splash.png",
-   "resizeMode": "contain",
-   "backgroundColor": "#ffffff"
-  },
-  "updates": {
-   "fallbackToCacheTimeout": 0,
-   "enabled": true,
-   "checkAutomatically": "ON_ERROR_RECOVERY"
-  },
-  "assetBundlePatterns": ["**/*"],
-  "ios": {
-   "supportsTablet": true,
-   "bundleIdentifier": "kr.co.teamfresh.cpft.truckowner.ios"
-  },
-  "android": {
-   "package": "kr.co.teamfresh.cpft.truckowner.android",
-   "versionCode": 6,
-   "permissions": [
-    "CAMERA",
-    "CAMERA_ROLL",
-    "RECORD_AUDIO",
-    "READ_PHONE_STATE",
-    "READ_CONTACTS",
-    "READ_INTERNAL_STORAGE",
-    "READ_EXTERNAL_STORAGE",
-    "WRITE_EXTERNAL_STORAGE",
-    "ACCESS_FINE_LOCATION",
-    "ACCESS_COARSE_LOCATION",
-    "CHANGE_CONFIGURATION",
-    "com.google.android.c2dm.permission.RECEIVE",
-    "com.android.launcher.permission.INSTALL_SHORTCUT",
-    "com.htc.launcher.permission.UPDATE_SHORTCUT"
-   ]
-  },
-  "androidStatusBar": {
-   "barStyle": "dark-content",
-   "backgroundColor": "#000000"
-  },
-  "androidNavigationBar": {
-   "barStyle": "dark-content",
-   "backgroundColor": "#000000"
-  },
-  "web": {
-   "favicon": "./assets/icon.png"
-  },
-  "description": "",
-  "sdkVersion": "38.0.0",
-  "platforms": ["ios", "android", "web"]
- }
+  "expo": {
+    "name": "용차블루",
+    "slug": "blue",
+    "version": "1.0.3",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "primaryColor": "#ffffff",
+    "backgroundColor": "#ffffff",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0,
+      "enabled": true,
+      "checkAutomatically": "ON_ERROR_RECOVERY"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "kr.co.teamfresh.cpft.truckowner.ios",
+      "buildNumber": "1.0.0"
+    },
+    "android": {
+      "package": "kr.co.teamfresh.cpft.truckowner.android",
+      "versionCode": 6,
+      "permissions": [
+        "CAMERA",
+        "CAMERA_ROLL",
+        "RECORD_AUDIO",
+        "READ_PHONE_STATE",
+        "READ_CONTACTS",
+        "READ_INTERNAL_STORAGE",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "CHANGE_CONFIGURATION",
+        "com.google.android.c2dm.permission.RECEIVE",
+        "com.android.launcher.permission.INSTALL_SHORTCUT",
+        "com.htc.launcher.permission.UPDATE_SHORTCUT"
+      ]
+    },
+    "androidStatusBar": {
+      "barStyle": "dark-content",
+      "backgroundColor": "#000000"
+    },
+    "androidNavigationBar": {
+      "barStyle": "dark-content",
+      "backgroundColor": "#000000"
+    },
+    "web": {
+      "favicon": "./assets/icon.png"
+    },
+    "description": "",
+    "sdkVersion": "38.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ]
+  }
 }
