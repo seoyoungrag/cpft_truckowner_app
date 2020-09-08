@@ -19,10 +19,11 @@
   },
   "assetBundlePatterns": ["**/*"],
   "ios": {
-   "supportsTablet": true
+   "supportsTablet": true,
+   "bundleIdentifier": "kr.co.teamfresh.cpft.truckowner.ios"
   },
   "android": {
-   "package": "kr.co.teamfresh.cpft.android.test",
+   "package": "kr.co.teamfresh.cpft.truckowner.android",
    "versionCode": 6,
    "permissions": [
     "CAMERA",
@@ -52,6 +53,8 @@
   "web": {
    "favicon": "./assets/icon.png"
   },
-  "description": ""
+  "description": "",
+  "sdkVersion": "38.0.0",
+  "platforms": ["ios", "android", "web"]
  }
 }
