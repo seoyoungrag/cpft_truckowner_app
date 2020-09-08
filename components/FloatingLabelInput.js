@@ -35,6 +35,7 @@ export default class FloatingLabelInput extends Component {
   const { label, ...props } = this.props;
   const labelStyle = {
    position: "absolute",
+   paddingTop: 10,
    left: 0,
    top: this._animatedIsFocused.interpolate({
     inputRange: [0, 1],
@@ -55,11 +56,13 @@ export default class FloatingLabelInput extends Component {
     <TextInput
      {...props}
      style={{
-      height: 30,
+      height: 35,
       fontSize: 20,
       color: "#000",
       borderBottomWidth: 1,
       borderBottomColor: "#555",
+      paddingBottom: 0,
+      paddingLeft: 0,
      }}
      placeholderTextColor="rgba(0,0,0,0)"
      onFocus={this.handleFocus}
