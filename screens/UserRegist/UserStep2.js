@@ -15,6 +15,7 @@ import { View } from "react-native-animatable";
 import FloatingLabelInput from "../../components/FloatingLabelInput";
 import { TextInput } from "react-native-gesture-handler";
 import Constants from "expo-constants";
+import * as Device from "expo-device";
 
 try {
  firebase.initializeApp({
@@ -156,6 +157,8 @@ const DataValueRed = styled.Text`
 export default ({ navigation }) => {
  const { register, getValues, setValue, handleSubmit, errors } = useForm();
  const [errCode, setErrCode] = useState("");
+ const [isConfrimedCode, setIsConfirmedCode] = useState(false);
+ const [displayNeedConfirm, setDisplayNeedConfirm] = useState(false);
  const recaptchaVerifier = useRef(null);
  const [verificationId, setVerificationId] = useState(null);
  const [userRegistInfo, setUserRegistInfoProp] = useState(null);
@@ -164,18 +167,29 @@ export default ({ navigation }) => {
 
  const requestPHAuthNumber = async () => {
   const data = await getUserRegistInfo();
-  const phoneProvider = new firebase.auth.PhoneAuthProvider();
-  var phoneNumberNational = data?.userPHNumber;
-  if (phoneNumberNational) {
-   phoneNumberNational = phoneNumberNational.replace(/-/gi, "");
+
+  try {
+   const phoneProvider = new firebase.auth.PhoneAuthProvider();
+   var phoneNumberNational = data?.userPHNumber;
+   if (phoneNumberNational) {
+    phoneNumberNational = phoneNumberNational.replace(/-/gi, "");
+   }
+   if (!phoneNumberNational.includes("+82")) {
+    phoneNumberNational = "+82" + phoneNumberNational;
+   }
+   console.log(phoneNumberNational);
+
+   firebase.auth().settings.appVerificationDisabledForTesting = true;
+   phoneProvider
+    .verifyPhoneNumber(phoneNumberNational, recaptchaVerifier.current)
+    .then(setVerificationId);
+  } catch (e) {
+   console.log(e);
+   for (const [key, value] of Object.entries(e)) {
+    console.log(`${key}: ${value}`);
+   }
+   setErrCode(e.code);
   }
-  if (!phoneNumberNational.includes("+82")) {
-   phoneNumberNational = "+82" + phoneNumberNational;
-  }
-  console.log(phoneNumberNational);
-  phoneProvider
-   .verifyPhoneNumber(phoneNumberNational, recaptchaVerifier.current)
-   .then(setVerificationId);
  };
  const NOT_SENDED_VFCD = "auth/missing-verification-code";
  const EXPIRED_CD = "auth/code-expired";
@@ -196,6 +210,7 @@ export default ({ navigation }) => {
      console.log(result);
      // Do something with the results here
      setErrCode(null);
+     setIsConfirmedCode(true);
     })
     .catch((e) => {
      for (const [key, value] of Object.entries(e)) {
@@ -240,7 +255,12 @@ export default ({ navigation }) => {
   userRegistInfoForm.userPHAuthNumber = undefined;
   const newValue = Object.assign({}, userRegistInfo, userRegistInfoForm);
   await setUserRegistInfo(newValue);
-  navigation.navigate("UserStep3");
+  if (isConfrimedCode) {
+   setDisplayNeedConfirm(false);
+   navigation.navigate("UserStep3");
+  } else {
+   setDisplayNeedConfirm(true);
+  }
  };
 
  const fetchData = async () => {
@@ -473,6 +493,9 @@ export default ({ navigation }) => {
         </View>
        ) : null}
        <DataValueRed>{errCode}</DataValueRed>
+       {displayNeedConfirm && !isConfrimedCode && (
+        <DataValueRed>인증을 완료해주세요.</DataValueRed>
+       )}
        {errCode === NOT_SENDED_VFCD && (
         <DataValueRed>인증번호를 입력해주세요.</DataValueRed>
        )}
