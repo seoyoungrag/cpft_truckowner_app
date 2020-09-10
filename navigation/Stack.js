@@ -68,6 +68,7 @@ export default () => {
  const logOut = useLogOut();
  const hasTutorialPass = useHasTutorialPass();
  const userRegistInfo = useUserRegistInfo();
+ return <UserRegistNavigation />;
  return !isLoggedIn ? (
   hasCameraPermission != "undetermined" &&
   hasPhonePermission != "undetermined" &&
@@ -118,7 +119,7 @@ export default () => {
        marginLeft: -20,
        paddingLeft: 0,
        fontSize: 24,
-       color: "white"
+       color: "white",
       },
       /*
        headerLeft: (props) => (

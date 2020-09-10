@@ -153,6 +153,7 @@ export default function App() {
   );
  };
  const loadAssets = async () => {
+  console.log("loadAssets start");
   const images = cacheImages([
    "https://images.unsplash.com/photo-1594782078968-2b07656d7bb2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
   ]);
@@ -162,6 +163,7 @@ export default function App() {
    FontAwesome5.font,
   ]);
   const codes = await cacheCodes();
+  console.log("loadAssets end");
   return Promise.all([...images, ...fonts, ...codes]);
  };
 

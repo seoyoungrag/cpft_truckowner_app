@@ -172,6 +172,7 @@ export default ({ navigation }) => {
 		const unsubscribe = navigation.addListener("focus", async () => {
 			await fetchData();
 		});
+		fetchData();
 		return unsubscribe;
 	}, [navigation]);
 	useEffect(() => {
@@ -280,8 +281,21 @@ export default ({ navigation }) => {
 										<DataValueRed>6자리를 입력해야합니다.</DataValueRed>
 									)}
 								</View>
-								<View>
-									<Text style={{ fontSize: 32 }}>-</Text>
+								<View
+									style={{
+										paddingTop: 18,
+										justifyContent: "flex-end",
+									}}
+								>
+									<Text
+										style={{
+											paddingTop: 5,
+											height: 35,
+											fontSize: 32,
+										}}
+									>
+										-
+									</Text>
 								</View>
 								<View style={{ flex: 1, flexDirection: "column" }}>
 									<View style={{ flexDirection: "row" }}>
@@ -303,7 +317,18 @@ export default ({ navigation }) => {
 											}}
 											defaultValue={userRegistInfo?.userSex}
 										/>
-										<Text style={{ paddingTop: 10, fontSize: 32, color: "silver" }}>******</Text>
+										<View style={{ justifyContent: "flex-end" }}>
+											<Text
+												style={{
+													paddingTop: 3,
+													height: 35,
+													fontSize: 32,
+													color: "silver",
+												}}
+											>
+												******
+											</Text>
+										</View>
 									</View>
 									{errors.userSex?.type === "required" && <DataValueRed style={{ marginLeft: 0 }}>필수 값 입니다.</DataValueRed>}
 									{errors.userSex?.type === "maxLength" && (

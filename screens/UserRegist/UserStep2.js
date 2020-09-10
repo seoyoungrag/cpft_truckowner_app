@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
-import { Dimensions, Text, TouchableOpacity, Picker } from "react-native";
+import React, { useState, useEffect } from "react";
+import { Dimensions, Text, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 import { useForm } from "react-hook-form";
 import { AntDesign } from "@expo/vector-icons";
@@ -7,7 +7,6 @@ import { useUserRegistInfo, useGetUserRegistInfo, useSetUserRegistInfo } from ".
 import ScrollContainer from "../../components/ScrollContainer";
 import { View } from "react-native-animatable";
 import FloatingLabelInput from "../../components/FloatingLabelInput";
-import { TextInput } from "react-native-gesture-handler";
 import Constants from "expo-constants";
 
 const screenWidth = Math.round(Dimensions.get("window").width);
@@ -131,11 +130,38 @@ const DataValueRed = styled.Text`
 	font-weight: 500;
 	border-radius: 10px;
 `;
-export default ({ navigation }) => {
+export default ({ navigation, route }) => {
+	const [merchantUid, setMerchantUid] = useState(`mid_${new Date().getTime()}`);
+	const [company, setCompany] = useState("용차블루");
+	const [tierCode, setTierCode] = useState(undefined);
 	const { register, getValues, setValue, handleSubmit, errors } = useForm();
 	const [userRegistInfo, setUserRegistInfoProp] = useState(null);
 	const getUserRegistInfo = useGetUserRegistInfo();
 	const setUserRegistInfo = useSetUserRegistInfo();
+	const [response, setResponse] = useState({
+		success: null,
+		imp_uid: null,
+		merchant_uid: null,
+		error_msg: null,
+	});
+
+	const requestPHAuthNumber = async () => {
+		const data = await getUserRegistInfo();
+		const params = {
+			merchant_uid: merchantUid,
+		};
+		if (company) {
+			params.company = company;
+		}
+		if (data?.userNm) {
+			params.name = data?.userNm;
+		}
+		if (data?.userPHNumber) {
+			params.phone = data.userPHNumber;
+		}
+
+		navigation.navigate("PhoneCertificate", { params, tierCode });
+	};
 
 	const goStep1 = () => {
 		navigation.navigate("UserStep1");
@@ -157,16 +183,20 @@ export default ({ navigation }) => {
 		await setUserRegistInfoProp({ ...userRegistInfo, [fildNm]: value });
 		await setUserRegistInfo({ ...userRegistInfo, [fildNm]: value });
 	};
-	const requestPHAuthNumber = () => {
+	const requestPHAuthNumberOld = () => {
 		setValue("userPHAuthNumber", "123456");
 		setUserRegistInfoProp({ ...userRegistInfo, userPHAuthNumber: "123456" });
 		//setUserRegistInfoProp({...userRegistInfo, userPHAuthNumber: '123456'})
 	};
 	const confrimBtnClicked = async (userRegistInfoForm) => {
 		userRegistInfoForm.userPHAuthNumber = undefined;
+		console.log(userRegistInfo);
 		const newValue = Object.assign({}, userRegistInfo, userRegistInfoForm);
 		await setUserRegistInfo(newValue);
-		navigation.navigate("UserStep3");
+		console.log(newValue);
+		if (response.success === true) {
+			navigation.navigate("UserStep3");
+		}
 	};
 
 	const fetchData = async () => {
@@ -191,7 +221,7 @@ export default ({ navigation }) => {
 			{
 				minLength: 6,
 				maxLength: 6,
-				required: true,
+				required: false,
 			}
 		);
 		register(
@@ -205,6 +235,11 @@ export default ({ navigation }) => {
 		const unsubscribe = navigation.addListener("focus", async () => {
 			await fetchData();
 		});
+		fetchData();
+		const crtResponse = route?.params?.response;
+		if (crtResponse) {
+			setResponse(crtResponse);
+		}
 		return unsubscribe;
 	}, [navigation]);
 	return (
@@ -244,27 +279,31 @@ export default ({ navigation }) => {
 										alignItems: "flex-end",
 									}}
 								>
-									<Picker
-										selectedValue={userRegistInfo?.userPHType}
-										style={{
-											height: 40,
-											width: 100,
-											marginLeft: 40,
-											paddingLeft: 0,
-											paddingTop: 0,
-										}}
-										onValueChange={(itemValue, itemIndex) => setUserRegistInfoProp({ ...userRegistInfo, userPHType: itemValue })}
-										itemStyle={{
-											backgroundColor: "grey",
-											color: "blue",
-											fontFamily: "Ebrima",
-											fontSize: 17,
-										}}
-									>
-										<Picker.Item label="SKT" value="SKT" />
-										<Picker.Item label="KT" value="KT" />
-										<Picker.Item label="LGT" value="LGT" />
-									</Picker>
+									{/*}
+         <Picker
+          selectedValue={userRegistInfo?.userPHType}
+          style={{
+           height: 40,
+           width: 100,
+           marginLeft: 40,
+           paddingLeft: 0,
+           paddingTop: 0,
+          }}
+          onValueChange={(itemValue, itemIndex) =>
+           setUserRegistInfoProp({ ...userRegistInfo, userPHType: itemValue })
+          }
+          itemStyle={{
+           backgroundColor: "grey",
+           color: "blue",
+           fontFamily: "Ebrima",
+           fontSize: 17,
+          }}
+         >
+          <Picker.Item label="SKT" value="SKT" />
+          <Picker.Item label="KT" value="KT" />
+          <Picker.Item label="LGT" value="LGT" />
+         </Picker>
+        */}
 									<FloatingLabelInput
 										maxLength={13}
 										keyboardType={"phone-pad"}
@@ -273,6 +312,7 @@ export default ({ navigation }) => {
 										onChangeText={setValueWithState}
 										fieldNm="userPHNumber"
 										containerStyle={{
+											marginLeft: 40,
 											height: 50,
 											margin: 0,
 										}}
@@ -285,20 +325,6 @@ export default ({ navigation }) => {
 										}}
 										defaultValue={userRegistInfo?.userPHNumber}
 									/>
-								</View>
-							</View>
-							{errors.userPHNumber?.type === "required" && <DataValueRed>필수 값 입니다.</DataValueRed>}
-							{(errors.userPHNumber?.type === "maxLength" || errors.userPHNumber?.type === "minLength") && (
-								<DataValueRed>올바르지 않은 휴대폰 번호입니다.</DataValueRed>
-							)}
-							<View style={{ flexDirection: "column" }}>
-								<View
-									style={{
-										flexDirection: "row",
-										justifyContent: "flex-end",
-										alignItems: "flex-end",
-									}}
-								>
 									<TouchableOpacity
 										style={{
 											marginTop: 5,
@@ -322,59 +348,92 @@ export default ({ navigation }) => {
 										}}
 										onPress={requestPHAuthNumber}
 									>
-										<Text
-											style={{
-												color: "#3E50B4",
-											}}
-										>
-											인증번호 받기
-										</Text>
+										<Text>본인인증 받기</Text>
 									</TouchableOpacity>
-									{/**
-         <FloatingLabelInput
+								</View>
+							</View>
+							{errors.userPHNumber?.type === "required" && <DataValueRed>필수 값 입니다.</DataValueRed>}
+							{(errors.userPHNumber?.type === "maxLength" || errors.userPHNumber?.type === "minLength") && (
+								<DataValueRed>올바르지 않은 휴대폰 번호입니다.</DataValueRed>
+							)}
+							{/*
+        <View style={{ flexDirection: "column" }}>
+         <View
+          style={{
+           marginLeft: 40,
+           flexDirection: "row",
+           justifyContent: "flex-end",
+           alignItems: "flex-end",
+          }}
+         >
+          <FloatingLabelInput
+           maxLength={6}
+           keyboardType={"numeric"}
+           label="인증번호 입력"
+           placeholder="인증번호 입력"
+           onChangeText={setValueWithState}
+           fieldNm="userPHAuthNumber"
+           containerStyle={{
+            height: 50,
+            margin: 0,
+           }}
+           style={{
+            color: "black",
+            opacity: 0.8,
+            fontWeight: 500,
+            fontSize: 32,
+            borderBottomWidth: 1,
+           }}
+          /><TextInput
           maxLength={6}
           keyboardType={"numeric"}
-          label="인증번호 입력"
           placeholder="인증번호 입력"
-          onChangeText={setValueWithState}
-          fieldNm="userPHAuthNumber"
-          containerStyle={{
-           height: 50,
-           margin: 0,
-          }}
+          editable={false}
           style={{
            color: "black",
            opacity: 0.8,
-           fontWeight: 500,
-           fontSize: 32,
+           fontSize: 20,
            borderBottomWidth: 1,
+           height: 30,
+           color: "#000",
+           borderBottomColor: "#555",
           }}
-          value={userPHAuthNumber}
-          defaultValue={userPHAuthNumber}
-         /> */}
-									<TextInput
-										maxLength={6}
-										keyboardType={"numeric"}
-										placeholder="인증번호 입력"
-										editable={false}
-										style={{
-											color: "black",
-											opacity: 0.8,
-											fontSize: 18,
-											borderBottomWidth: 1,
-											height: 30,
-											color: "#000",
-											borderBottomColor: "#555",
-										}}
-										value={userRegistInfo?.userPHAuthNumber}
-									/>
-								</View>
-							</View>
-							<DataValueRed style={{ color: "grey" }}>프로토타입에서 휴대폰 본인 인증은 구현되지 않았습니다.</DataValueRed>
+          value={userRegistInfo?.userPHAuthNumber}
+         />
+          <TouchableOpacity
+           style={{
+            height: 35,
+            width: 100,
+            marginLeft: 20,
+            paddingLeft: 0,
+            paddingTop: 0,
+            borderWidth: 1,
+            borderRadius: 10,
+            borderColor: "silver",
+            color: verificationId ? "black" : "white",
+            opacity: 0.8,
+            fontWeight: 500,
+            fontSize: 16,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            justifyContent: "center",
+           }}
+           disabled={verificationId ? false : true}
+           onPress={confirmCode}
+          >
+           <Text>인증번호 체크</Text>
+          </TouchableOpacity>
+         </View>
+        </View>
+       */}
 							{errors.userPHAuthNumber?.type === "required" && <DataValueRed>필수 값 입니다.</DataValueRed>}
 							{(errors.userPHAuthNumber?.type === "maxLength" || errors.userPHAuthNumber?.type === "minLength") && (
 								<DataValueRed>올바르지 않은 인증 번호입니다.</DataValueRed>
 							)}
+							{response.success === null && <DataValueRed>본인인증을 해주세요.</DataValueRed>}
+							{response.success === true && <DataValueRed>본인인증을 성공했습니다.</DataValueRed>}
+							{response.success === false && <DataValueRed>본인인증을 실패했습니다.</DataValueRed>}
 							<View style={{ flexDirection: "column" }}>
 								<DataName>이용약관 동의</DataName>
 								<DataValue>앱 서비스 이용을 위한 약관에 동의</DataValue>
@@ -425,7 +484,6 @@ export default ({ navigation }) => {
 						</Container>
 					</Data>
 				</ScrollContainer>
-
 				<ModalFooter>
 					<ConfirmBtn onPress={handleSubmit(confrimBtnClicked)}>
 						<ConfirmBtnText>다음</ConfirmBtnText>
