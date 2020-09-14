@@ -37,7 +37,7 @@ const forFade = ({ current, closing }) => ({
 export default () => (
  <NavigationContainer independent={true}>
   <UserRegistlNavigation.Navigator
-   initialRouteName="UserStep2"
+   initialRouteName="UserStep1"
    screenOptions={{
     headerShown: false,
    }}
