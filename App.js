@@ -1,14 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { Provider } from "react-redux";
+
+import SplashScreen from "react-native-splash-screen";
+
 import store from "./store/configure";
 import ReactStore from "./ReactStore";
-import {
- SafeAreaView,
- SafeAreaProvider,
- SafeAreaInsetsContext,
- useSafeAreaInsets,
- initialWindowMetrics,
-} from "react-native-safe-area-context";
 import { AppLoading } from "expo";
 import * as Updates from "expo-updates";
 import * as Font from "expo-font";
@@ -225,6 +221,16 @@ export default function App() {
   return AppState.removeEventListener("change", checkForUpdates);
  });
 */
+ const appLoading = async () => {
+  SplashScreen.show();
+  await loadAssets();
+  await onFinish();
+  SplashScreen.hide();
+ };
+ useLayoutEffect(() => {
+  appLoading();
+ }, []);
+
  return (
   <>
    {isReady ? (
@@ -253,13 +259,7 @@ export default function App() {
       </ThemeProvider>
      </ReactStore.Provider>
     </Provider>
-   ) : (
-    <AppLoading
-     startAsync={loadAssets}
-     onFinish={onFinish}
-     onError={console.error}
-    />
-   )}
+   ) : null}
    <StatusBar barStyle="light" />
   </>
  );
