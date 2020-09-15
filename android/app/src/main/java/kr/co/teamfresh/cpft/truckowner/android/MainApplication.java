@@ -24,6 +24,8 @@ import expo.modules.permissions.PermissionsPackage;
 import expo.modules.filesystem.FileSystemPackage;
 //import expo.modules.updates.UpdatesController;
 
+import com.microsoft.codepush.react.CodePush;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
@@ -54,12 +56,7 @@ public class MainApplication extends Application implements ReactApplication {
 
     @Override
     protected @Nullable String getJSBundleFile() {
-      if (BuildConfig.DEBUG) {
-        return super.getJSBundleFile();
-      } else {
-        return super.getJSBundleFile();
-        //return UpdatesController.getInstance().getLaunchAssetFile();
-      }
+      return CodePush.getJSBundleFile();
     }
 
     @Override

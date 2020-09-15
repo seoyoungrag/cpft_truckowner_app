@@ -133,7 +133,7 @@ export default ({ navigation, route }) => {
      tabBarLabel: ({ focused }) => {
       let label;
       if (route.name === "Orders") {
-       label = "오더";
+       label = "오더1";
       } else if (route.name === "Trans") {
        label = "운송";
       } else if (route.name === "MyInfo") {
