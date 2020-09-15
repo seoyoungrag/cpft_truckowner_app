@@ -68,7 +68,7 @@ export default () => {
  const logOut = useLogOut();
  const hasTutorialPass = useHasTutorialPass();
  const userRegistInfo = useUserRegistInfo();
- return <UserRegistNavigation />;
+ //return <UserRegistNavigation />;
  return !isLoggedIn ? (
   hasCameraPermission != "undetermined" &&
   hasPhonePermission != "undetermined" &&

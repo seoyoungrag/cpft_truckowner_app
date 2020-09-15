@@ -22,7 +22,7 @@ import org.unimodules.core.interfaces.SingletonModule;
 import expo.modules.constants.ConstantsPackage;
 import expo.modules.permissions.PermissionsPackage;
 import expo.modules.filesystem.FileSystemPackage;
-import expo.modules.updates.UpdatesController;
+//import expo.modules.updates.UpdatesController;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
@@ -57,7 +57,8 @@ public class MainApplication extends Application implements ReactApplication {
       if (BuildConfig.DEBUG) {
         return super.getJSBundleFile();
       } else {
-        return UpdatesController.getInstance().getLaunchAssetFile();
+        return super.getJSBundleFile();
+        //return UpdatesController.getInstance().getLaunchAssetFile();
       }
     }
 
@@ -66,7 +67,8 @@ public class MainApplication extends Application implements ReactApplication {
       if (BuildConfig.DEBUG) {
         return super.getBundleAssetName();
       } else {
-        return UpdatesController.getInstance().getBundleAssetName();
+        return super.getBundleAssetName();
+        //return UpdatesController.getInstance().getBundleAssetName();
       }
     }
   };
@@ -82,7 +84,7 @@ public class MainApplication extends Application implements ReactApplication {
     SoLoader.init(this, /* native exopackage */ false);
 
     if (!BuildConfig.DEBUG) {
-      UpdatesController.initialize(this);
+      //UpdatesController.initialize(this);
     }
 
     initializeFlipper(this, getReactNativeHost().getReactInstanceManager());

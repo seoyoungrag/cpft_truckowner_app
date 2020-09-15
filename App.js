@@ -5,7 +5,7 @@ import SplashScreen from "react-native-splash-screen";
 
 import store from "./store/configure";
 import ReactStore from "./ReactStore";
-import * as Updates from "expo-updates";
+
 import * as Font from "expo-font";
 import { Asset } from "expo-asset";
 import {
@@ -204,8 +204,8 @@ export default function App() {
   } else {
    setHasTutorialPass(true);
   }
-  await checkForUpdates();
-  //setIsReady(true);
+  //await checkForUpdates();
+  setIsReady(true);
  };
 
  const getCameraPermission = async () => {
