@@ -5,12 +5,18 @@ import SplashScreen from "react-native-splash-screen";
 
 import store from "./store/configure";
 import ReactStore from "./ReactStore";
-import { AppLoading } from "expo";
 import * as Updates from "expo-updates";
 import * as Font from "expo-font";
 import { Asset } from "expo-asset";
-import { Image, AsyncStorage, Alert, AppState, View, Text } from "react-native";
-import { StatusBar } from "expo-status-bar";
+import {
+ Image,
+ AsyncStorage,
+ Alert,
+ AppState,
+ View,
+ Text,
+ StatusBar,
+} from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { Ionicons, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import { ThemeProvider } from "styled-components";
@@ -222,7 +228,7 @@ export default function App() {
  });
 */
  const appLoading = async () => {
-  SplashScreen.show();
+  //SplashScreen.show();
   await loadAssets();
   await onFinish();
   SplashScreen.hide();
@@ -260,7 +266,7 @@ export default function App() {
      </ReactStore.Provider>
     </Provider>
    ) : null}
-   <StatusBar barStyle="light" />
+   <StatusBar translucent />
   </>
  );
 }

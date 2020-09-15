@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, StatusBar, TextInput, Animated } from "react-native";
+import { View, TextInput, Animated } from "react-native";
 
 export default class FloatingLabelInput extends Component {
  constructor(props) {
