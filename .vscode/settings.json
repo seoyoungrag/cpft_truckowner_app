@@ -1,6 +1,4 @@
 {
-    "gradle.nestedProjects": [
-        "android"
-    ],
-    "gradle.autoDetect": "off"
+ "gradle.nestedProjects": ["android"],
+ "gradle.autoDetect": "on"
 }

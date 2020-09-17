@@ -15,7 +15,8 @@ export default function PhoneCertificate({ navigation, route }) {
    <View style={{ height: statusHeight }}></View>
    <IMP.Certification
     style={{ padding: 100 }}
-    userCode={"imp10391932"}
+    userCode={"imp21576986"}
+    //imp10391932
     loading={<Loading />}
     data={params}
     callback={(response) =>
