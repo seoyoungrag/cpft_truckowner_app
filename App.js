@@ -74,29 +74,36 @@ function App() {
   };
  }, []);
 
- useEffect(async ()=>{
+ useEffect(async () => {
+  const isEmulator = await DeviceInfo.isEmulator();
+  console.log(
+   "CUSTOMTAG",
+   "App has come to the foreground! from ",
+   appState.current
+  );
+  console.log("CUSTOMTAG", isEmulator);
 
-    const isEmulator = await DeviceInfo.isEmulator();
-    console.log("CUSTOMTAG", "App has come to the foreground! from ", appState.current);
-    console.log("CUSTOMTAG", isEmulator);
- 
-    if (!isEmulator) {
-     try {
-      const result = await startUpdateFlow(updateModes);
-      console.log(result);
-     } catch (e) {
-      console.log("CUSTOMTAG error:", e);
-     }
-    }
-    setUpdateModalVisible(true);
- },[])
+  if (!isEmulator) {
+   try {
+    const result = await startUpdateFlow(updateModes);
+    console.log(result);
+   } catch (e) {
+    console.log("CUSTOMTAG error:", e);
+   }
+  }
+  setUpdateModalVisible(true);
+ }, []);
  const _handleAppStateChange = async (nextAppState) => {
   if (
    appState.current.match(/inactive|background/) &&
    nextAppState === "active"
   ) {
-      const isEmulator = await DeviceInfo.isEmulator();
-   console.log("CUSTOMTAG", "App has come to the foreground! from ", appState.current);
+   const isEmulator = await DeviceInfo.isEmulator();
+   console.log(
+    "CUSTOMTAG",
+    "App has come to the foreground! from ",
+    appState.current
+   );
    console.log("CUSTOMTAG", isEmulator);
 
    if (!isEmulator) {
