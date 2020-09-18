@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
+import React, { useRef, useState, useEffect, useLayoutEffect } from "react";
 import { Provider } from "react-redux";
 
 import SplashScreen from "react-native-splash-screen";
@@ -11,13 +11,13 @@ import { Asset } from "expo-asset";
 import {
  Image,
  AsyncStorage,
- Alert,
- AppState,
- View,
- Text,
  StatusBar,
  StyleSheet,
  Dimensions,
+ AppState,
+ Text,
+ View,
+ Alert,
 } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { Ionicons, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
@@ -32,7 +32,12 @@ import { CodeProvider } from "./CodeContext";
 import { UserRegistProvider } from "./UserRegistContext";
 import { ModalProvider } from "./ModalContext";
 import { codeApi } from "./api";
-import CodePush from "react-native-code-push";
+
+import UpdateApp from "./UpdateApp";
+import { startUpdateFlow } from "react-native-android-inapp-updates";
+import DeviceInfo from "react-native-device-info";
+
+const updateModes = "immediate";
 
 const cacheImages = (images) =>
  images.map((image) => {
@@ -57,8 +62,62 @@ const cacheCodes = async () => {
  return codes;
 };
 
-let codePushOptions = { checkFrequency: CodePush.CheckFrequency.ON_APP_RESUME };
 function App() {
+ const [updateModalVisible, setUpdateModalVisible] = useState(false);
+ const appState = useRef(AppState.currentState);
+ const [appStateVisible, setAppStateVisible] = useState(appState.current);
+
+ useEffect(() => {
+  AppState.addEventListener("change", _handleAppStateChange);
+
+  return () => {
+   AppState.removeEventListener("change", _handleAppStateChange);
+  };
+ }, []);
+
+ const _handleAppStateChange = async (nextAppState) => {
+  if (
+   appState.current.match(/inactive|background/) &&
+   nextAppState === "active"
+  ) {
+   console.log("CUSTOMTAG", "App has come to the foreground!");
+
+   if (!DeviceInfo.isEmulator()) {
+    try {
+     const result = await startUpdateFlow(updateModes);
+     console.log(result);
+    } catch (e) {
+     console.error("error:", e);
+    }
+   }
+   setUpdateModalVisible(true);
+  }
+
+  if (nextAppState === "active") {
+   /*
+   try {
+    const result = await startUpdateFlow(updateModes);
+   } catch (e) {
+    console.log("error:", e);
+   }
+   setUpdateModalVisible(true);
+   */
+   console.log("CUSTOMTAG", "App has come to the active!");
+  }
+
+  if (nextAppState === "background") {
+   setUpdateModalVisible(false);
+   console.log("CUSTOMTAG", "App has come to the background!");
+  }
+  if (nextAppState === "inactive") {
+   setUpdateModalVisible(false);
+   console.log("CUSTOMTAG", "App has come to the inactive!");
+  }
+
+  appState.current = nextAppState;
+  setAppStateVisible(appState.current);
+  console.log("AppState", appState.current);
+ };
  //AsyncStorage.clear();
  const [codes, setCodes] = useState(null);
  const [userRegistInfo, setUserRegistInfo] = useState(null);
@@ -67,86 +126,13 @@ function App() {
  const [isReady, setIsReady] = useState(false);
  const [permissions, setPermissions] = useState(null);
 
- const [restartAllowed, setRestartAllowed] = useState(true);
- const [syncMessage, setSyncMessage] = useState(null);
- const [progress, setProgress] = useState(null);
- const codePushStatusDidChange = (syncStatus) => {
-  switch (syncStatus) {
-   case CodePush.SyncStatus.CHECKING_FOR_UPDATE:
-    setSyncMessage("Checking for update.");
-    break;
-   case CodePush.SyncStatus.DOWNLOADING_PACKAGE:
-    setSyncMessage("Downloading package.");
-    break;
-   case CodePush.SyncStatus.AWAITING_USER_ACTION:
-    setSyncMessage("Awaiting user action.");
-    break;
-   case CodePush.SyncStatus.INSTALLING_UPDATE:
-    setSyncMessage("Installing update.");
-    break;
-   case CodePush.SyncStatus.UP_TO_DATE:
-    setSyncMessage("App up to date.");
-    break;
-   case CodePush.SyncStatus.UPDATE_IGNORED:
-    setSyncMessage("Update cancelled by user.");
-    break;
-   case CodePush.SyncStatus.UPDATE_INSTALLED:
-    setSyncMessage("Update installed and will be applied on restart.");
-    break;
-   case CodePush.SyncStatus.UNKNOWN_ERROR:
-    setSyncMessage("An unknown error occurred.");
-    break;
-  }
- };
-
- const codePushDownloadDidProgress = (progress) => {
-  setProgress(progress);
- };
-
- const toggleAllowRestart = () => {
-  restartAllowed ? CodePush.disallowRestart() : CodePush.allowRestart();
-
-  setRestartAllowed(!restartAllowed);
- };
-
- const getUpdateMetadata = () => {
-  CodePush.getUpdateMetadata(CodePush.UpdateState.RUNNING).then(
-   (metadata) => {
-    setSyncMessage(
-     metadata ? JSON.stringify(metadata) : "Running binary version"
-    );
-    setProgress(false);
-   },
-   (error) => {
-    setSyncMessage("Error: " + error);
-    setProgress(false);
-   }
-  );
- };
-
- /** Update is downloaded silently, and applied on restart (recommended) */
- const sync = () => {
-  CodePush.sync(
-   {},
-   codePushStatusDidChange.bind(this),
-   codePushDownloadDidProgress.bind(this)
-  );
- };
-
- /** Update pops a confirmation dialog, and then immediately reboots the app */
- const syncImmediate = () => {
-  CodePush.sync(
-   { installMode: CodePush.InstallMode.IMMEDIATE, updateDialog: true },
-   codePushStatusDidChange.bind(this),
-   codePushDownloadDidProgress.bind(this)
-  );
- };
-
  const loadAssets = async () => {
   console.log("loadAssets start");
+  /*
   const images = cacheImages([
    "https://images.unsplash.com/photo-1594782078968-2b07656d7bb2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
   ]);
+  */
   const fonts = cacheFonts([
    Ionicons.font,
    FontAwesome.font,
@@ -154,7 +140,8 @@ function App() {
   ]);
   const codes = await cacheCodes();
   console.log("loadAssets end");
-  return Promise.all([...images, ...fonts, ...codes]);
+  //return Promise.all([...images, ...fonts, ...codes]);
+  return Promise.all([...fonts, ...codes]);
  };
 
  const onFinish = async () => {
@@ -162,38 +149,47 @@ function App() {
   try {
    setCodes(JSON.parse(codes));
   } catch (e) {
-   console.log(e);
+   console.error(e);
    setCodes(null);
   }
   const userRegistInfo = await AsyncStorage.getItem("userRegistInfo");
   try {
    setUserRegistInfo(JSON.parse(userRegistInfo));
   } catch (e) {
-   console.log(e);
+   console.error(e);
    setUserRegistInfo(null);
   }
-  const isLoggedIn = await AsyncStorage.getItem("isLoggedIn");
-  const hasTutorialPass = await AsyncStorage.getItem("hasTutorialPass");
-  hasCameraPermission = await getCameraPermission();
-  hasPhonePermission = await getPhonePermission();
-  hasFilePermission = await getFilePermission();
+  try {
+   const hasTutorialPass = await AsyncStorage.getItem("hasTutorialPass");
+   if (!hasTutorialPass || hasTutorialPass === "false") {
+    setHasTutorialPass(false);
+   } else {
+    setHasTutorialPass(true);
+   }
+  } catch (e) {
+   console.error(e);
+   setHasTutorialPass(true);
+  }
+  try {
+   const isLoggedIn = await AsyncStorage.getItem("isLoggedIn");
+   if (!isLoggedIn || isLoggedIn === "false") {
+    setIsLoggedIn(false);
+   } else {
+    setIsLoggedIn(true);
+   }
+  } catch (e) {
+   console.error(e);
+   setIsLoggedIn(true);
+  }
+  const hasCameraPermission = await getCameraPermission();
+  const hasPhonePermission = await getPhonePermission();
+  const hasFilePermission = await getFilePermission();
   setPermissions({
    hasCameraPermission,
    hasPhonePermission,
    hasFilePermission,
   });
-  if (!isLoggedIn || isLoggedIn === "false") {
-   setIsLoggedIn(false);
-  } else {
-   setIsLoggedIn(true);
-  }
-  if (!hasTutorialPass || hasTutorialPass === "false") {
-   setHasTutorialPass(false);
-  } else {
-   setHasTutorialPass(true);
-  }
   //await checkForUpdates();
-  setIsReady(true);
  };
 
  const getCameraPermission = async () => {
@@ -211,14 +207,19 @@ function App() {
  };
  /*
  useEffect(() => {
-  AppState.addEventListener("change", checkForUpdates);
-  return AppState.removeEventListener("change", checkForUpdates);
+  AppState.addEventListener("focus", checkForUpdates);
+  return AppState.removeEventListener("focus", checkForUpdates);
  });
 */
  const appLoading = async () => {
   //SplashScreen.show();
-  await loadAssets();
-  await onFinish();
+  try {
+   await loadAssets();
+   await onFinish();
+  } catch (e) {
+   console.error(e);
+  }
+  setIsReady(true);
   SplashScreen.hide();
  };
  useLayoutEffect(() => {
@@ -227,33 +228,9 @@ function App() {
 
  return (
   <>
+   <UpdateApp updateModalVisible={updateModalVisible}></UpdateApp>
    {isReady ? (
-    progress ? (
-     <View style={styles.container}>
-      <Text style={styles.welcome}>Welcome to CodePush!</Text>
-      <TouchableOpacity onPress={this.sync.bind(this)}>
-       <Text style={styles.syncButton}>Press for background sync</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={this.syncImmediate.bind(this)}>
-       <Text style={styles.syncButton}>Press for dialog-driven sync</Text>
-      </TouchableOpacity>
-      {progressView}
-      <Image
-       style={styles.image}
-       resizeMode={"contain"}
-       source={require("./assets/laptop_phone_howitworks.png")}
-      />
-      <TouchableOpacity onPress={this.toggleAllowRestart.bind(this)}>
-       <Text style={styles.restartToggleButton}>
-        Restart {this.state.restartAllowed ? "allowed" : "forbidden"}
-       </Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={this.getUpdateMetadata.bind(this)}>
-       <Text style={styles.syncButton}>Press for Update Metadata</Text>
-      </TouchableOpacity>
-      <Text style={styles.messages}>{this.state.syncMessage || ""}</Text>
-     </View>
-    ) : (
+    <>
      <Provider store={store}>
       <ReactStore.Provider>
        <ThemeProvider theme={theme}>
@@ -279,42 +256,11 @@ function App() {
        </ThemeProvider>
       </ReactStore.Provider>
      </Provider>
-    )
+    </>
    ) : null}
    <StatusBar translucent />
   </>
  );
 }
 
-const styles = StyleSheet.create({
- container: {
-  flex: 1,
-  alignItems: "center",
-  backgroundColor: "#F5FCFF",
-  paddingTop: 50,
- },
- image: {
-  margin: 30,
-  width: Dimensions.get("window").width - 100,
-  height: (365 * (Dimensions.get("window").width - 100)) / 651,
- },
- messages: {
-  marginTop: 30,
-  textAlign: "center",
- },
- restartToggleButton: {
-  color: "blue",
-  fontSize: 17,
- },
- syncButton: {
-  color: "green",
-  fontSize: 17,
- },
- welcome: {
-  fontSize: 20,
-  textAlign: "center",
-  margin: 20,
- },
-});
-
-export default CodePush(App);
+export default App;
