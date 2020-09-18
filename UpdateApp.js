@@ -49,6 +49,9 @@ const UpdateApp = ({ updateModalVisible }) => {
     break;
    case CodePush.SyncStatus.UP_TO_DATE:
     setSyncMessage("앱이 최신버전입니다.");
+    setTimeout(() => {
+     setModalVisible(false);
+    }, 500);
     break;
    case CodePush.SyncStatus.UPDATE_IGNORED:
     setSyncMessage("사용자에 의해 업데이트가 취소되었습니다.");
@@ -108,11 +111,11 @@ const UpdateApp = ({ updateModalVisible }) => {
    codePushStatusDidChange,
    codePushDownloadDidProgress
   );
-  
+  /*
   setTimeout(() => {
    setModalVisible(false);
   }, 500);
-  
+  */
  };
 
  useEffect(() => {
