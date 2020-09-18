@@ -65,7 +65,6 @@ const cacheCodes = async () => {
 function App() {
  const [updateModalVisible, setUpdateModalVisible] = useState(false);
  const appState = useRef(AppState.currentState);
- const [appStateVisible, setAppStateVisible] = useState(appState.current);
 
  useEffect(() => {
   AppState.addEventListener("change", _handleAppStateChange);
@@ -80,14 +79,16 @@ function App() {
    appState.current.match(/inactive|background/) &&
    nextAppState === "active"
   ) {
-   console.log("CUSTOMTAG", "App has come to the foreground!");
+      const isEmulator = await DeviceInfo.isEmulator();
+   console.log("CUSTOMTAG", "App has come to the foreground! from ", appState.current);
+   console.log("CUSTOMTAG", isEmulator);
 
-   if (!DeviceInfo.isEmulator()) {
+   if (!isEmulator) {
     try {
      const result = await startUpdateFlow(updateModes);
      console.log(result);
     } catch (e) {
-     console.error("error:", e);
+     console.log("CUSTOMTAG error:", e);
     }
    }
    setUpdateModalVisible(true);
@@ -115,7 +116,6 @@ function App() {
   }
 
   appState.current = nextAppState;
-  setAppStateVisible(appState.current);
   console.log("AppState", appState.current);
  };
  //AsyncStorage.clear();

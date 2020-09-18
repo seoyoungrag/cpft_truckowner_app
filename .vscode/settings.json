@@ -1,4 +1,5 @@
 {
  "gradle.nestedProjects": ["android"],
- "gradle.autoDetect": "on"
+"gradle.autoDetect": "on",
+"react-native-tools.projectRoot": "./"
 }

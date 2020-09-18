@@ -14,22 +14,26 @@ import {
 import Modal from "react-native-modal";
 
 import CodePush from "react-native-code-push";
+import * as Progress from 'react-native-progress';
 
 let codePushOptions = {
+  checkFrequency: CodePush.CheckFrequency.MANUAL,
  updateDialog: {
   appendReleaseDescription: true,
   descriptionPrefix: "업데이트 설명",
   mandatoryContinueButtonLabel: "앱 업데이트",
-  mandatoryUpdateMessage: "앱 업데이트를 수행해야 합니다.",
-  title: "앱 코드푸시 테스트 중입니다. 1차",
+  mandatoryUpdateMessage: "앱 업데이트 기능이 패치되었습니다.",
+  title: "앱 업데이트가 발생했습니다.",
  },
 };
 const UpdateApp = ({ updateModalVisible }) => {
  const [modalVisible, setModalVisible] = useState(false);
  const [restartAllowed, setRestartAllowed] = useState(true);
  const [syncMessage, setSyncMessage] = useState(null);
- const [progress, setProgress] = useState(null);
+ const [progressUI, setProgressUI] = useState(null);
+ const [indeterminate, setIndeterminate] = useState(false);
  const codePushStatusDidChange = (syncStatus) => {
+  
   switch (syncStatus) {
    case CodePush.SyncStatus.CHECKING_FOR_UPDATE:
     setSyncMessage("업데이트를 체크 중입니다.");
@@ -60,7 +64,9 @@ const UpdateApp = ({ updateModalVisible }) => {
  };
 
  const codePushDownloadDidProgress = (progress) => {
-  setProgress(progress);
+   
+  setProgressUI(progress);
+  setIndeterminate(true);
  };
 
  const toggleAllowRestart = () => {
@@ -75,11 +81,11 @@ const UpdateApp = ({ updateModalVisible }) => {
     setSyncMessage(
      metadata ? JSON.stringify(metadata) : "실행 중 바이너리 버전"
     );
-    setProgress(false);
+    setProgressUI(false);
    },
    (error) => {
     setSyncMessage("에러: " + error);
-    setProgress(false);
+    setProgressUI(false);
    }
   );
  };
@@ -92,13 +98,21 @@ const UpdateApp = ({ updateModalVisible }) => {
  /** Update pops a confirmation dialog, and then immediately reboots the app */
  const syncImmediate = () => {
   CodePush.sync(
-   { installMode: CodePush.InstallMode.IMMEDIATE, updateDialog: true },
+   { installMode: CodePush.InstallMode.IMMEDIATE, updateDialog: {
+    appendReleaseDescription: true,
+    descriptionPrefix: "업데이트 설명",
+    mandatoryContinueButtonLabel: "앱 업데이트",
+    mandatoryUpdateMessage: "앱 업데이트 기능이 패치되었습니다.",
+    title: "앱 업데이트가 발생했습니다.",
+   } },
    codePushStatusDidChange,
    codePushDownloadDidProgress
   );
+  
   setTimeout(() => {
    setModalVisible(false);
   }, 500);
+  
  };
 
  useEffect(() => {
@@ -132,16 +146,25 @@ const UpdateApp = ({ updateModalVisible }) => {
     </TouchableOpacity>
 
     */}
-    {progress ? (
-     <Text style={styles.messages}>
-      {progress.receivedBytes} of {progress.totalBytes} bytes received
-     </Text>
-    ) : null}
+    {!progressUI && (
     <Image
      style={styles.image}
      resizeMode={"contain"}
      source={require("./assets/laptop_phone_howitworks.png")}
+    /> )}
+    {progressUI && (<Progress.Bar
+      style={ {
+        margin: 10,
+      }}
+      progress={progressUI.receivedBytes/progressUI.totalBytes}
+      indeterminate={indeterminate}
     />
+    )}
+    {progressUI && (
+     <Text style={styles.messages}>
+      {progressUI.receivedBytes} / {progressUI.totalBytes}
+     </Text>
+    )}
     {/*
     <TouchableOpacity onPress={toggleAllowRestart}>
      <Text style={styles.restartToggleButton}>
@@ -189,4 +212,4 @@ const styles = StyleSheet.create({
  },
 });
 
-export default CodePush(codePushOptions)(UpdateApp);
+export default UpdateApp;
