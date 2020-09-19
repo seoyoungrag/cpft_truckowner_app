@@ -74,24 +74,27 @@ function App() {
   };
  }, []);
 
- useEffect(async () => {
-  const isEmulator = await DeviceInfo.isEmulator();
-  console.log(
-   "CUSTOMTAG",
-   "App has come to the foreground! from ",
-   appState.current
-  );
-  console.log("CUSTOMTAG", isEmulator);
+ useEffect(() => {
+  updateFromPlayStore = async () => {
+   const isEmulator = await DeviceInfo.isEmulator();
+   console.log(
+    "CUSTOMTAG",
+    "App has come to the foreground! from ",
+    appState.current
+   );
+   console.log("CUSTOMTAG", isEmulator);
 
-  if (!isEmulator) {
-   try {
-    const result = await startUpdateFlow(updateModes);
-    console.log(result);
-   } catch (e) {
-    console.log("CUSTOMTAG error:", e);
+   if (!isEmulator) {
+    try {
+     const result = await startUpdateFlow(updateModes);
+     console.log(result);
+    } catch (e) {
+     console.log("CUSTOMTAG error:", e);
+    }
    }
-  }
-  setUpdateModalVisible(true);
+   setUpdateModalVisible(true);
+  };
+  updateFromPlayStore();
  }, []);
  const _handleAppStateChange = async (nextAppState) => {
   if (
