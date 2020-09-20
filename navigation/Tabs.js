@@ -45,59 +45,6 @@ export default ({ navigation, route }) => {
   });
   */
  }, [route]);
- const checkForUpdates = async () => {
-  if (!__DEV__) {
-   try {
-    const update = await Updates.checkForUpdateAsync();
-    if (update.isAvailable) {
-     Alert.alert(
-      "알림!",
-      "새로운 버전이 있습니다. 업데이트 하시겠습니까?",
-      [
-       {
-        text: "아니오",
-        onPress: () => console.log("Cancel Pressed"),
-        style: "cancel",
-       },
-       { text: "네", onPress: () => runUpdate() },
-      ],
-      { cancelable: false }
-     );
-    } else {
-    }
-   } catch (e) {
-    console.log(e);
-    // handle or log error
-   }
-  } else {
-   return;
-  }
- };
-
- const runUpdate = async () => {
-  await Updates.fetchUpdateAsync(); //최신업데이트 동기화, 로컬 캐시에 저장
-  // ... notify user of update ...
-
-  Alert.alert(
-   "업데이트 완료!",
-   "업데이트가 완료되었습니다.",
-   [
-    {
-     text: "네",
-     onPress: async () => {
-      await Updates.reloadAsync();
-      console.log("update complete");
-     },
-    },
-   ],
-   {
-    cancelable: false,
-   }
-  );
- };
- useEffect(() => {
-  //checkForUpdates();
- }, [route]);
  return (
   <>
    <Tabs.Navigator

@@ -8,6 +8,10 @@ import { useGetUserRegistInfo } from "../../UserRegistContext";
 import { useNavigation } from "@react-navigation/native";
 import JiraIssueCollectModal from "../../components/JiraIssueCollectModal";
 
+import { getStatusBarHeight } from "react-native-status-bar-height";
+
+const statusBarHeight = getStatusBarHeight();
+
 const Stack = createStackNavigator();
 
 export default () => {
@@ -34,11 +38,13 @@ export default () => {
   <Stack.Navigator
    mode="modal"
    screenOptions={{
+    headerShown: true,
     gestureEnabled: true,
     headerStyle: {
      backgroundColor: "white",
      shadowColor: "black",
      borderBottomColor: "silver",
+     height: statusBarHeight * 2,
     },
     headerTintColor: "#3a99fc",
     headerBackTitleVisible: false,
@@ -48,7 +54,11 @@ export default () => {
     name="용차블루"
     component={OrdersContainer}
     options={{
-     headerTitleStyle: { marginLeft: -20, paddingLeft: 0 },
+     headerStatusBarHeight: statusBarHeight,
+     headerTitleStyle: {
+      marginLeft: -20,
+      paddingLeft: 0,
+     },
      headerLeft: () => (
       <FontAwesome5
        name="truck-moving"

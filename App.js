@@ -18,6 +18,7 @@ import {
  Text,
  View,
  Alert,
+ SafeAreaView,
 } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { Ionicons, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
@@ -253,7 +254,7 @@ function App() {
  }, []);
 
  return (
-  <>
+  <SafeAreaView flex={1}>
    <UpdateApp updateModalVisible={updateModalVisible}></UpdateApp>
    {isReady ? (
     <>
@@ -270,9 +271,7 @@ function App() {
            <UserRegistProvider userRegistInfo={userRegistInfo}>
             <AuthProvider isLoggedIn={isLoggedIn}>
              <TutorialProvider hasTutorialPass={hasTutorialPass}>
-              <NavigationContainer>
-               <Stack />
-              </NavigationContainer>
+              <Stack />
              </TutorialProvider>
             </AuthProvider>
            </UserRegistProvider>
@@ -285,7 +284,7 @@ function App() {
     </>
    ) : null}
    <StatusBar translucent />
-  </>
+  </SafeAreaView>
  );
 }
 

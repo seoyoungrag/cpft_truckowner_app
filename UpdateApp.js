@@ -21,7 +21,7 @@ const UpdateApp = ({ updateModalVisible }) => {
  const [modalVisible, setModalVisible] = useState(false);
  const [restartAllowed, setRestartAllowed] = useState(true);
  const [syncMessage, setSyncMessage] = useState(null);
- const [progressUI, setProgressUI] = useState(null);
+ const [progressUI, setProgressUI] = useState(0);
  const [indeterminate, setIndeterminate] = useState(false);
  const codePushStatusDidChange = (syncStatus) => {
   switch (syncStatus) {
@@ -58,7 +58,7 @@ const UpdateApp = ({ updateModalVisible }) => {
 
  const codePushDownloadDidProgress = (progress) => {
   setProgressUI(progress);
-  setIndeterminate(true);
+  //setIndeterminate(true);
  };
 
  const toggleAllowRestart = () => {
@@ -155,26 +155,25 @@ const UpdateApp = ({ updateModalVisible }) => {
  return (
   <View
    style={[
+    styles.container,
     modalVisible
-     ? { paddingVertical: statusBarHeight, marginTop: statusBarHeight }
+     ? { height: statusBarHeight * 2 }
      : {
-        paddingVertical: 0,
-        marginTop: 0,
+        height: 0,
        },
-    { marginHorizontal: 10 },
+    {},
    ]}
   >
-   <View style={styles.container}>
-    {!progressUI && (
-     <Image
-      style={styles.image}
-      resizeMode={"cover"}
-      source={require("./assets/laptop_phone_howitworks.png")}
-     />
-    )}
-    <Text style={styles.welcome}>앱 업데이트 체크 중</Text>
+   {progressUI == 0 && (
+    <Image
+     style={styles.image}
+     resizeMode={"contain"}
+     source={require("./assets/laptop_phone_howitworks.png")}
+    />
+   )}
+   <Text style={styles.welcome}>앱 업데이트 체크 중</Text>
 
-    {/*
+   {/*
     <TouchableOpacity onPress={sync}>
      <Text style={styles.syncButton}>Press for background sync</Text>
     </TouchableOpacity>
@@ -183,18 +182,18 @@ const UpdateApp = ({ updateModalVisible }) => {
     </TouchableOpacity>
 
     */}
-    {progressUI && (
-     <Progress.Bar
-      progress={progressUI.receivedBytes / progressUI.totalBytes}
-      indeterminate={indeterminate}
-     />
-    )}
-    {progressUI && (
-     <Text style={styles.messages}>
-      {progressUI.receivedBytes} / {progressUI.totalBytes}
-     </Text>
-    )}
-    {/*
+   {progressUI != 0 && progressUI && (
+    <Progress.Bar
+     progress={progressUI.receivedBytes / progressUI.totalBytes}
+     indeterminate={true}
+    />
+   )}
+   {progressUI != 0 && progressUI && (
+    <Text style={styles.messages}>
+     {progressUI.receivedBytes} / {progressUI.totalBytes}
+    </Text>
+   )}
+   {/*
     <TouchableOpacity onPress={toggleAllowRestart}>
      <Text style={styles.restartToggleButton}>
       Restart {restartAllowed ? "allowed" : "forbidden"}
@@ -204,24 +203,21 @@ const UpdateApp = ({ updateModalVisible }) => {
      <Text style={styles.syncButton}>Press for Update Metadata</Text>
     </TouchableOpacity>
     */}
-    <Text style={styles.messages}>{syncMessage || ""}</Text>
-   </View>
+   <Text style={styles.messages}>{syncMessage || ""}</Text>
   </View>
  );
 };
 
 const styles = StyleSheet.create({
  container: {
-  flex: 1,
-  alignItems: "center",
-  backgroundColor: "#F5FCFF",
+  alignItems: "flex-end",
+  backgroundColor: "white",
   flexDirection: "row",
-  justifyContent: "space-between",
-  paddingHorizontal: 10,
+  justifyContent: "flex-start",
  },
  image: {
   width: 53,
-  height: 30,
+  height: statusBarHeight - 2,
  },
  messages: {
   textAlign: "center",
@@ -235,6 +231,7 @@ const styles = StyleSheet.create({
   fontSize: 17,
  },
  welcome: {
+  paddingHorizontal: 10,
   textAlign: "center",
  },
 });

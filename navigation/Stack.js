@@ -163,13 +163,6 @@ export default () => {
      }}
     />
     <Stack.Screen
-     name="UserStep4AddrFindView"
-     component={UserStep4AddrFindView}
-     options={{
-      headerShown: false,
-     }}
-    />
-    <Stack.Screen
      name="OrderDetail"
      component={OrderDetail}
      options={{

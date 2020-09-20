@@ -8,6 +8,10 @@ import { useGetUserRegistInfo } from "../../UserRegistContext";
 import { useNavigation } from "@react-navigation/native";
 import JiraIssueCollectModal from "../../components/JiraIssueCollectModal";
 
+import { getStatusBarHeight } from "react-native-status-bar-height";
+
+const statusBarHeight = getStatusBarHeight();
+
 const Stack = createStackNavigator();
 
 export default () => {
@@ -39,6 +43,7 @@ export default () => {
      backgroundColor: "white",
      shadowColor: "black",
      borderBottomColor: "silver",
+     height: statusBarHeight * 2,
     },
     headerTintColor: "#3E50B4",
     headerBackTitleVisible: false,
@@ -48,6 +53,7 @@ export default () => {
     name="용차블루"
     component={TransContainer}
     options={{
+     headerStatusBarHeight: statusBarHeight,
      headerTitleStyle: { marginLeft: -20, paddingLeft: 0 },
      headerLeft: () => (
       <FontAwesome5

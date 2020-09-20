@@ -6,6 +6,8 @@ import {
  Modal,
  View,
  StyleSheet,
+ SafeAreaView,
+ StatusBar,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import HorizontalOrder from "../../components/HorizontalOrder";
@@ -131,7 +133,8 @@ export default ({ refreshFn, loading, now }) => {
   return unsubscribe;
  }, [navigation]);
  return (
-  <>
+  <SafeAreaView flex={1}>
+   <StatusBar barStyle="dark-content" backgroundColor="white" />
    <View
     style={{
      backgroundColor: "rgba(0,0,0,0.4)",
@@ -285,6 +288,6 @@ export default ({ refreshFn, loading, now }) => {
      ))}
     </ScrollContainer>
    </List>
-  </>
+  </SafeAreaView>
  );
 };
