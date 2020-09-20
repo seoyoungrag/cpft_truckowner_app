@@ -1,23 +1,14 @@
 import React, { useState, useEffect } from "react";
 
-import {
- Image,
- AppState,
- View,
- Text,
- StyleSheet,
- Dimensions,
- TouchableOpacity,
- Alert,
-} from "react-native";
-
-import Modal from "react-native-modal";
+import { Image, View, Text, StyleSheet, Alert, Animated } from "react-native";
 
 import CodePush from "react-native-code-push";
-import * as Progress from 'react-native-progress';
+import * as Progress from "react-native-progress";
+import { getStatusBarHeight } from "react-native-status-bar-height";
 
+const statusBarHeight = getStatusBarHeight();
 let codePushOptions = {
-  checkFrequency: CodePush.CheckFrequency.MANUAL,
+ checkFrequency: CodePush.CheckFrequency.MANUAL,
  updateDialog: {
   appendReleaseDescription: true,
   descriptionPrefix: "업데이트 설명",
@@ -33,7 +24,6 @@ const UpdateApp = ({ updateModalVisible }) => {
  const [progressUI, setProgressUI] = useState(null);
  const [indeterminate, setIndeterminate] = useState(false);
  const codePushStatusDidChange = (syncStatus) => {
-  
   switch (syncStatus) {
    case CodePush.SyncStatus.CHECKING_FOR_UPDATE:
     setSyncMessage("업데이트를 체크 중입니다.");
@@ -67,7 +57,6 @@ const UpdateApp = ({ updateModalVisible }) => {
  };
 
  const codePushDownloadDidProgress = (progress) => {
-   
   setProgressUI(progress);
   setIndeterminate(true);
  };
@@ -101,13 +90,16 @@ const UpdateApp = ({ updateModalVisible }) => {
  /** Update pops a confirmation dialog, and then immediately reboots the app */
  const syncImmediate = () => {
   CodePush.sync(
-   { installMode: CodePush.InstallMode.IMMEDIATE, updateDialog: {
-    appendReleaseDescription: true,
-    descriptionPrefix: "업데이트 설명",
-    mandatoryContinueButtonLabel: "앱 업데이트",
-    mandatoryUpdateMessage: "앱 업데이트 기능이 패치되었습니다.",
-    title: "앱 업데이트가 발생했습니다.",
-   } },
+   {
+    installMode: CodePush.InstallMode.IMMEDIATE,
+    updateDialog: {
+     appendReleaseDescription: true,
+     descriptionPrefix: "업데이트 설명",
+     mandatoryContinueButtonLabel: "앱 업데이트",
+     mandatoryUpdateMessage: "앱 업데이트 기능이 패치되었습니다.",
+     title: "앱 업데이트가 발생했습니다.",
+    },
+   },
    codePushStatusDidChange,
    codePushDownloadDidProgress
   );
@@ -117,28 +109,70 @@ const UpdateApp = ({ updateModalVisible }) => {
   }, 500);
   */
  };
+ /*
+ const [animatedHeight] = useState(new Animated.Value(0));
 
+ const _fadein = () => {
+  Animated.timing(animatedHeight, {
+   toValue: 100,
+   duration: 1000,
+  }).start();
+ };
+ const _fadeout = () => {
+  Animated.timing(modalVisible, {
+   toValue: 1,
+   duration: 1000,
+  }).start();
+ };
+ */
  useEffect(() => {
   if (updateModalVisible === false) {
    setSyncMessage("");
   }
   setModalVisible(updateModalVisible);
  }, [updateModalVisible]);
+ useEffect(() => {
+  if (modalVisible) {
+   /*
+   Animated.timing(animatedHeight, {
+    toValue: statusBarHeight,
+    duration: 500,
+    useNativeDriver: false,
+   }).start();
+ */
+   syncImmediate();
+  } else {
+   /*
+   Animated.timing(animatedHeight, {
+    toValue: 0,
+    duration: 500,
+    useNativeDriver: false,
+    delay: 1000,
+   }).start();
+ */
+  }
+ }, [modalVisible]);
  return (
-  <Modal
-   style={{ margin: 0 }}
-   animationInTiming={1000}
-   useNativeDriver={true}
-   animationIn="pulse"
-   coverScreen={true}
-   isVisible={modalVisible}
-   onModalShow={syncImmediate}
-   onRequestClose={() => {
-    Alert.alert("Modal has been closed.");
-   }}
+  <View
+   style={[
+    modalVisible
+     ? { paddingVertical: statusBarHeight, marginTop: statusBarHeight }
+     : {
+        paddingVertical: 0,
+        marginTop: 0,
+       },
+    { marginHorizontal: 10 },
+   ]}
   >
    <View style={styles.container}>
-    <Text style={styles.welcome}>앱 업데이트를 체크합니다.</Text>
+    {!progressUI && (
+     <Image
+      style={styles.image}
+      resizeMode={"cover"}
+      source={require("./assets/laptop_phone_howitworks.png")}
+     />
+    )}
+    <Text style={styles.welcome}>앱 업데이트 체크 중</Text>
 
     {/*
     <TouchableOpacity onPress={sync}>
@@ -149,19 +183,11 @@ const UpdateApp = ({ updateModalVisible }) => {
     </TouchableOpacity>
 
     */}
-    {!progressUI && (
-    <Image
-     style={styles.image}
-     resizeMode={"contain"}
-     source={require("./assets/laptop_phone_howitworks.png")}
-    /> )}
-    {progressUI && (<Progress.Bar
-      style={ {
-        margin: 10,
-      }}
-      progress={progressUI.receivedBytes/progressUI.totalBytes}
+    {progressUI && (
+     <Progress.Bar
+      progress={progressUI.receivedBytes / progressUI.totalBytes}
       indeterminate={indeterminate}
-    />
+     />
     )}
     {progressUI && (
      <Text style={styles.messages}>
@@ -180,7 +206,7 @@ const UpdateApp = ({ updateModalVisible }) => {
     */}
     <Text style={styles.messages}>{syncMessage || ""}</Text>
    </View>
-  </Modal>
+  </View>
  );
 };
 
@@ -189,15 +215,15 @@ const styles = StyleSheet.create({
   flex: 1,
   alignItems: "center",
   backgroundColor: "#F5FCFF",
-  justifyContent: "center",
+  flexDirection: "row",
+  justifyContent: "space-between",
+  paddingHorizontal: 10,
  },
  image: {
-  margin: 30,
-  width: Dimensions.get("window").width - 100,
-  height: (365 * (Dimensions.get("window").width - 100)) / 651,
+  width: 53,
+  height: 30,
  },
  messages: {
-  marginTop: 30,
   textAlign: "center",
  },
  restartToggleButton: {
@@ -209,9 +235,7 @@ const styles = StyleSheet.create({
   fontSize: 17,
  },
  welcome: {
-  fontSize: 20,
   textAlign: "center",
-  margin: 20,
  },
 });
 
