@@ -9,7 +9,6 @@ import {
  KeyboardAvoidingView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import Constants from "expo-constants";
 import { AntDesign } from "@expo/vector-icons";
 import styled from "styled-components/native";
 import HorizontalOrderDetail from "../../components/HorizontalOrderDetail";
@@ -31,7 +30,6 @@ const Detail = styled.View`
 const DetailHeader = styled.View`
  padding-left: 20px;
  padding-right: 20px;
- margin-top: ${Constants.statusBarHeight}px;
  align-items: center;
  flex-direction: row;
  justify-content: space-between;

@@ -10,21 +10,11 @@ import {
  KeyboardAvoidingView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import Constants from "expo-constants";
 import { AntDesign } from "@expo/vector-icons";
 import styled from "styled-components/native";
-import HorizontalOrderDetail from "../../components/HorizontalOrderDetail";
-import { code, trimText } from "../../utils";
 import { useCodes } from "../../CodeContext";
-import {
- useUserRegistInfo,
- useGetUserRegistInfo,
- useSetUserRegistInfo,
-} from "../../UserRegistContext";
+import { useGetUserRegistInfo } from "../../UserRegistContext";
 import DataQueryBox from "../../components/DataQueryBox";
-
-const screenWidth = Math.round(Dimensions.get("window").width);
-const screenHeight = Math.round(Dimensions.get("window").height);
 
 const OuterContainer = styled.SafeAreaView`
  flex: 1;
@@ -40,7 +30,6 @@ const Detail = styled.View`
 const DetailHeader = styled.View`
  padding-left: 20px;
  padding-right: 20px;
- margin-top: ${Constants.statusBarHeight}px;
  align-items: center;
  flex-direction: row;
  justify-content: space-between;

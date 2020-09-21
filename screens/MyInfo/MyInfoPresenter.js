@@ -9,18 +9,13 @@ import {
  KeyboardAvoidingView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import Constants from "expo-constants";
 import { Entypo } from "@expo/vector-icons";
 import HorizontalMyOrders from "../../components/HorizontalMyOrders";
 import ScrollContainer from "../../components/ScrollContainer";
-import { code, trimText } from "../../utils";
-import { useIsModal, useSetIsModalProp } from "../../ModalContext";
+import { code } from "../../utils";
+import { useIsModal } from "../../ModalContext";
 import { useCodes } from "../../CodeContext";
-import {
- useUserRegistInfo,
- useGetUserRegistInfo,
- useSetUserRegistInfo,
-} from "../../UserRegistContext";
+import { useGetUserRegistInfo } from "../../UserRegistContext";
 import styled from "styled-components/native";
 import Title from "../../components/Title";
 
@@ -131,74 +126,6 @@ const DataBody = styled.View`
  flex-direction: column;
  justify-content: flex-start;
  align-items: flex-start;
-`;
-
-const DataBodyColumn = styled.View`
- flex-direction: column;
- justify-content: flex-start;
- align-items: flex-start;
-`;
-
-const DataBodyTitle = styled.View`
- padding-bottom: 10px;
-`;
-
-const DataBodyTitleText = styled.Text`
- font-size: 18px;
- color: grey;
-`;
-
-const DataBodyContent = styled.View`
- padding-bottom: 10px;
-`;
-
-const DataBodyContentText = styled.Text`
- font-size: 16px;
- padding-bottom: 10px;
-`;
-
-const OuterContainer = styled.SafeAreaView`
- flex: 1;
-`;
-
-const Detail = styled.View`
- flex: 1;
- flex-direction: column;
- background-color: white;
-`;
-
-const DetailHeader = styled.View`
- padding-left: 20px;
- padding-right: 20px;
- margin-top: ${Constants.statusBarHeight}px;
- align-items: center;
- flex-direction: row;
- justify-content: space-between;
-`;
-const DetailFooter = styled.View`
- flex-direction: row;
- justify-content: space-around;
-`;
-
-const CancelBtn = styled.TouchableOpacity`
- flex: 0.3;
- align-items: center;
- justify-content: center;
- background-color: whitesmoke;
- height: 50px;
-`;
-const ConfirmBtn = styled.TouchableOpacity`
- flex: 0.7;
- align-items: center;
- justify-content: center;
- background-color: #3e50b4;
- height: 50px;
-`;
-const ConfirmBtnText = styled.Text`
- text-align: center;
- color: white;
- font-weight: bold;
- font-size: 24px;
 `;
 
 const TransProgress = styled.View`

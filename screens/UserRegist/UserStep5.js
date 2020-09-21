@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Dimensions, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 import { useLogIn } from "../../AuthContext";
-import Constants from "expo-constants";
 import {
  useGetUserRegistInfo,
  useSetUserRegistInfo,
