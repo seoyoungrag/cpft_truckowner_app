@@ -4,14 +4,12 @@ import styled from "styled-components/native";
 import { useForm } from "react-hook-form";
 import { AntDesign } from "@expo/vector-icons";
 import {
- useUserRegistInfo,
  useGetUserRegistInfo,
  useSetUserRegistInfo,
 } from "../../UserRegistContext";
 import ScrollContainer from "../../components/ScrollContainer";
 import { View } from "react-native-animatable";
 import FloatingLabelInput from "../../components/FloatingLabelInput";
-import Constants from "expo-constants";
 
 const screenWidth = Math.round(Dimensions.get("window").width);
 const screenHeight = Math.round(Dimensions.get("window").height);
@@ -29,7 +27,6 @@ const Modal = styled.View`
 const ModalHeader = styled.View`
  padding-left: 20px;
  padding-right: 20px;
- margin-top: ${Constants.statusBarHeight}px;
  align-items: center;
  flex-direction: row;
  justify-content: space-between;
@@ -285,12 +282,12 @@ export default ({ navigation, route }) => {
       <Container
        style={{ flex: 1, justifyContent: "flex-start", marginTop: 0 }}
       >
-       <DataName>휴대폰 인증</DataName>
+       <DataName style={{ marginTop: 0 }}>휴대폰 인증</DataName>
        <View style={{ flexDirection: "column" }}>
         <View
          style={{
           flexDirection: "row",
-          justifyContent: "flex-end",
+          justifyContent: "center",
           alignItems: "flex-end",
          }}
         >

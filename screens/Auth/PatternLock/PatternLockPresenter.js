@@ -5,7 +5,8 @@ import {
  View,
  Animated,
  PanResponder,
- Alert,
+ StatusBar,
+ SafeAreaView,
 } from "react-native";
 import Svg, { Line, Circle } from "react-native-svg";
 import constants from "../../../constants";
@@ -288,7 +289,8 @@ export default ({
   */
  }, [snap, activeLine]);
  return (
-  <View style={styles.container}>
+  <SafeAreaView style={styles.container}>
+   <StatusBar barStyle="lite-content" backgroundColor="#3e50b4" />
    <View style={styles.hintContainer}>
     <Text style={styles.hintText}>{message}</Text>
    </View>
@@ -357,7 +359,7 @@ export default ({
      </Svg>
     </Animated.View>
    ) : null}
-  </View>
+  </SafeAreaView>
  );
 };
 

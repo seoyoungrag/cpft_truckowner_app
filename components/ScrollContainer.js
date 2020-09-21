@@ -37,6 +37,8 @@ const ScrollContainer = ({
     justifyContent: loading ? "center" : "flex-start",
     ...contentContainerStyle,
    }}
+   persistentScrollbar={true}
+   showsVerticalScrollIndicator={true}
   >
    {loading ? <ActivityIndicator color="#3e50b4" size="large" /> : children}
   </ScrollView>

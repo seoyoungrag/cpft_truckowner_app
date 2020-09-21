@@ -1,4 +1,5 @@
 import React from "react";
+import { StatusBar } from "react-native";
 import styled from "styled-components/native";
 import ScrollContainer from "../../components/ScrollContainer";
 
@@ -68,9 +69,7 @@ const DataValueRed = styled.Text`
 
 const OuterContainer = styled.View`
  flex: 1;
- margin: 1px;
-
- margin-top: ${statusBarHeight}px;
+ background-color: white;
 `;
 
 const Modal = styled.View`
@@ -117,6 +116,7 @@ const ConfirmBtnText = styled.Text`
 
 export default ({ confrimBtnClicked }) => (
  <OuterContainer>
+  <StatusBar barStyle="dark-content" backgroundColor="white" />
   <Modal>
    <ModalHeader>
     <Info>

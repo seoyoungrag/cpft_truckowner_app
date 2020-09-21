@@ -10,15 +10,13 @@ import {
  Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import Constants from "expo-constants";
 import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
 import YearMonthPicker from "../../components/YearMonthPicker";
-import { code, trimText } from "../../utils";
+import { code } from "../../utils";
 import { useCodes } from "../../CodeContext";
 import { useGetUserRegistInfo } from "../../UserRegistContext";
 import styled from "styled-components/native";
 import HorizontalTransDetail from "../../components/HorizontalTransDetail";
-import { color } from "react-native-reanimated";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -158,7 +156,6 @@ const DataBodyContentText = styled.Text`
 const DetailHeader = styled.View`
  padding-left: 20px;
  padding-right: 20px;
- margin-top: ${Constants.statusBarHeight}px;
  align-items: center;
  flex-direction: row;
  justify-content: space-between;

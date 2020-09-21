@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {
- Dimensions,
  Text,
  TouchableOpacity,
  Modal,
@@ -12,18 +11,9 @@ import {
 import styled from "styled-components/native";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import Constants from "expo-constants";
-import ScrollContainer from "../../components/ScrollContainer";
-import List from "../../components/List";
 import { useCodes } from "../../CodeContext";
-import { code, trimText } from "../../utils";
-import DataQueryBox from "../../components/DataQueryBox";
 
-import {
- useUserRegistInfo,
- useGetUserRegistInfo,
- useSetUserRegistInfo,
-} from "../../UserRegistContext";
+import { useGetUserRegistInfo } from "../../UserRegistContext";
 
 const OuterContainer = styled.SafeAreaView`
  flex: 1;
@@ -38,7 +28,6 @@ const Detail = styled.View`
 const DetailHeader = styled.View`
  padding-left: 20px;
  padding-right: 20px;
- margin-top: ${Constants.statusBarHeight}px;
  align-items: center;
  flex-direction: row;
  justify-content: space-between;

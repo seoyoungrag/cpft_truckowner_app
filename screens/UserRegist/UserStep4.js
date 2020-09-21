@@ -3,9 +3,8 @@ import { Dimensions, TouchableOpacity, View, Text } from "react-native";
 import styled from "styled-components/native";
 import { useForm } from "react-hook-form";
 import { AntDesign } from "@expo/vector-icons";
-import Constants from "expo-constants";
 import { Camera } from "expo-camera";
-import { FontAwesome5, Entypo } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
 import {
  useGetUserRegistInfo,
  useSetUserRegistInfo,
@@ -14,7 +13,6 @@ import ScrollContainer from "../../components/ScrollContainer";
 import FloatingLabelInput from "../../components/FloatingLabelInput";
 
 const screenWidth = Math.round(Dimensions.get("window").width);
-const screenHeight = Math.round(Dimensions.get("window").height);
 
 const OuterContainer = styled.SafeAreaView`
  flex: 1;
@@ -29,7 +27,6 @@ const Modal = styled.View`
 const ModalHeader = styled.View`
  padding-left: 20px;
  padding-right: 20px;
- margin-top: ${Constants.statusBarHeight}px;
  align-items: center;
  flex-direction: row;
  justify-content: space-between;
@@ -61,10 +58,6 @@ const ConfirmBtnText = styled.Text`
  font-size: 16px;
 `;
 
-const Data = styled.View`
- margin-top: 0px;
- padding: 0px 0px;
-`;
 const Container = styled.View`
  flex: 1;
  flex-direction: column;
@@ -78,51 +71,6 @@ const DataName = styled.Text`
  font-weight: bold;
  font-size: 20px;
  margin-left: 40px;
-`;
-
-const DataValue = styled.Text`
- margin-left: 40px;
- margin-right: 40px;
- color: black;
- opacity: 0.8;
- font-weight: 500;
- font-size: 16px;
-`;
-
-const DataValueBtn = styled.TouchableOpacity`
- width: ${(screenWidth * 3) / 4}px;
- border-width: 1px;
- border-radius: 10px;
- border-color: silver;
- padding: 10px;
- margin-top: 10px;
- margin-left: 40px;
- margin-right: 40px;
- color: black;
- opacity: 0.8;
- font-weight: 500;
- font-size: 16px;
- flex-direction: row;
- justify-content: space-between;
- align-items: center;
-`;
-
-const DataValueBtnSec = styled.TouchableOpacity`
- width: ${(screenWidth * 3) / 4}px;
- border-width: 1px;
- border-radius: 10px;
- border-color: silver;
- padding: 10px;
- margin-top: 10px;
- margin-left: 40px;
- margin-right: 40px;
- color: black;
- opacity: 0.8;
- font-weight: 500;
- font-size: 16px;
- flex-direction: row;
- justify-content: space-between;
- align-items: center;
 `;
 
 const DataValueRed = styled.Text`

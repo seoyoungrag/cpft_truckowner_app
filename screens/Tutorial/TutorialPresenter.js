@@ -6,7 +6,6 @@ import {
  LayoutAnimation,
  Platform,
  UIManager,
- Dimensions,
 } from "react-native";
 import Indicator from "./Indicator";
 import ChildItem from "./ChildItem";
@@ -81,7 +80,6 @@ export default class TutorialPresenter extends Component {
         marginHorizontal: 40,
         borderRadius: 5,
         marginVertical: 20,
-        color: "#3e50b4",
        },
        item: item,
        imageKey: this.props.imageKey,

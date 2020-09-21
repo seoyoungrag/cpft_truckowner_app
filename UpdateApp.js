@@ -1,11 +1,19 @@
 import React, { useState, useEffect } from "react";
 
-import { Image, View, Text, StyleSheet, Alert, Animated } from "react-native";
+import {
+ Image,
+ Dimensions,
+ Text,
+ StyleSheet,
+ Alert,
+ Animated,
+} from "react-native";
 
 import CodePush from "react-native-code-push";
 import * as Progress from "react-native-progress";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 
+const { width } = Dimensions.get("screen");
 const statusBarHeight = getStatusBarHeight();
 let codePushOptions = {
  checkFrequency: CodePush.CheckFrequency.MANUAL,
@@ -35,13 +43,12 @@ const UpdateApp = ({ updateModalVisible }) => {
     setSyncMessage("사용자 액션을 기다립니다.");
     break;
    case CodePush.SyncStatus.INSTALLING_UPDATE:
+    setIndeterminate(false);
     setSyncMessage("업데이트를 설치합니다.");
     break;
    case CodePush.SyncStatus.UP_TO_DATE:
     setSyncMessage("앱이 최신버전입니다.");
-    setTimeout(() => {
-     setModalVisible(false);
-    }, 500);
+    fadeOutAnimation();
     break;
    case CodePush.SyncStatus.UPDATE_IGNORED:
     setSyncMessage("사용자에 의해 업데이트가 취소되었습니다.");
@@ -109,22 +116,25 @@ const UpdateApp = ({ updateModalVisible }) => {
   }, 500);
   */
  };
- /*
- const [animatedHeight] = useState(new Animated.Value(0));
 
- const _fadein = () => {
+ const fadeOutAnimation = () => {
   Animated.timing(animatedHeight, {
-   toValue: 100,
-   duration: 1000,
-  }).start();
- };
- const _fadeout = () => {
-  Animated.timing(modalVisible, {
    toValue: 1,
-   duration: 1000,
+   duration: 500,
+   useNativeDriver: true,
+   delay: 1000,
   }).start();
+  setTimeout(() => {
+   setModalVisible(false);
+   Animated.timing(animatedHeight, {
+    toValue: -1,
+    duration: 0,
+    useNativeDriver: true,
+   }).start();
+  }, 1500);
  };
- */
+ const [animatedHeight, setAnimatedHeight] = useState(new Animated.Value(-1));
+
  useEffect(() => {
   if (updateModalVisible === false) {
    setSyncMessage("");
@@ -133,46 +143,51 @@ const UpdateApp = ({ updateModalVisible }) => {
  }, [updateModalVisible]);
  useEffect(() => {
   if (modalVisible) {
-   /*
    Animated.timing(animatedHeight, {
-    toValue: statusBarHeight,
-    duration: 500,
-    useNativeDriver: false,
+    toValue: 0,
+    duration: 100,
+    useNativeDriver: true,
    }).start();
- */
+
    syncImmediate();
   } else {
    /*
    Animated.timing(animatedHeight, {
-    toValue: 0,
+    toValue: 1,
     duration: 500,
-    useNativeDriver: false,
+    useNativeDriver: true,
     delay: 1000,
    }).start();
- */
+   */
   }
  }, [modalVisible]);
  return (
-  <View
+  <Animated.View
    style={[
     styles.container,
     modalVisible
-     ? { height: statusBarHeight * 2 }
+     ? { height: statusBarHeight }
      : {
         height: 0,
        },
-    {},
+    {
+     transform: [
+      {
+       translateX: animatedHeight.interpolate({
+        inputRange: [-1, 0, 1],
+        outputRange: [-width, 0, width],
+       }),
+      },
+     ],
+    },
    ]}
   >
-   {progressUI == 0 && (
-    <Image
-     style={styles.image}
-     resizeMode={"contain"}
-     source={require("./assets/laptop_phone_howitworks.png")}
-    />
-   )}
-   <Text style={styles.welcome}>앱 업데이트 체크 중</Text>
-
+   <Image
+    style={styles.image}
+    resizeMode={"contain"}
+    source={require("./assets/launcher.png")}
+   />
+   {progressUI == 0 && <Text style={styles.welcome}>앱 업데이트 체크 중</Text>}
    {/*
     <TouchableOpacity onPress={sync}>
      <Text style={styles.syncButton}>Press for background sync</Text>
@@ -185,7 +200,7 @@ const UpdateApp = ({ updateModalVisible }) => {
    {progressUI != 0 && progressUI && (
     <Progress.Bar
      progress={progressUI.receivedBytes / progressUI.totalBytes}
-     indeterminate={true}
+     indeterminate={indeterminate}
     />
    )}
    {progressUI != 0 && progressUI && (
@@ -204,20 +219,22 @@ const UpdateApp = ({ updateModalVisible }) => {
     </TouchableOpacity>
     */}
    <Text style={styles.messages}>{syncMessage || ""}</Text>
-  </View>
+  </Animated.View>
  );
 };
 
 const styles = StyleSheet.create({
  container: {
-  alignItems: "flex-end",
+  alignItems: "center",
   backgroundColor: "white",
   flexDirection: "row",
   justifyContent: "flex-start",
  },
  image: {
-  width: 53,
-  height: statusBarHeight - 2,
+  marginLeft: statusBarHeight / 2,
+  width: statusBarHeight,
+  height: statusBarHeight,
+  transform: [{ rotateY: "180deg" }],
  },
  messages: {
   textAlign: "center",

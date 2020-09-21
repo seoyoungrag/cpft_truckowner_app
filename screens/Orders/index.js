@@ -44,7 +44,7 @@ export default () => {
      backgroundColor: "white",
      shadowColor: "black",
      borderBottomColor: "silver",
-     height: statusBarHeight * 2,
+     height: statusBarHeight,
     },
     headerTintColor: "#3e50b4",
     headerBackTitleVisible: false,
@@ -54,7 +54,7 @@ export default () => {
     name="용차블루"
     component={OrdersContainer}
     options={{
-     headerStatusBarHeight: statusBarHeight,
+     headerStatusBarHeight: 0,
      headerTitleStyle: {
       marginLeft: -20,
       paddingLeft: 0,

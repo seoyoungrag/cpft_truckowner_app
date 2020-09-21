@@ -11,15 +11,10 @@ import { useNavigation } from "@react-navigation/native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import HorizontalTrans from "../../components/HorizontalTrans";
 import ScrollContainer from "../../components/ScrollContainer";
-import List from "../../components/List";
-import { code, trimText } from "../../utils";
-import { useIsModal, useSetIsModalProp } from "../../ModalContext";
+import { code } from "../../utils";
+import { useIsModal } from "../../ModalContext";
 import { useCodes } from "../../CodeContext";
-import {
- useUserRegistInfo,
- useGetUserRegistInfo,
- useSetUserRegistInfo,
-} from "../../UserRegistContext";
+import { useGetUserRegistInfo } from "../../UserRegistContext";
 import YearMonthPicker from "../../components/YearMonthPicker";
 
 const { width, height } = Dimensions.get("screen");
@@ -207,7 +202,7 @@ export default ({ refreshFn, loading, now }) => {
      style={{
       alignItems: "center",
       flexDirection: "row",
-      backgroundColor: "#FBF9FA",
+      backgroundColor: "white",
       width: width,
       paddingLeft: 20,
       paddingRight: 20,

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Dimensions, StyleSheet } from "react-native";
+import { Dimensions, StatusBar } from "react-native";
 import styled from "styled-components/native";
 import TutorialPresenter from "./TutorialPresenter";
 import ScrollContainer from "../../components/ScrollContainer";
@@ -7,11 +7,6 @@ import { useTutorialPass } from "../../TutorialContext";
 import snapshot1 from "../../assets/snapshot1.jpg";
 import snapshot2 from "../../assets/snapshot2.jpg";
 import snapshot3 from "../../assets/snapshot3.jpg";
-// import {FlatListSlider} from 'react-native-flatlist-slider';
-
-import { getStatusBarHeight } from "react-native-status-bar-height";
-
-const statusBarHeight = getStatusBarHeight();
 
 const ModalFooter = styled.View`
  position: absolute;
@@ -38,7 +33,7 @@ const ConfirmBtnText = styled.Text`
 
 const OuterContainer = styled.SafeAreaView`
  flex: 1;
- margin-top: ${statusBarHeight}px;
+ background-color: white;
 `;
 
 export default () => {
@@ -64,6 +59,7 @@ export default () => {
  const screenHeight = Math.round(Dimensions.get("window").height);
  return (
   <OuterContainer>
+   <StatusBar barStyle="dark-content" backgroundColor="white" />
    <ScrollContainer
     loading={false}
     contentContainerStyle={{

@@ -37,6 +37,7 @@ import { codeApi } from "./api";
 import UpdateApp from "./UpdateApp";
 import { startUpdateFlow } from "react-native-android-inapp-updates";
 import DeviceInfo from "react-native-device-info";
+import VersionCheck from "react-native-version-check";
 
 const updateModes = "immediate";
 
@@ -78,14 +79,41 @@ function App() {
  useEffect(() => {
   updateFromPlayStore = async () => {
    const isEmulator = await DeviceInfo.isEmulator();
-   console.log(
-    "CUSTOMTAG",
-    "App has come to the foreground! from ",
-    appState.current
-   );
-   console.log("CUSTOMTAG", isEmulator);
+
+   /*
+    //공개 버전이 되어야 쓸 수 있음.
+    VersionCheck.getLatestVersion({
+     forceUpdate: true,
+     provider: () =>
+      fetch(
+       "https://play.google.com/store/apps/details?id=kr.co.teamfresh.cpft.truckowner.android"
+      )
+       .then((r) => {
+        console.log(r);
+        return r.json();
+       })
+       .then(({ version }) => version), 
+    }).then((latestVersion) => {
+     console.log(latestVersion);
+    });
+   */
 
    if (!isEmulator) {
+    //공개 버전이 되어야 쓸 수 있음.
+    /*
+    try {
+     await VersionCheck.needUpdate().then(async (res) => {
+      if (res.isNeeded) {
+       try {
+        const result = await startUpdateFlow(updateModes);
+        console.log(result);
+       } catch (e) {
+        console.log("CUSTOMTAG error:", e);
+       }
+      }
+     });
+    } catch (e) {}
+    */
     try {
      const result = await startUpdateFlow(updateModes);
      console.log(result);
@@ -283,7 +311,6 @@ function App() {
      </Provider>
     </>
    ) : null}
-   <StatusBar translucent />
   </SafeAreaView>
  );
 }

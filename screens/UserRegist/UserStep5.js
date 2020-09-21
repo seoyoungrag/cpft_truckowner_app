@@ -25,7 +25,6 @@ const Modal = styled.View`
 const ModalHeader = styled.View`
  padding-left: 20px;
  padding-right: 20px;
- margin-top: ${Constants.statusBarHeight}px;
  align-items: center;
  flex-direction: row;
  justify-content: space-between;
@@ -85,51 +84,6 @@ const DataValue = styled.Text`
  font-size: 14px;
 `;
 
-const DataValueBtn = styled.TouchableOpacity`
- width: ${(screenWidth * 3) / 4}px;
- border-width: 1px;
- border-radius: 10px;
- border-color: silver;
- padding: 10px;
- margin-top: 10px;
- margin-left: 40px;
- margin-right: 40px;
- color: black;
- opacity: 0.8;
- font-weight: 500;
- font-size: 16px;
- flex-direction: row;
- justify-content: space-between;
- align-items: center;
-`;
-
-const DataValueBtnSec = styled.TouchableOpacity`
- width: ${(screenWidth * 3) / 4}px;
- border-width: 1px;
- border-radius: 10px;
- border-color: silver;
- padding: 10px;
- margin-top: 10px;
- margin-left: 40px;
- margin-right: 40px;
- color: black;
- opacity: 0.8;
- font-weight: 500;
- font-size: 16px;
- flex-direction: row;
- justify-content: space-between;
- align-items: center;
-`;
-
-const DataValueRed = styled.Text`
- width: 200px;
- margin-left: 40px;
- margin-right: 40px;
- color: red;
- opacity: 0.8;
- font-weight: 500;
- border-radius: 10px;
-`;
 export default ({ navigation }) => {
  const logIn = useLogIn();
  const [userRegistInfo, setUserRegistInfoProp] = useState(null);

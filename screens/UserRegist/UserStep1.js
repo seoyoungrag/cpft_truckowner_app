@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Dimensions, Text, TouchableOpacity } from "react-native";
+import { Dimensions, Text, TouchableOpacity, StatusBar } from "react-native";
 import styled from "styled-components/native";
 import { useForm } from "react-hook-form";
 import { AntDesign } from "@expo/vector-icons";
-import Constants from "expo-constants";
 import {
  useGetUserRegistInfo,
  useSetUserRegistInfo,
@@ -28,7 +27,6 @@ const Modal = styled.View`
 const ModalHeader = styled.View`
  padding-left: 20px;
  padding-right: 20px;
- margin-top: ${Constants.statusBarHeight}px;
  align-items: center;
  flex-direction: row;
  justify-content: space-between;
@@ -71,7 +69,6 @@ const Container = styled.View`
 `;
 
 const DataName = styled.Text`
- margin-top: 30px;
  color: #0d0d0d;
  opacity: 0.8;
  font-weight: bold;
@@ -213,6 +210,7 @@ export default ({ navigation }) => {
  useEffect(() => {}, []);
  return (
   <OuterContainer>
+   <StatusBar barStyle="dark-content" backgroundColor="white" />
    <Modal>
     <ModalHeader>
      <TouchableOpacity
@@ -354,7 +352,7 @@ export default ({ navigation }) => {
         </View>
        </View>
        <View style={{ flexDirection: "column" }}>
-        <DataName>본인인증 동의</DataName>
+        <DataName style={{ marginTop: 30 }}>본인인증 동의</DataName>
         <DataValue>본인인증을 위한 약관에 동의</DataValue>
         <DataValueBtn
          onPress={() => {
