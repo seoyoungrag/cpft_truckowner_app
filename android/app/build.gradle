@@ -1,4 +1,5 @@
 apply plugin: "com.android.application"
+apply plugin: 'com.google.gms.google-services'
 
 import com.android.build.OutputFile
 
@@ -76,6 +77,25 @@ import com.android.build.OutputFile
  *   extraPackagerArgs: []
  * ]
  */
+project.ext {
+  set('react-native', [
+    versions: [
+      // Overriding Build/Android SDK Versions
+      android : [
+        minSdk    : 19,
+        targetSdk : 29,
+        compileSdk: 29,
+        buildTools: "29.0.3"
+      ],
+
+      // Overriding Library SDK Versions
+      firebase: [
+        // Override Firebase SDK Version
+        bom           : "25.7.0"
+      ],
+    ],
+  ])
+}
 
 project.ext.react = [
     enableHermes: false
@@ -131,10 +151,11 @@ android {
     }
 
     defaultConfig {
+        multiDexEnabled true
         applicationId "kr.co.teamfresh.cpft.truckowner.android"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 15
+        versionCode 16
         versionName "1.0"
     }
     splits {
