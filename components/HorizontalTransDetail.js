@@ -91,7 +91,7 @@ const DataBottomBtn = styled.TouchableOpacity`
  flex: 1;
  align-items: center;
  justify-content: center;
- background-color: #3a99fc;
+ background-color: #3e50b4;
  border-color: white;
  height: 50px;
 `;
@@ -232,16 +232,16 @@ const Horizontal = ({
     <TransProgress>
      <Text style={{ textAlignVertical: "center" }}>
       명세서{" "}
-      <Entypo name="chevron-with-circle-down" size={18} color="#3a99fc" />{" "}
+      <Entypo name="chevron-with-circle-down" size={18} color="#3e50b4" />{" "}
      </Text>
      <Text>
-      <Entypo name="dot-single" size={18} color="#3a99fc" />{" "}
-      <Entypo name="dot-single" size={18} color="#3a99fc" />{" "}
-      <Entypo name="dot-single" size={18} color="#3a99fc" />{" "}
+      <Entypo name="dot-single" size={18} color="#3e50b4" />{" "}
+      <Entypo name="dot-single" size={18} color="#3e50b4" />{" "}
+      <Entypo name="dot-single" size={18} color="#3e50b4" />{" "}
      </Text>
      <Text style={{ textAlignVertical: "center" }}>
       세금계산서{" "}
-      <Entypo name="chevron-with-circle-down" size={18} color="#3a99fc" />{" "}
+      <Entypo name="chevron-with-circle-down" size={18} color="#3e50b4" />{" "}
      </Text>
      <Text>
       <Entypo name="dot-single" size={18} color="black" />{" "}
@@ -281,7 +281,7 @@ const Horizontal = ({
     <TransProgress>
      <Text style={{ textAlignVertical: "center" }}>
       명세서{" "}
-      <Entypo name="chevron-with-circle-down" size={18} color="#3a99fc" />{" "}
+      <Entypo name="chevron-with-circle-down" size={18} color="#3e50b4" />{" "}
      </Text>
      <Text>
       <Entypo name="dot-single" size={18} color="black" />{" "}
@@ -308,16 +308,16 @@ const Horizontal = ({
    {/**
    <TransProgress>
     <Text style={{ textAlignVertical: "center" }}>
-     명세서 <Entypo name="chevron-with-circle-down" size={18} color="#3a99fc" />{" "}
+     명세서 <Entypo name="chevron-with-circle-down" size={18} color="#3e50b4" />{" "}
     </Text>
     <Text>
-     <Entypo name="dot-single" size={18} color="#3a99fc" />{" "}
-     <Entypo name="dot-single" size={18} color="#3a99fc" />{" "}
-     <Entypo name="dot-single" size={18} color="#3a99fc" />{" "}
+     <Entypo name="dot-single" size={18} color="#3e50b4" />{" "}
+     <Entypo name="dot-single" size={18} color="#3e50b4" />{" "}
+     <Entypo name="dot-single" size={18} color="#3e50b4" />{" "}
     </Text>
     <Text style={{ textAlignVertical: "center" }}>
      세금계산서{" "}
-     <Entypo name="chevron-with-circle-down" size={18} color="#3a99fc" />{" "}
+     <Entypo name="chevron-with-circle-down" size={18} color="#3e50b4" />{" "}
     </Text>
     <Text>
      <Entypo name="dot-single" size={18} color="black" />{" "}

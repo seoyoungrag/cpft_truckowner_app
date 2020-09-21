@@ -64,7 +64,7 @@ export default ({ userPattern, loginSuccess }) => {
      containerHeight={PATTERN_CONTAINER_HEIGHT}
      correctPattern={userPattern}
      correctPatternBackDoor={CORRECT_UNLOCK_PATTERN}
-     hint="Z를 그려보셈."
+     hint="Z를 그려보셈.(테스트기간만 제공)"
      onPatternMatch={onBackPress}
      onMatchedPattern={onMatchedPattern}
     />
@@ -86,7 +86,7 @@ export default ({ userPattern, loginSuccess }) => {
 const styles = StyleSheet.create({
  root: {
   flex: 1,
-  backgroundColor: "#3a99fc",
+  backgroundColor: "#3e50b4",
  },
  backgroundContainer: {
   flex: 1,

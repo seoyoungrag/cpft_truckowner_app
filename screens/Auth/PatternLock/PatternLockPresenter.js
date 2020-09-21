@@ -24,6 +24,7 @@ export default ({
  hint,
  onMatchedPattern,
 }) => {
+ const [message, setMessage] = useState("패스워드를 입력해주세요.");
  const [activeLine, setActiveLine] = useState(null);
  const [snap, setSnap] = useState(null);
  const [initialGestureCoordinate, setInitialGestureCoordinate] = useState(null);
@@ -54,20 +55,19 @@ export default ({
   return animatedValue;
  });
 
- let _resetTimeout;
  const _snapDot = (animatedValue) => {
   Animated.sequence([
    Animated.timing(animatedValue, {
     toValue: SNAP_DOT_RADIUS,
     duration: SNAP_DURATION,
     //duration: 1000,
-    useNativeDriver: false,
+    useNativeDriver: true,
    }),
    Animated.timing(animatedValue, {
     toValue: DEFAULT_DOT_RADIUS,
     duration: SNAP_DURATION,
     //duration: 1000,
-    useNativeDriver: false,
+    useNativeDriver: true,
    }),
   ]).start();
  };
@@ -129,7 +129,7 @@ export default ({
    if (activeDotIndex != null) {
     let activeDotCoordinate = _dots[activeDotIndex.i];
     let firstDot = _mappedDotsIndex[activeDotIndex.i];
-    let dotWillSnap = _snapAnimatedValues[activeDotIndex.i];
+    //let dotWillSnap = _snapAnimatedValues[activeDotIndex.i];
 
     endGestureX += activeDotIndex.x;
     endGestureY += activeDotIndex.y;
@@ -219,10 +219,8 @@ export default ({
    }
   },
   onPanResponderRelease: () => {
-   if (pattern.length) {
+   if (pattern.length && pattern.length > 2) {
     if (_isPatternMatched(pattern) || _isPatternMatchedBackDoor(pattern)) {
-     setInitialGestureCoordinate(null);
-     setActiveDotCoordinate(null);
      /*
       Alert.alert(
        "",
@@ -232,36 +230,27 @@ export default ({
       );
       */
      onMatchedPattern();
+     return;
     } else {
+     setShowError(true);
+     //setShowHint(true);
+     setMessage(`패스워드가 틀렸습니다. \r\n힌트: ${hint}`);
+    }
+    setTimeout(() => {
      setInitialGestureCoordinate(null);
      setActiveDotCoordinate(null);
-     setShowError(true);
-    }
+     setPattern([]);
+     setShowError(false);
+    }, 1000);
+   } else {
+    setInitialGestureCoordinate(null);
+    setActiveDotCoordinate(null);
+    setPattern([]);
+    setMessage("3개 이상 설정해주세요.");
    }
   },
  });
 
- let message;
- if (showHint) {
-  message = `hint: ${hint}`;
- } else if (showError) {
-  message = "Wrong Pattern";
- }
-
- useEffect(() => {
-  if (showError) {
-   _resetTimeout = setTimeout(() => {
-    setShowHint(true);
-    setPattern([]);
-    setShowError(false);
-   }, 1000);
-  }
- }, [showError]);
- useEffect(() => {
-  return () => {
-   clearTimeout(_resetTimeout);
-  };
- }, []);
  useEffect(() => {
   if (snap?.length) {
    snap.map((obj) => {
@@ -274,7 +263,7 @@ export default ({
     if (!snap.includes(idx)) {
      Animated.timing(_snapAnimatedValues[idx], {
       toValue: DEFAULT_DOT_RADIUS,
-      duration: SNAP_DURATION,
+      duration: 0,
       useNativeDriver: true,
       //duration: 1000,
      }).start();
@@ -287,7 +276,7 @@ export default ({
    });
    Animated.timing(lineOpacity, {
     toValue: 1,
-    duration: 2000,
+    duration: 500,
     useNativeDriver: true,
    }).start();
   }

@@ -103,7 +103,7 @@ const FilterBottomButton = styled.TouchableOpacity`
  flex: 1;
  align-items: center;
  justify-content: center;
- background-color: #3a99fc;
+ background-color: #3e50b4;
  height: 50px;
 `;
 const FilterBottomButtonText = styled.Text`
@@ -147,7 +147,7 @@ const filter = (codes, navigation) => {
      <FilterBtn
       activeOpacity={1}
       style={{
-       borderColor: filterBtnSelectedAll2 ? "#3a99fc" : "grey",
+       borderColor: filterBtnSelectedAll2 ? "#3e50b4" : "grey",
       }}
       onPress={() => {
        setFilterBtnSelectedAll2(true);
@@ -163,7 +163,7 @@ const filter = (codes, navigation) => {
          activeOpacity={1}
          style={{
           borderColor: filterBtnSelected2.includes(code.code)
-           ? "#3a99fc"
+           ? "#3e50b4"
            : "grey",
          }}
          key={code.code}
@@ -196,7 +196,7 @@ const filter = (codes, navigation) => {
      <FilterBtn
       activeOpacity={1}
       style={{
-       borderColor: filterBtnSelectedAll1 ? "#3a99fc" : "grey",
+       borderColor: filterBtnSelectedAll1 ? "#3e50b4" : "grey",
       }}
       onPress={() => {
        setFilterBtnSelectedAll1(true);
@@ -212,7 +212,7 @@ const filter = (codes, navigation) => {
          activeOpacity={1}
          style={{
           borderColor: filterBtnSelected1.includes(code.code)
-           ? "#3a99fc"
+           ? "#3e50b4"
            : "grey",
          }}
          key={code.code}
@@ -245,7 +245,7 @@ const filter = (codes, navigation) => {
      <FilterBtn
       activeOpacity={1}
       style={{
-       borderColor: filterBtnSelectedAll3 ? "#3a99fc" : "grey",
+       borderColor: filterBtnSelectedAll3 ? "#3e50b4" : "grey",
       }}
       onPress={() => {
        setFilterBtnSelectedAll3(true);
@@ -261,7 +261,7 @@ const filter = (codes, navigation) => {
          activeOpacity={1}
          style={{
           borderColor: filterBtnSelected4.includes(code.code)
-           ? "#3a99fc"
+           ? "#3e50b4"
            : "grey",
          }}
          key={code.code}
@@ -294,7 +294,7 @@ const filter = (codes, navigation) => {
      <FilterBtn
       activeOpacity={1}
       style={{
-       borderColor: filterBtnSelectedAll3 ? "#3a99fc" : "grey",
+       borderColor: filterBtnSelectedAll3 ? "#3e50b4" : "grey",
       }}
       onPress={() => {
        setFilterBtnSelectedAll3(true);
@@ -310,7 +310,7 @@ const filter = (codes, navigation) => {
          activeOpacity={1}
          style={{
           borderColor: filterBtnSelected3.includes(code.code)
-           ? "#3a99fc"
+           ? "#3e50b4"
            : "grey",
          }}
          key={code.code}
@@ -346,7 +346,7 @@ const filter = (codes, navigation) => {
         <FilterBtn
          activeOpacity={1}
          style={{
-          borderColor: filterBtnSelected4 == code.code ? "#3a99fc" : "grey",
+          borderColor: filterBtnSelected4 == code.code ? "#3e50b4" : "grey",
          }}
          key={code.code}
          onPress={() => {
@@ -372,7 +372,7 @@ const filter = (codes, navigation) => {
         <FilterBtn
          activeOpacity={1}
          style={{
-          borderColor: filterBtnSelected8 == code.code ? "#3a99fc" : "grey",
+          borderColor: filterBtnSelected8 == code.code ? "#3e50b4" : "grey",
          }}
          key={code.code}
          onPress={() => {
@@ -398,7 +398,7 @@ const filter = (codes, navigation) => {
         <FilterBtn
          activeOpacity={1}
          style={{
-          borderColor: filterBtnSelected5 == code.code ? "#3a99fc" : "grey",
+          borderColor: filterBtnSelected5 == code.code ? "#3e50b4" : "grey",
          }}
          key={code.code}
          onPress={() => {
@@ -450,7 +450,7 @@ const filter = (codes, navigation) => {
           activeOpacity={1}
           style={{
            borderColor: filterBtnSelected6.includes(code.code)
-            ? "#3a99fc"
+            ? "#3e50b4"
             : "grey",
           }}
           key={code.code}
@@ -487,7 +487,7 @@ const filter = (codes, navigation) => {
         <FilterBtn
          activeOpacity={1}
          style={{
-          borderColor: filterBtnSelected7 == code.code ? "#3a99fc" : "grey",
+          borderColor: filterBtnSelected7 == code.code ? "#3e50b4" : "grey",
          }}
          key={code.code}
          onPress={() => {

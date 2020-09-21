@@ -72,7 +72,7 @@ export default ({ navigation, route }) => {
       return (
        <FontAwesome5
         name={iconName}
-        color={focused ? "#3E50B4" : "#909090"}
+        color={focused ? "#3e50b4" : "#909090"}
         size={20}
        />
       );
@@ -97,7 +97,7 @@ export default ({ navigation, route }) => {
        label = "albums";
       }
       return (
-       <Text style={{ fontSize: 12, color: focused ? "#3E50B4" : "#909090" }}>
+       <Text style={{ fontSize: 12, color: focused ? "#3e50b4" : "#909090" }}>
         {label}
        </Text>
       );

@@ -55,7 +55,6 @@ export default ({
   return animatedValue;
  });
 
- let _resetTimeout;
  const _snapDot = (animatedValue) => {
   Animated.sequence([
    Animated.timing(animatedValue, {
@@ -115,7 +114,7 @@ export default ({
    if (activeDotIndex != null) {
     let activeDotCoordinate = _dots[activeDotIndex.i];
     let firstDot = _mappedDotsIndex[activeDotIndex.i];
-    let dotWillSnap = _snapAnimatedValues[activeDotIndex.i];
+    //let dotWillSnap = _snapAnimatedValues[activeDotIndex.i];
 
     endGestureX += activeDotIndex.x;
     endGestureY += activeDotIndex.y;
@@ -205,7 +204,7 @@ export default ({
    }
   },
   onPanResponderRelease: () => {
-   if (pattern.length) {
+   if (pattern.length && pattern.length > 2) {
     if (firstPattern?.length == 0) {
      setFirstPattern(pattern);
      setMessage("패스워드 확인을 위해 다시한번 입력해주세요.");
@@ -231,15 +230,21 @@ export default ({
      setActiveDotCoordinate(null);
      setShowError(true);
     }
+   } else {
+    setInitialGestureCoordinate(null);
+    setActiveDotCoordinate(null);
+    setPattern([]);
+    if (firstPattern?.length > 0) {
+     setMessage(
+      "패스워드 확인을 위해 다시한번 입력해주세요.\r\n3개 이상 설정해주세요."
+     );
+    } else {
+     setMessage("3개 이상 설정해주세요.");
+    }
    }
   },
  });
 
- useEffect(() => {
-  return () => {
-   clearTimeout(_resetTimeout);
-  };
- }, []);
  useEffect(() => {
   if (snap?.length) {
    snap.map((obj) => {
@@ -252,7 +257,7 @@ export default ({
     if (!snap.includes(idx)) {
      Animated.timing(_snapAnimatedValues[idx], {
       toValue: DEFAULT_DOT_RADIUS,
-      duration: SNAP_DURATION,
+      duration: 0,
       useNativeDriver: true,
       //duration: 1000,
      }).start();
@@ -265,7 +270,7 @@ export default ({
    });
    Animated.timing(lineOpacity, {
     toValue: 1,
-    duration: 2000,
+    duration: 500,
     useNativeDriver: true,
    }).start();
   }

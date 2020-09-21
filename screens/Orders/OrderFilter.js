@@ -103,7 +103,7 @@ const FilterBottomButton = styled.TouchableOpacity`
  flex: 1;
  align-items: center;
  justify-content: center;
- background-color: #3a99fc;
+ background-color: #3e50b4;
  height: 50px;
 `;
 const FilterBottomButtonText = styled.Text`
@@ -136,7 +136,7 @@ export default () => {
     <FilterHeader>
      <FilterParentBtn
       style={{
-       borderColor: filterSelected[0] ? "#3a99fc" : "grey",
+       borderColor: filterSelected[0] ? "#3e50b4" : "grey",
       }}
       onPress={() => {
        setFilterSelected([true, false, false]);
@@ -157,11 +157,11 @@ export default () => {
       </Text>
       <FontAwesome5
        name={filterSelected[0] ? "caret-square-down" : "caret-square-right"}
-       color={filterSelected[0] ? "#3a99fc" : "grey"}
+       color={filterSelected[0] ? "#3e50b4" : "grey"}
       />
      </FilterParentBtn>
      <FilterParentBtn
-      style={{ borderColor: filterSelected[1] ? "#3a99fc" : "grey" }}
+      style={{ borderColor: filterSelected[1] ? "#3e50b4" : "grey" }}
       onPress={() => {
        setFilterSelected([false, true, false]);
        setIsModal(true);
@@ -181,12 +181,12 @@ export default () => {
       </Text>
       <FontAwesome5
        name={filterSelected[1] ? "caret-square-down" : "caret-square-right"}
-       color={filterSelected[1] ? "#3a99fc" : "grey"}
+       color={filterSelected[1] ? "#3e50b4" : "grey"}
       />
      </FilterParentBtn>
 
      <FilterParentBtn
-      style={{ borderColor: filterSelected[2] ? "#3a99fc" : "grey" }}
+      style={{ borderColor: filterSelected[2] ? "#3e50b4" : "grey" }}
       onPress={() => {
        setFilterSelected([false, false, true]);
        setIsModal(true);
@@ -206,7 +206,7 @@ export default () => {
       </Text>
       <FontAwesome5
        name={filterSelected[2] ? "caret-square-down" : "caret-square-right"}
-       color={filterSelected[2] ? "#3a99fc" : "grey"}
+       color={filterSelected[2] ? "#3e50b4" : "grey"}
       />
      </FilterParentBtn>
      <TouchableOpacity
@@ -231,7 +231,7 @@ export default () => {
         <FilterBtn
          activeOpacity={1}
          style={{
-          borderColor: filterBtnSelectedAll1 ? "#3a99fc" : "whitesmoke",
+          borderColor: filterBtnSelectedAll1 ? "#3e50b4" : "whitesmoke",
          }}
          onPress={() => {
           setFilterBtnSelectedAll1(true);
@@ -247,7 +247,7 @@ export default () => {
             activeOpacity={1}
             style={{
              borderColor: filterBtnSelected1.includes(code.code)
-              ? "#3a99fc"
+              ? "#3e50b4"
               : "whitesmoke",
             }}
             key={code.code}
@@ -298,7 +298,7 @@ export default () => {
         <FilterBtn
          activeOpacity={1}
          style={{
-          borderColor: filterBtnSelectedAll2 ? "#3a99fc" : "whitesmoke",
+          borderColor: filterBtnSelectedAll2 ? "#3e50b4" : "whitesmoke",
          }}
          onPress={() => {
           setFilterBtnSelectedAll2(true);
@@ -314,7 +314,7 @@ export default () => {
             activeOpacity={1}
             style={{
              borderColor: filterBtnSelected2.includes(code.code)
-              ? "#3a99fc"
+              ? "#3e50b4"
               : "whitesmoke",
             }}
             key={code.code}
@@ -364,7 +364,7 @@ export default () => {
         <FilterBtn
          activeOpacity={1}
          style={{
-          borderColor: filterBtnSelectedAll3 ? "#3a99fc" : "whitesmoke",
+          borderColor: filterBtnSelectedAll3 ? "#3e50b4" : "whitesmoke",
          }}
          onPress={() => {
           setFilterBtnSelectedAll3(true);
@@ -380,7 +380,7 @@ export default () => {
             activeOpacity={1}
             style={{
              borderColor: filterBtnSelected3.includes(code.code)
-              ? "#3a99fc"
+              ? "#3e50b4"
               : "whitesmoke",
             }}
             key={code.code}

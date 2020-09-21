@@ -62,7 +62,7 @@ const ConfirmBtn = styled.TouchableOpacity`
  flex: 0.5;
  align-items: center;
  justify-content: center;
- background-color: #3a99fc;
+ background-color: #3e50b4;
  height: 50px;
 `;
 const ConfirmBtnText = styled.Text`
@@ -134,8 +134,8 @@ const titleBorderWidth = "1";
 const DataHeaderBottomTitleContainer = styled.View`
  align-items: center;
  justify-content: center;
- background-color: #3a99fc;
- border-color: #3a99fc;
+ background-color: #3e50b4;
+ border-color: #3e50b4;
  width: ${titleFontSize * 3}px;
  height: ${titleFontSize * 3}px;
  border-radius: ${titleFontSize * 3}px;

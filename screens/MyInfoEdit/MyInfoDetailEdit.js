@@ -51,7 +51,7 @@ const ConfirmBtn = styled.TouchableOpacity`
  width: 100%;
  height: 100%;
  justify-content: center;
- background-color: #3a99fc;
+ background-color: #3e50b4;
 `;
 const ConfirmBtnText = styled.Text`
  text-align: center;
@@ -313,7 +313,7 @@ export default ({ navigation, route }) => {
             activeOpacity={1}
             style={{
              borderColor:
-              filterBtnSelected1 === code.code ? "#3a99fc" : "silver",
+              filterBtnSelected1 === code.code ? "#3e50b4" : "silver",
             }}
             key={code.code}
             onPress={() => {
@@ -360,7 +360,7 @@ export default ({ navigation, route }) => {
             activeOpacity={1}
             style={{
              borderColor:
-              filterBtnSelected1 === code.code ? "#3a99fc" : "silver",
+              filterBtnSelected1 === code.code ? "#3e50b4" : "silver",
             }}
             key={code.code}
             onPress={() => {
@@ -387,7 +387,7 @@ export default ({ navigation, route }) => {
             activeOpacity={1}
             style={{
              borderColor:
-              filterBtnSelected1 === code.code ? "#3a99fc" : "silver",
+              filterBtnSelected1 === code.code ? "#3e50b4" : "silver",
             }}
             key={code.code}
             onPress={() => {
@@ -541,7 +541,7 @@ export default ({ navigation, route }) => {
      >
       <TouchableOpacity
        style={{
-        backgroundColor: "#3a99fc",
+        backgroundColor: "#3e50b4",
         width: screenWidth / 4,
         height: screenWidth / 4,
         alignItems: "center",
@@ -553,7 +553,7 @@ export default ({ navigation, route }) => {
       </TouchableOpacity>
       <TouchableOpacity
        style={{
-        backgroundColor: "#3a99fc",
+        backgroundColor: "#3e50b4",
         width: screenWidth / 4,
         height: screenWidth / 4,
         alignItems: "center",
@@ -567,7 +567,7 @@ export default ({ navigation, route }) => {
       </TouchableOpacity>
       <TouchableOpacity
        style={{
-        backgroundColor: "#3a99fc",
+        backgroundColor: "#3e50b4",
         width: screenWidth / 4,
         height: screenWidth / 4,
         alignItems: "center",
@@ -581,7 +581,7 @@ export default ({ navigation, route }) => {
       </TouchableOpacity>
       <TouchableOpacity
        style={{
-        backgroundColor: "#3a99fc",
+        backgroundColor: "#3e50b4",
         width: screenWidth / 4,
         height: screenWidth / 4,
         alignItems: "center",

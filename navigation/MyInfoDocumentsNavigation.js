@@ -28,10 +28,10 @@ const MyInfoEditTabsImpl = ({ navigation, route }) => {
       iconName += "dolly";
      }
      return (
-      <Text style={{ fontSize: 12, color: focused ? "#3a99fc" : "grey" }}>
+      <Text style={{ fontSize: 12, color: focused ? "#3e50b4" : "grey" }}>
        <FontAwesome5
         name={iconName}
-        color={focused ? "#3a99fc" : "grey"}
+        color={focused ? "#3e50b4" : "grey"}
         size={20}
        />
        {"  "}
@@ -44,7 +44,7 @@ const MyInfoEditTabsImpl = ({ navigation, route }) => {
     showLabel: true,
     style: {
      borderTopColor: "silver",
-     color: "#3a99fc",
+     color: "#3e50b4",
      backgroundColor: "white",
     },
    }}
@@ -67,9 +67,9 @@ export default ({ navigation, route }) => {
    screenOptions={{
     gestureEnabled: true,
     headerStyle: {
-     backgroundColor: "#3a99fc",
-     shadowColor: "#3a99fc",
-     borderBottomColor: "#3a99fc",
+     backgroundColor: "#3e50b4",
+     shadowColor: "#3e50b4",
+     borderBottomColor: "#3e50b4",
     },
     headerTintColor: "white",
     headerBackTitleVisible: false,

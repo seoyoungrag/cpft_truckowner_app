@@ -46,7 +46,7 @@ export default () => {
      borderBottomColor: "silver",
      height: statusBarHeight * 2,
     },
-    headerTintColor: "#3a99fc",
+    headerTintColor: "#3e50b4",
     headerBackTitleVisible: false,
    }}
   >
@@ -63,7 +63,7 @@ export default () => {
       <FontAwesome5
        name="truck-moving"
        size={24}
-       color="#3a99fc"
+       color="#3e50b4"
        style={{
         marginLeft: 10,
         transform: [{ rotate: "-15deg" }],
@@ -77,12 +77,12 @@ export default () => {
          setModalVisible(true);
         }}
        >
-        <Text style={{ marginRight: 20, color: "#3a99fc" }}>
+        <Text style={{ marginRight: 20, color: "#3e50b4" }}>
          테스트 피드백 보내기
          <MaterialIcons
           name="feedback"
           size={24}
-          color="#3a99fc"
+          color="#3e50b4"
           style={{
            marginRight: 10,
           }}
@@ -98,7 +98,7 @@ export default () => {
         <FontAwesome5
          name="sign-out-alt"
          size={24}
-         color="#3a99fc"
+         color="#3e50b4"
          style={{
           marginRight: 10,
          }}

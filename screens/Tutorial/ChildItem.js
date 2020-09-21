@@ -7,7 +7,7 @@ const OuterContainer = styled.View`
 `;
 const DescText = styled.Text`
  text-align: center;
- color: #3a99fc;
+ color: #3e50b4;
  font-weight: bold;
  font-size: 24px;
 `;

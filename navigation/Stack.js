@@ -99,9 +99,9 @@ export default () => {
     screenOptions={{
      gestureEnabled: true,
      headerStyle: {
-      backgroundColor: "#3a99fc",
-      shadowColor: "#3a99fc",
-      borderBottomColor: "#3a99fc",
+      backgroundColor: "#3e50b4",
+      shadowColor: "#3e50b4",
+      borderBottomColor: "#3e50b4",
      },
      headerTintColor: "white",
      headerBackTitleVisible: false,
