@@ -1,4 +1,4 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="kr.co.teamfresh.cpft.truckowner.android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" package="kr.co.teamfresh.cpft.truckowner.android">
   <uses-permission android:name="android.permission.INTERNET"/>
   <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
   <!-- OPTIONAL PERMISSIONS, REMOVE WHATEVER YOU DO NOT NEED -->
@@ -32,6 +32,13 @@
     <meta-data android:name="expo.modules.updates.EXPO_SDK_VERSION" android:value="38.0.0" />
     <meta-data android:name="expo.modules.updates.EXPO_RELEASE_CHANNEL" android:value="default" />
 
+      <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/app_primary"
+            tools:replace="android:resource" />
+            <meta-data
+    android:name="com.google.firebase.messaging.default_notification_icon"
+    android:resource="@drawable/ic_stat_noti" />
   <activity
     android:name=".MainActivity"
       android:label="@string/app_name"
