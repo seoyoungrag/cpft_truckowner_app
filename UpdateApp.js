@@ -6,6 +6,10 @@ import CodePush from "react-native-code-push";
 import * as Progress from "react-native-progress";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 
+import VersionCheck from "react-native-version-check";
+import DeviceInfo from "react-native-device-info";
+import { startUpdateFlow } from "react-native-android-inapp-updates";
+
 const { width } = Dimensions.get("screen");
 const statusBarHeight = getStatusBarHeight();
 let codePushOptions = {
@@ -86,7 +90,56 @@ const UpdateApp = ({ updateModalVisible }) => {
   };
 
   /** Update pops a confirmation dialog, and then immediately reboots the app */
+  const updateFromPlayStore = async () => {
+    const isEmulator = await DeviceInfo.isEmulator();
+
+    console.log("CUSTOMTAG", "isEmulator: ", isEmulator);
+    //공개 버전이 되어야 쓸 수 있음.
+    VersionCheck.getLatestVersion({
+      forceUpdate: true,
+      provider: () =>
+        fetch("https://play.google.com/store/apps/details?id=kr.co.teamfresh.cpft.truckowner.android")
+          .then(
+            (r) =>
+              new Promise((resolve, reject) => {
+                if (r.status && r.status == 404) {
+                  return reject("플레이스토어에서 앱을 찾을 수 없음.");
+                }
+                return r.json();
+              })
+          )
+          .then(({ version }) => version)
+    })
+      .then(async (latestVersion) => {
+        console.log(latestVersion);
+        try {
+          await VersionCheck.needUpdate().then(async (res) => {
+            if (res.isNeeded) {
+              try {
+                const result = await startUpdateFlow(updateModes);
+                console.log(result);
+              } catch (e) {
+                console.log("CUSTOMTAG error:", e);
+              }
+            }
+          });
+        } catch (e) {}
+      })
+      .catch((error) => console.log(error));
+
+    if (!isEmulator) {
+      //공개 버전이 되어야 쓸 수 있음.
+
+      try {
+        const result = await startUpdateFlow(updateModes);
+        console.log(result);
+      } catch (e) {
+        console.log("CUSTOMTAG error:", e);
+      }
+    }
+  };
   const syncImmediate = () => {
+    updateFromPlayStore();
     CodePush.sync(
       {
         installMode: CodePush.InstallMode.IMMEDIATE,

@@ -23,13 +23,11 @@ import { ModalProvider } from "./ModalContext";
 import { codeApi } from "./api";
 
 import UpdateApp from "./UpdateApp";
-import { startUpdateFlow } from "react-native-android-inapp-updates";
-import DeviceInfo from "react-native-device-info";
-import VersionCheck from "react-native-version-check";
 
 import messaging from "@react-native-firebase/messaging";
 import firebase from "@react-native-firebase/app";
 
+import BackendHealthCheck from "./BackendHealthCheck";
 const updateModes = "immediate";
 
 const cacheImages = (images) =>
@@ -49,7 +47,7 @@ const cacheFonts = (fonts) =>
 const cacheCodes = async () => {
   const [codes, codesErr] = await codeApi.codes();
   if (codesErr) {
-    console.error(codesErr);
+    console.log(codesErr);
   }
   await AsyncStorage.setItem("codes", JSON.stringify(codes));
   return codes;
@@ -94,68 +92,11 @@ function App() {
   }, []);
 
   useEffect(() => {
-    updateFromPlayStore = async () => {
-      const isEmulator = await DeviceInfo.isEmulator();
-
-      /*
-    //공개 버전이 되어야 쓸 수 있음.
-    VersionCheck.getLatestVersion({
-     forceUpdate: true,
-     provider: () =>
-      fetch(
-       "https://play.google.com/store/apps/details?id=kr.co.teamfresh.cpft.truckowner.android"
-      )
-       .then((r) => {
-        console.log(r);
-        return r.json();
-       })
-       .then(({ version }) => version), 
-    }).then((latestVersion) => {
-     console.log(latestVersion);
-    });
-   */
-
-      if (!isEmulator) {
-        //공개 버전이 되어야 쓸 수 있음.
-        /*
-    try {
-     await VersionCheck.needUpdate().then(async (res) => {
-      if (res.isNeeded) {
-       try {
-        const result = await startUpdateFlow(updateModes);
-        console.log(result);
-       } catch (e) {
-        console.log("CUSTOMTAG error:", e);
-       }
-      }
-     });
-    } catch (e) {}
-    */
-        try {
-          const result = await startUpdateFlow(updateModes);
-          console.log(result);
-        } catch (e) {
-          console.log("CUSTOMTAG error:", e);
-        }
-      }
-      setUpdateModalVisible(true);
-    };
-    updateFromPlayStore();
+    setUpdateModalVisible(true);
   }, []);
   const _handleAppStateChange = async (nextAppState) => {
     if (appState.current.match(/inactive|background/) && nextAppState === "active") {
-      const isEmulator = await DeviceInfo.isEmulator();
       console.log("CUSTOMTAG", "App has come to the foreground! from ", appState.current);
-      console.log("CUSTOMTAG", isEmulator);
-
-      if (!isEmulator) {
-        try {
-          const result = await startUpdateFlow(updateModes);
-          console.log(result);
-        } catch (e) {
-          console.log("CUSTOMTAG error:", e);
-        }
-      }
       setUpdateModalVisible(true);
     }
 
@@ -210,14 +151,14 @@ function App() {
     try {
       setCodes(JSON.parse(codes));
     } catch (e) {
-      console.error(e);
+      console.log(e);
       setCodes(null);
     }
     const userRegistInfo = await AsyncStorage.getItem("userRegistInfo");
     try {
       setUserRegistInfo(JSON.parse(userRegistInfo));
     } catch (e) {
-      console.error(e);
+      console.log(e);
       setUserRegistInfo(null);
     }
     try {
@@ -228,7 +169,7 @@ function App() {
         setHasTutorialPass(true);
       }
     } catch (e) {
-      console.error(e);
+      console.log(e);
       setHasTutorialPass(true);
     }
     try {
@@ -239,7 +180,7 @@ function App() {
         setIsLoggedIn(true);
       }
     } catch (e) {
-      console.error(e);
+      console.log(e);
       setIsLoggedIn(true);
     }
     const hasCameraPermission = await getCameraPermission();
@@ -278,7 +219,7 @@ function App() {
       await loadAssets();
       await onFinish();
     } catch (e) {
-      console.error(e);
+      console.log(e);
     }
     setIsReady(true);
     SplashScreen.hide();
@@ -289,6 +230,7 @@ function App() {
 
   return (
     <SafeAreaView flex={1}>
+      {/*<BackendHealthCheck updateModalVisible={updateModalVisible}></BackendHealthCheck>*/}
       <UpdateApp updateModalVisible={updateModalVisible}></UpdateApp>
       {isReady ? (
         <>
