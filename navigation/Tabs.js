@@ -100,8 +100,7 @@ export default ({ navigation, route }) => {
           name="Orders"
           component={Orders}
           options={{
-            tabBarButton: (props) =>
-              useIsModal() ? <TouchableOpacity {...props} disabled={true} /> : <TouchableOpacity activeOpacity={1} {...props} />
+            tabBarButton: (props) => (useIsModal() ? <TouchableOpacity {...props} disabled={true} /> : <TouchableOpacity activeOpacity={1} {...props} />)
           }}
           options={({ route }) => ({
             tabBarVisible: getTabBarVisibility(route)
@@ -111,8 +110,7 @@ export default ({ navigation, route }) => {
           name="Trans"
           component={Trans}
           options={{
-            tabBarButton: (props) =>
-              useIsModal() ? <TouchableOpacity {...props} disabled={true} /> : <TouchableOpacity activeOpacity={1} {...props} />
+            tabBarButton: (props) => (useIsModal() ? <TouchableOpacity {...props} disabled={true} /> : <TouchableOpacity activeOpacity={1} {...props} />)
           }}
           options={({ route }) => ({
             tabBarVisible: getTabBarVisibility(route)
@@ -122,8 +120,7 @@ export default ({ navigation, route }) => {
           name="MyInfo"
           component={MyInfo}
           options={{
-            tabBarButton: (props) =>
-              useIsModal() ? <TouchableOpacity {...props} disabled={true} /> : <TouchableOpacity activeOpacity={1} {...props} />
+            tabBarButton: (props) => (useIsModal() ? <TouchableOpacity {...props} disabled={true} /> : <TouchableOpacity activeOpacity={1} {...props} />)
           }}
           options={({ route }) => ({
             tabBarVisible: getTabBarVisibility(route)
