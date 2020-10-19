@@ -16,6 +16,7 @@ const BackendHealthCheck = ({ updateModalVisible }) => {
     if (codesErr) {
       setSyncMessage("네트워크 및 서버 장애로, 정상작동하지 않을 수 있습니다.");
     } else {
+      await AsyncStorage.setItem("codes", JSON.stringify(codes));
       setSyncMessage("서버 동기화 완료");
       fadeOutAnimation();
     }

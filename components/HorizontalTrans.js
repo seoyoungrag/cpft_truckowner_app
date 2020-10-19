@@ -45,7 +45,7 @@ const TransProgress = styled.View`
  font-size: 18px;
 `;
 
-const WorkingArea = styled.Text`
+const WorkArea = styled.Text`
  flex: 1;
  text-align: left;
 `;
@@ -61,12 +61,12 @@ const DlvyPrdlst = styled.Text`
  flex: 1;
  text-align: left;
 `;
-const PayAmt = styled.Text`
+const Salary = styled.Text`
  flex: 1;
  text-align: right;
  font-size: 20px;
 `;
-const PayFullType = styled.Text`
+const ExpensYn = styled.Text`
  padding-left: 5px;
  font-size: 20px;
 `;
@@ -114,12 +114,12 @@ const Horizontal = ({
  id,
  opratSctn,
  rcritType,
- workingArea,
+ workArea,
  carTypes,
  tonType,
  dlvyPrdlst,
- payAmt,
- payFullType,
+ salary,
+                     expensYn,
  goToTransDetail,
  tmpKey,
 }) => {
@@ -137,15 +137,15 @@ const Horizontal = ({
      <DataHeader>
       <CarrierNm>팀프레시</CarrierNm>
       <PayInfo>
-       <PayAmt>{payAmt}</PayAmt>
-       <PayFullType>{payFullType}</PayFullType>
+       <Salary>{salary}</Salary>
+       <ExpensYn>{expensYn}</ExpensYn>
       </PayInfo>
      </DataHeader>
      <DataBody>
       <OpratSctn>{opratSctn}</OpratSctn>
-      <WorkingArea>
-       {workingArea?.split(" ").slice(0, 2).join(" ")} 배송
-      </WorkingArea>
+      <WorkArea>
+       {workArea?.split(" ").slice(0, 2).join(" ")} 배송
+      </WorkArea>
      </DataBody>
 
      <DataBottom>
@@ -320,12 +320,12 @@ Horizontal.propTypes = {
  tmpKey: PropTypes.number.isRequired,
  id: PropTypes.number.isRequired,
  opratSctn: PropTypes.string.isRequired,
- workingArea: PropTypes.string.isRequired,
+ workArea: PropTypes.string.isRequired,
  rcritType: PropTypes.string.isRequired,
  carTypes: PropTypes.array.isRequired,
  tonType: PropTypes.string.isRequired,
  dlvyPrdlst: PropTypes.string.isRequired,
- payAmt: PropTypes.string.isRequired,
- payFullType: PropTypes.string.isRequired,
+ salary: PropTypes.string.isRequired,
+ expensYn: PropTypes.string.isRequired,
 };
 export default Horizontal;

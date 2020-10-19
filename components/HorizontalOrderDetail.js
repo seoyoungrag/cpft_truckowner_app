@@ -31,7 +31,7 @@ const RcritType = styled.Text`
  text-align: right;
 `;
 
-const WorkingAreaHeader = styled.Text`
+const WorkAreaHeader = styled.Text`
  text-align: center;
  font-size: 20px;
 `;
@@ -96,12 +96,12 @@ const Horizontal = ({
  id,
  opratSctn,
  rcritType,
- workingArea,
+ workArea,
  carTypes,
  tonType,
  dlvyPrdlst,
- payAmt,
- payFullType,
+ salary,
+                     expensYn,
  workHourStart,
  workMinuteStart,
  workHourEnd,
@@ -115,16 +115,16 @@ const Horizontal = ({
  return (
   <Data>
    <DataHeader>
-    <WorkingAreaHeader>
-     {workingArea.split(" ").slice(0, 2).join(" ")}
-    </WorkingAreaHeader>
+    <WorkAreaHeader>
+     {workArea.split(" ").slice(0, 2).join(" ")}
+    </WorkAreaHeader>
     <OpratSctn>{opratSctn + " 배송"}</OpratSctn>
     <DataHeaderBottom>
      <DataHeaderBottomInner>
       <DataHeaderBottomTitleContainer>
        <DataHeaderBottomTitle>급여</DataHeaderBottomTitle>
       </DataHeaderBottomTitleContainer>
-      <Text>{payAmt + " 이상"}</Text>
+      <Text>{salary + " 이상"}</Text>
      </DataHeaderBottomInner>
      <DataHeaderBottomInner>
       <DataHeaderBottomTitleContainer style={{ backgroundColor: "white" }}>
@@ -152,8 +152,8 @@ const Horizontal = ({
      <DataBodyRow title="톤수" content={tonType} />
      <DataBodyRow title="차종" content={carTypes} />
      <DataBodyRow title="품목" content={dlvyPrdlst} />
-     <DataBodyRow title="상차지" content={workingArea} />
-     <DataBodyRow title="급여" content={payAmt + " " + payFullType} />
+     <DataBodyRow title="상차지" content={workArea} />
+     <DataBodyRow title="급여" content={salary + " " + expensYn} />
      <DataBodyRow title="근무일자" content={workDays} />
      <DataBodyRow
       title="근무시간"
@@ -178,13 +178,13 @@ const Horizontal = ({
 Horizontal.propTypes = {
  id: PropTypes.number.isRequired,
  opratSctn: PropTypes.string.isRequired,
- workingArea: PropTypes.string.isRequired,
+ workArea: PropTypes.string.isRequired,
  rcritType: PropTypes.string.isRequired,
  carTypes: PropTypes.string.isRequired,
  tonType: PropTypes.string.isRequired,
  dlvyPrdlst: PropTypes.string.isRequired,
- payAmt: PropTypes.string.isRequired,
- payFullType: PropTypes.string.isRequired,
+ salary: PropTypes.string.isRequired,
+ expensYn: PropTypes.string.isRequired,
  detailMatter: PropTypes.string,
  workDays: PropTypes.string,
 };

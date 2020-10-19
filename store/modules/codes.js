@@ -76,7 +76,7 @@ const initialState = {
  rcritTypeCodes: [],
  carTypeCodes: [],
  tonTypeCodes: [],
- payFullTypeCodes: [],
+ expensYnCodes: [],
  workDayCodes: [],
  // 에러 관련 state 등록.
  error: {
@@ -178,7 +178,7 @@ export const codes = (state = initialState, action) => {
       return rtn;
      })();
     })(),
-    payFullTypeCodes: (function () {
+    expensYnCodes: (function () {
      return (function () {
       var rtn;
       var ctgry = action.payload.codes.filter((codeCtgry) => {

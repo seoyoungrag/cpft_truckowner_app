@@ -107,13 +107,13 @@ export default ({ refreshFn, loading, now }) => {
    navigation.navigate("OrderDetail", {
     orderSeq: order.orderSeq,
     opratSctn: order.opratSctn,
-    workingArea: order.workingArea,
+    workArea: order.workArea,
     rcritType: order.rcritType,
     carTypes: order.carTypes,
     tonType: order.tonType,
     dlvyPrdlst: order.dlvyPrdlst,
-    payAmt: order.payAmt,
-    payFullType: order.payFullType,
+    salary: order.salary,
+    expensYn: order.expensYn,
     workHourStart: order.workHourStart,
     workMinuteStart: order.workMinuteStart,
     workHourEnd: order.workHourEnd,
@@ -215,15 +215,15 @@ export default ({ refreshFn, loading, now }) => {
        key={n.orderSeq}
        id={n.orderSeq}
        opratSctn={n.opratSctn}
-       workingArea={n.workingArea}
+       workArea={n.workArea}
        rcritType={code(codes, n.rcritType)}
        carTypes={n.carTypes.map((c) => {
         return code(codes, c) + " ";
        })}
        tonType={code(codes, n.tonType)}
        dlvyPrdlst={n.dlvyPrdlst}
-       payAmt={n.payAmt}
-       payFullType={code(codes, n.payFullType)}
+       salary={n.salary}
+       expensYn={code(codes, n.expensYn)}
        goToOrderDetail={() => {
         goToOrderDetail(n);
        }}
@@ -234,15 +234,15 @@ export default ({ refreshFn, loading, now }) => {
        key={n.orderSeq}
        id={n.orderSeq}
        opratSctn={n.opratSctn}
-       workingArea={n.workingArea}
+       workArea={n.workArea}
        rcritType={code(codes, n.rcritType)}
        carTypes={n.carTypes.map((c) => {
         return code(codes, c) + " ";
        })}
        tonType={code(codes, n.tonType)}
        dlvyPrdlst={n.dlvyPrdlst}
-       payAmt={n.payAmt}
-       payFullType={code(codes, n.payFullType)}
+       salary={n.salary}
+       expensYn={code(codes, n.expensYn)}
        goToOrderDetail={() => {
         goToOrderDetail(n);
        }}
@@ -253,15 +253,15 @@ export default ({ refreshFn, loading, now }) => {
        key={n.orderSeq}
        id={n.orderSeq}
        opratSctn={n.opratSctn}
-       workingArea={n.workingArea}
+       workArea={n.workArea}
        rcritType={code(codes, n.rcritType)}
        carTypes={n.carTypes.map((c) => {
         return code(codes, c) + " ";
        })}
        tonType={code(codes, n.tonType)}
        dlvyPrdlst={n.dlvyPrdlst}
-       payAmt={n.payAmt}
-       payFullType={code(codes, n.payFullType)}
+       salary={n.salary}
+       expensYn={code(codes, n.expensYn)}
        goToOrderDetail={() => {
         goToOrderDetail(n);
        }}
@@ -272,15 +272,15 @@ export default ({ refreshFn, loading, now }) => {
        key={n.orderSeq}
        id={n.orderSeq}
        opratSctn={n.opratSctn}
-       workingArea={n.workingArea}
+       workArea={n.workArea}
        rcritType={code(codes, n.rcritType)}
        carTypes={n.carTypes.map((c) => {
         return code(codes, c) + " ";
        })}
        tonType={code(codes, n.tonType)}
        dlvyPrdlst={n.dlvyPrdlst}
-       payAmt={n.payAmt}
-       payFullType={code(codes, n.payFullType)}
+       salary={n.salary}
+       expensYn={code(codes, n.expensYn)}
        goToOrderDetail={() => {
         goToOrderDetail(n);
        }}

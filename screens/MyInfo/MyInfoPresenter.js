@@ -332,15 +332,15 @@ export default ({ refreshFn, loading, truckOwnerOrders }) => {
         key={n.order.orderSeq}
         id={n.order.orderSeq}
         opratSctn={n.order.opratSctn}
-        workingArea={n.order.workingArea}
+        workArea={n.order.workArea}
         rcritType={code(codes, n.order.rcritType)}
         carTypes={n.order.carTypes?.map((c) => {
          return code(codes, c) + " ";
         })}
         tonType={code(codes, n.order.tonType)}
         dlvyPrdlst={n.order.dlvyPrdlst}
-        payAmt={n.order.payAmt}
-        payFullType={code(codes, n.order.payFullType)}
+        salary={n.order.salary}
+        expensYn={code(codes, n.order.expensYn)}
         order={n.order}
         status={code(codes, n.status)}
         goToTransDetail={() => {
