@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Dimensions, Text, TouchableOpacity } from "react-native";
+import { Dimensions, Text, TouchableOpacity,View } from "react-native";
 import styled from "styled-components/native";
 import { useForm } from "react-hook-form";
 import { AntDesign } from "@expo/vector-icons";
@@ -8,7 +8,6 @@ import {
  useSetUserRegistInfo,
 } from "../../UserRegistContext";
 import ScrollContainer from "../../components/ScrollContainer";
-import { View } from "react-native-animatable";
 import FloatingLabelInput from "../../components/FloatingLabelInput";
 
 const screenWidth = Math.round(Dimensions.get("window").width);
@@ -506,6 +505,7 @@ export default ({ navigation, route }) => {
         {errors.userServiceAuthAgree && (
          <DataValueRed>동의해야 진행할 수 있습니다.</DataValueRed>
         )}
+        {/**
         <DataValueBtnSec onPress={goToHPA1}>
          <Text>앱 서비스 이용 동의(필수)</Text>
          <AntDesign name={"right"} color={"grey"} size={22} />
@@ -522,6 +522,7 @@ export default ({ navigation, route }) => {
          <Text>앱 서비스 이용 동의(필수)</Text>
          <AntDesign name={"right"} color={"grey"} size={22} />
         </DataValueBtnSec>
+         */}
        </View>
       </Container>
      </Data>

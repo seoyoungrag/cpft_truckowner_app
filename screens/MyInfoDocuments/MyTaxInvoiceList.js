@@ -24,6 +24,7 @@ export default () => {
  const navigation = useNavigation();
  return (
   <ScrollContainer
+  loading={false}
    contentContainerStyle={{ paddingTop: 20, backgroundColor: "white" }}
   >
    <MyDocumentListRow

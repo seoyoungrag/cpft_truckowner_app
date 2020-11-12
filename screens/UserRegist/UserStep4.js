@@ -212,7 +212,7 @@ export default ({ navigation, route }) => {
       <AntDesign name={"arrowleft"} color={"#303030"} size={24} />
      </TouchableOpacity>
      <ModalHeaderTitle>
-      {routeParams?.isFromOrder ? null : "4/5"}
+      {routeParams?.isFromOrder ? null : "3/4"}
      </ModalHeaderTitle>
     </ModalHeader>
     <ScrollContainer

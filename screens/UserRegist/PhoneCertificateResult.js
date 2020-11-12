@@ -35,7 +35,7 @@ export default function PhoneCertificateResult({ navigation, route }) {
    <TouchableOpacity
     bordered
     transparent
-    onPress={() => navigation.navigate("UserStep2")}
+    onPress={() => navigation.navigate("UserStep1")}
    >
     {/*<Icon name="arrow-back" style={btnIcon} />*/}
     <Text>돌아가기</Text>

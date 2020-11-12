@@ -145,7 +145,7 @@ export default ({ navigation }) => {
      >
       <AntDesign name={"arrowleft"} color={"#303030"} size={24} />
      </TouchableOpacity>
-     <ModalHeaderTitle>3/5</ModalHeaderTitle>
+     <ModalHeaderTitle>2/4</ModalHeaderTitle>
     </ModalHeader>
     <View
      style={{

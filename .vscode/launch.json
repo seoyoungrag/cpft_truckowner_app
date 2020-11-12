@@ -32,7 +32,8 @@
             "type": "reactnative",
             "request": "launch",
             "platform": "android",
-            "trace": "verbose"
+            "trace": "verbose",
+            "sourceMaps": true
         }
     ]
 }

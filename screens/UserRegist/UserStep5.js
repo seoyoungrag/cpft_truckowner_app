@@ -121,7 +121,7 @@ export default ({ navigation }) => {
        justifyContent: "center",
       }}
      ></TouchableOpacity>
-     <ModalHeaderTitle>5/5</ModalHeaderTitle>
+     <ModalHeaderTitle>4/4</ModalHeaderTitle>
     </ModalHeader>
     <ScrollContainer
      loading={false}

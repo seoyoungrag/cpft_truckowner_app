@@ -68,7 +68,7 @@ export default ({ navigation }) => {
           >
             <AntDesign name={"arrowleft"} color={"#303030"} size={24} />
           </TouchableOpacity>
-          <ModalHeaderTitle>위치기반 서비스 이용약관</ModalHeaderTitle>
+          <ModalHeaderTitle>서비스 이용약관</ModalHeaderTitle>
         </ModalHeader>
         <ScrollContainer
           loading={false}

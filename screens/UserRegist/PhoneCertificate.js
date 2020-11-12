@@ -15,7 +15,7 @@ export default function PhoneCertificate({ navigation, route }) {
     data={params}
     callback={(response) =>
      //navigation.replace("PhoneCertificateResult", { response })
-     navigation.replace("UserStep2", { response })
+     navigation.replace("UserStep1", { response })
     }
    />
   </>

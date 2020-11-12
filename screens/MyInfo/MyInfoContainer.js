@@ -16,7 +16,7 @@ export default () => {
   //console.log(truckOwnerOrders);
   setOrders({
    loading: false,
-   truckOwnerOrders,
+   truckOwnerOrders: [],
    truckOwnerOrdersError,
   });
  };

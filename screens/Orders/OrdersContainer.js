@@ -12,7 +12,7 @@ export default () => {
   const [now, nowError] = await orderApi.now("0701");
   setOrders({
    loading: false,
-   now,
+   now: [],
    nowError,
   });
  };

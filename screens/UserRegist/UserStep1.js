@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Dimensions, Text, TouchableOpacity, StatusBar } from "react-native";
+import { Dimensions, Text, TouchableOpacity, StatusBar,View } from "react-native";
 import styled from "styled-components/native";
 import { useForm } from "react-hook-form";
 import { AntDesign } from "@expo/vector-icons";
 import { useGetUserRegistInfo, useSetUserRegistInfo } from "../../UserRegistContext";
 import ScrollContainer from "../../components/ScrollContainer";
-import { View } from "react-native-animatable";
 import FloatingLabelInput from "../../components/FloatingLabelInput";
 
 const screenWidth = Math.round(Dimensions.get("window").width);
@@ -127,7 +126,35 @@ const DataValueRed = styled.Text`
   font-weight: 500;
   border-radius: 10px;
 `;
-export default ({ navigation }) => {
+export default ({ navigation,route  }) => {
+  const [merchantUid, setMerchantUid] = useState(`mid_${new Date().getTime()}`);
+  const [company, setCompany] = useState("용차블루");
+  const [tierCode, setTierCode] = useState(undefined);
+  const [response, setResponse] = useState({
+   success: null,
+   imp_uid: null,
+   merchant_uid: null,
+   error_msg: null,
+  });
+  const requestPHAuthNumber = async () => {
+   const data = await getUserRegistInfo();
+   const params = {
+    merchant_uid: merchantUid,
+   };
+   if (company) {
+    params.company = company;
+   }
+   if (data?.userNm) {
+    params.name = data?.userNm;
+   }
+   if (data?.userPHNumber) {
+    params.phone = data.userPHNumber;
+   }
+   const result = await trigger("userPHNumber");
+   if (result) {
+    navigation.navigate("PhoneCertificate", { params, tierCode });
+   }
+  };
   const goToHPA1 = () => {
     navigation.push("UserStep1HPA1");
   };
@@ -144,12 +171,18 @@ export default ({ navigation }) => {
   const getUserRegistInfo = useGetUserRegistInfo();
   const setUserRegistInfo = useSetUserRegistInfo();
   const confrimBtnClicked = async (userRegistInfoForm) => {
+    console.log('asdf');
     const newValue = Object.assign({}, userRegistInfo, userRegistInfoForm);
     await setUserRegistInfo(newValue);
-    navigation.navigate("UserStep2");
+    console.log(response);
+    console.log(newValue);
+    if (response.success === true) {
+     navigation.navigate("UserStep3");
+    }
+    //navigation.navigate("UserStep2");
   };
 
-  const { register, getValues, setValue, handleSubmit, errors } = useForm();
+  const { trigger, register, getValues, setValue, handleSubmit, errors } = useForm();
 
   const setValueWithState = async (fildNm, value) => {
     await setValue(fildNm, value);
@@ -164,6 +197,9 @@ export default ({ navigation }) => {
     setValue("userBirthDate", data?.userBirthDate);
     setValue("userSex", data?.userSex);
     setValue("userHPAuthAgree", data?.userHPAuthAgree);
+    setValue("userPHAuthNumber", null);
+    setValue("userPHNumber", data?.userPHNumber);
+    setValue("userPHAuthNumber", data?.userPHAuthNumber);
   };
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", async () => {
@@ -203,7 +239,34 @@ export default ({ navigation }) => {
       }
     );
     register({ name: "userHPAuthAgree" }, { required: true });
+    register(
+     { name: "userPHNumber" },
+     {
+      minLength: 13,
+      maxLength: 13,
+      required: true,
+     }
+    );
+    register(
+     { name: "userPHAuthNumber" },
+     {
+      minLength: 6,
+      maxLength: 6,
+      required: false,
+     }
+    );
   }, [register]);
+  useEffect(() => {
+   const unsubscribe = navigation.addListener("focus", async () => {
+    await fetchData();
+   });
+   fetchData();
+   const crtResponse = route?.params?.response;
+   if (crtResponse) {
+    setResponse(crtResponse);
+   }
+   return unsubscribe;
+  }, [navigation]);
   useEffect(() => {}, []);
   return (
     <OuterContainer>
@@ -217,7 +280,7 @@ export default ({ navigation }) => {
               justifyContent: "center"
             }}
           ></TouchableOpacity>
-          <ModalHeaderTitle>1/5</ModalHeaderTitle>
+          <ModalHeaderTitle>1/4</ModalHeaderTitle>
         </ModalHeader>
         <ScrollContainer
           loading={false}
@@ -229,7 +292,7 @@ export default ({ navigation }) => {
           }}
           refreshOn={false}
         >
-          <Data style={{ width: screenWidth, height: screenHeight - 100 }}>
+          <Data style={{ width: screenWidth, height: screenHeight }}>
             <Container style={{ flex: 1, justifyContent: "flex-start", marginTop: 0 }}>
               <DataName>기본정보 입력</DataName>
               <FloatingLabelInput
@@ -332,6 +395,87 @@ export default ({ navigation }) => {
                 </View>
               </View>
               <View style={{ flexDirection: "column" }}>
+        <View
+         style={{
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "flex-end",
+         }}
+        >
+         <FloatingLabelInput
+          maxLength={13}
+          keyboardType={"phone-pad"}
+          label="휴대폰 번호 입력"
+          placeholder="휴대폰 번호 입력"
+          onChangeText={setValueWithState}
+          fieldNm="userPHNumber"
+          containerStyle={{
+           marginLeft: 40,
+           height: 50,
+           margin: 0,
+          }}
+          style={{
+           color: "black",
+           opacity: 0.8,
+           fontWeight: 500,
+           fontSize: 32,
+           borderBottomWidth: 1,
+          }}
+          defaultValue={userRegistInfo?.userPHNumber}
+         />
+         <TouchableOpacity
+          style={{
+           marginTop: 5,
+           marginRight: 10,
+           height: 30,
+           width: 90,
+           marginLeft: 40,
+           paddingLeft: 0,
+           paddingTop: 0,
+           borderWidth: 1,
+           borderRadius: 5,
+           borderColor: "#3e50b4",
+           color: "black",
+           opacity: 0.8,
+           fontWeight: 500,
+           fontSize: 14,
+           flexDirection: "row",
+           justifyContent: "space-between",
+           alignItems: "center",
+           justifyContent: "center",
+          }}
+          onPress={requestPHAuthNumber}
+         >
+          <Text style={{ color: "#3e50b4" }}>본인인증 받기</Text>
+         </TouchableOpacity>
+        </View>
+       </View>
+       {errors.userPHNumber?.type === "required" && (
+        <DataValueRed>필수 값 입니다.</DataValueRed>
+       )}
+       {(errors.userPHNumber?.type === "maxLength" ||
+        errors.userPHNumber?.type === "minLength") && (
+        <DataValueRed>올바르지 않은 휴대폰 번호입니다.</DataValueRed>
+       )}
+       {errors.userPHAuthNumber?.type === "required" && (
+        <DataValueRed>필수 값 입니다.</DataValueRed>
+       )}
+       {(errors.userPHAuthNumber?.type === "maxLength" ||
+        errors.userPHAuthNumber?.type === "minLength") && (
+        <DataValueRed>올바르지 않은 인증 번호입니다.</DataValueRed>
+       )}
+       {response.success === null && (
+        <DataValueRed>본인인증을 해주세요.</DataValueRed>
+       )}
+       {response.success === true && (
+        <DataValueRed style={{ color: "#3e50b4" }}>
+         본인인증을 성공했습니다.
+        </DataValueRed>
+       )}
+       {response.success === false && (
+        <DataValueRed>본인인증을 실패했습니다.</DataValueRed>
+       )}
+              <View style={{ flexDirection: "column" }}>
                 <DataName style={{ marginTop: 30 }}>본인인증 동의</DataName>
                 <DataValue>본인인증을 위한 약관에 동의</DataValue>
                 <DataValueBtn
@@ -359,14 +503,16 @@ export default ({ navigation }) => {
                   <AntDesign name={"checkcircleo"} color={userRegistInfo?.userHPAuthAgree == "Y" ? "#3e50b4" : "grey"} size={22} />
                 </DataValueBtn>
                 {errors.userHPAuthAgree && <DataValueRed>동의해야 진행할 수 있습니다.</DataValueRed>}
-                <DataValueBtnSec onPress={goToHPA1}>
-                  <Text>위치기반 서비스 이용약관</Text>
-                  <AntDesign name={"right"} color={"grey"} size={22} />
-                </DataValueBtnSec>
                 <DataValueBtnSec onPress={goToHPA2}>
                   <Text>개인정보 처리 방침</Text>
                   <AntDesign name={"right"} color={"grey"} size={22} />
                 </DataValueBtnSec>
+                {/**
+                <DataValueBtnSec onPress={goToHPA1}>
+                  <Text>서비스 이용약관</Text>
+                  <AntDesign name={"right"} color={"grey"} size={22} />
+                </DataValueBtnSec>
+                 */}
               </View>
             </Container>
           </Data>
