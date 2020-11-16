@@ -72,8 +72,8 @@ export default ({ navigation }) => {
         </ModalHeader>
         <ScrollContainer
           loading={false}
-          contentContainerStyle={{
-            paddingBottom: 80,
+          contentContainerStyle={{paddingBottom: 0,
+            marginBottom:0,
             backgroundColor: "transparent",
             marginTop: 0,
             paddingTop: 0
@@ -84,7 +84,6 @@ export default ({ navigation }) => {
           <Image style={{ width: screenWidth, height: screenHeight }} resizeMode={"stretch"} source={require("../../assets/terms2-2.png")} />
           <Image style={{ width: screenWidth, height: screenHeight }} resizeMode={"stretch"} source={require("../../assets/terms2-3.png")} />
           <Image style={{ width: screenWidth, height: screenHeight }} resizeMode={"stretch"} source={require("../../assets/terms2-4.png")} />
-          <Image style={{ width: screenWidth, height: screenHeight }} resizeMode={"stretch"} source={require("../../assets/terms2-5.png")} />
         </ScrollContainer>
       </Modal>
     </OuterContainer>

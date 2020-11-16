@@ -110,13 +110,15 @@ const DataValueBtnSec = styled.TouchableOpacity`
   margin-right: 40px;
   color: black;
   opacity: 0.8;
-  font-weight: 500;
-  font-size: 16px;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
 `;
 
+const DataValueBtnSecText = styled.Text`
+  font-weight: 500;
+  font-size: 12px;
+`;
 const DataValueRed = styled.Text`
   width: 200px;
   margin-left: 40px;
@@ -498,21 +500,21 @@ export default ({ navigation,route  }) => {
                       color: userRegistInfo?.userHPAuthAgree == "Y" ? "#3e50b4" : "grey"
                     }}
                   >
-                    휴대폰 본인인증 동의(필수)
+                    전체 이용약관 동의
                   </Text>
                   <AntDesign name={"checkcircleo"} color={userRegistInfo?.userHPAuthAgree == "Y" ? "#3e50b4" : "grey"} size={22} />
                 </DataValueBtn>
                 {errors.userHPAuthAgree && <DataValueRed>동의해야 진행할 수 있습니다.</DataValueRed>}
                 <DataValueBtnSec onPress={goToHPA2}>
-                  <Text>개인정보 처리 방침</Text>
+                  <DataValueBtnSecText>[필수]개인정보 처리 방침</DataValueBtnSecText>
                   <AntDesign name={"right"} color={"grey"} size={22} />
                 </DataValueBtnSec>
-                {/**
+                {
                 <DataValueBtnSec onPress={goToHPA1}>
-                  <Text>서비스 이용약관</Text>
+                  <DataValueBtnSecText>[필수]서비스 이용약관</DataValueBtnSecText>
                   <AntDesign name={"right"} color={"grey"} size={22} />
                 </DataValueBtnSec>
-                 */}
+                 }
               </View>
             </Container>
           </Data>

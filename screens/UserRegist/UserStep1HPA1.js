@@ -73,18 +73,19 @@ export default ({ navigation }) => {
         <ScrollContainer
           loading={false}
           contentContainerStyle={{
-            paddingBottom: 80,
+            paddingBottom: 0,
+            marginBottom:0,
             backgroundColor: "transparent",
             marginTop: 0,
             paddingTop: 0
           }}
           refreshOn={false}
         >
-          <Image style={{ width: screenWidth, height: screenHeight }} resizeMode={"stretch"} source={require("../../assets/term1.png")} />
-          <Image style={{ width: screenWidth, height: screenHeight }} resizeMode={"stretch"} source={require("../../assets/term2.png")} />
-          <Image style={{ width: screenWidth, height: screenHeight }} resizeMode={"stretch"} source={require("../../assets/term3.png")} />
-          <Image style={{ width: screenWidth, height: screenHeight }} resizeMode={"stretch"} source={require("../../assets/term4.png")} />
-          <Image style={{ width: screenWidth, height: screenHeight }} resizeMode={"stretch"} source={require("../../assets/term5.png")} />
+          <Image style={{ width: screenWidth, height: screenHeight }} resizeMode={"stretch"} source={require("../../assets/terms1-1.png")} />
+          <Image style={{ width: screenWidth, height: screenHeight }} resizeMode={"stretch"} source={require("../../assets/terms1-2.png")} />
+          <Image style={{ width: screenWidth, height: screenHeight }} resizeMode={"stretch"} source={require("../../assets/terms1-3.png")} />
+          <Image style={{ width: screenWidth, height: screenHeight }} resizeMode={"stretch"} source={require("../../assets/terms1-4.png")} />
+          <Image style={{ width: screenWidth, height: screenHeight }} resizeMode={"stretch"} source={require("../../assets/terms1-5.png")} />
         </ScrollContainer>
       </Modal>
     </OuterContainer>
