@@ -36,6 +36,8 @@ import TaxInvoice from "../screens/TaxInvoice";
 import MyInfoEdit from "../screens/MyInfoEdit";
 import MyInfoDetailEdit from "../screens/MyInfoEdit/MyInfoDetailEdit";
 import MyInfoDocumentsNavigation from "./MyInfoDocumentsNavigation";
+import TaxBillDetail from "../screens/TaxBill/TaxBillDetail";
+import DocketForm from "../screens/DocketForm/DocketForm";
 
 const Stack = createStackNavigator();
 
@@ -73,15 +75,15 @@ export default () => {
   hasCameraPermission != "undetermined" &&
   hasPhonePermission != "undetermined" &&
   hasFilePermission != "undetermined" ? (
-   hasTutorialPass ? (
-    userRegistInfo?.userNm &&
-    userRegistInfo?.userBirthDate &&
-    userRegistInfo?.userSex &&
-    userRegistInfo?.userHPAuthAgree &&
-    userRegistInfo?.userPHNumber &&
-    userRegistInfo?.userPattern &&
-    userRegistInfo?.userServiceAuthAgree &&
-    userRegistInfo?.userRegistComplete ? (
+   !hasTutorialPass ? (
+    !userRegistInfo?.userNm &&
+    !userRegistInfo?.userBirthDate &&
+    !userRegistInfo?.userSex &&
+    !userRegistInfo?.userHPAuthAgree &&
+    !userRegistInfo?.userPHNumber &&
+    !userRegistInfo?.userPattern &&
+    !userRegistInfo?.userServiceAuthAgree &&
+    !userRegistInfo?.userRegistComplete ? (
      <AuthNavigation />
     ) : (
      <UserRegistNavigation />
@@ -184,6 +186,8 @@ export default () => {
      component={MyInfoDocumentsNavigation}
     />
     <Stack.Screen name="MyInfoDetailEdit" component={MyInfoDetailEdit} />
+    <Stack.Screen name="TaxBillDetail" component={TaxBillDetail}/>
+    <Stack.Screen name="DocketForm" component={DocketForm}/>
    </Stack.Navigator>
   </NavigationContainer>
  );

@@ -34,6 +34,7 @@ export default () => {
   });
   return unsubscribe;
  }, [navigation]);
+ 
  return (
   <Stack.Navigator
    mode="modal"

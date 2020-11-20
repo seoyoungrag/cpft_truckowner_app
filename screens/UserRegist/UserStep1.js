@@ -173,7 +173,6 @@ export default ({ navigation,route  }) => {
   const getUserRegistInfo = useGetUserRegistInfo();
   const setUserRegistInfo = useSetUserRegistInfo();
   const confrimBtnClicked = async (userRegistInfoForm) => {
-    console.log('asdf');
     const newValue = Object.assign({}, userRegistInfo, userRegistInfoForm);
     await setUserRegistInfo(newValue);
     console.log(response);

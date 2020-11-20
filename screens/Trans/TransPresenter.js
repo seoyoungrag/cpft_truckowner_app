@@ -15,7 +15,13 @@ import { code } from "../../utils";
 import { useIsModal } from "../../ModalContext";
 import { useCodes } from "../../CodeContext";
 import { useGetUserRegistInfo } from "../../UserRegistContext";
+import MonthPicker from 'react-native-month-year-picker';
 import YearMonthPicker from "../../components/YearMonthPicker";
+import * as Calc from "../../components/Calc";
+import TransCard from "./TransCard";
+import axios from "axios";
+import * as rq from "react-query";
+import { getAnythingCpft, postAnythingCpft } from "../../api";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -74,6 +80,7 @@ const styles = StyleSheet.create({
 });
 
 export default ({ refreshFn, loading, now }) => {
+
  const navigation = useNavigation();
  const codes = useCodes();
  const getUserRegistInfo = useGetUserRegistInfo();
@@ -85,10 +92,27 @@ export default ({ refreshFn, loading, now }) => {
  const [selectedYear, setSelectedYear] = useState(2020);
  const [selectedMonth, setSelectedMonth] = useState(8);
  const monthPicker = useRef();
+
+ const targetMonthRef = useRef(new Date());
+
  const fetchData = async () => {
   const data = await getUserRegistInfo();
   setUserRegistInfoProp(data);
  };
+
+ const dummyArray = [1,2,3,4,5];
+
+ const [targetDate, setTargetDate] = useState(new Date());
+ const [isMonthPickerShow, setIsMonthPickerShow] = useState(false);
+
+ const dateChange = React.useCallback((e, newDate) => {
+  const date = newDate || targetDate;
+  setIsMonthPickerShow(false);
+  setTargetDate(date);
+  targetMonthRef.current = date;
+  rq.queryCache.invalidateQueries("getTransList");
+ }, [targetDate]);
+
 
  const goToTransDetail = (order, tmpKey) => {
   navigation.navigate("TransDetail", {
@@ -134,6 +158,24 @@ export default ({ refreshFn, loading, now }) => {
   });
   return unsubscribe;
  }, [navigation]);
+
+ const getTransList = async (url) => {
+   const {data} = await axios.get(url)
+ };
+
+
+ const dataInfo = rq.useQuery("getTransList", async () => {
+   const {data} = await axios.post("http://172.126.11.154:82/v2/trans/getTransList" ,{
+     targetMonth: targetMonthRef.current.toISOString(),
+   });
+   return data;
+ }, {
+   enabled: targetDate,
+   retry: 0,
+   refetchOnWindowFocus: false,
+   onSuccess: (data) => {}
+ });
+
  return (
   <>
    <Modal
@@ -192,11 +234,11 @@ export default ({ refreshFn, loading, now }) => {
       paddingLeft: 20,
      }}
     >
-     <Text
+     {/* <Text
       style={{ color: "#3e50b4", fontSize: 13, textAlignVertical: "center" }}
      >
-      {selectedYear}년
-     </Text>
+      {Calc.getMonthStr(targetDate)}월
+     </Text> */}
     </View>
     <View
      style={{
@@ -217,11 +259,11 @@ export default ({ refreshFn, loading, now }) => {
        alignItems: "center",
       }}
      >
-      <Text style={{ color: "#0d0d0d", fontSize: 24 }}>{selectedMonth}월</Text>
+      <Text style={{ color: "#0d0d0d", fontSize: 24 }}>{Calc.getMonthStr(targetDate)}월</Text>
       <TouchableOpacity
        onPress={() => {
-        setMonthPickerModalVisible(true);
-        //showPicker();
+        // setMonthPickerModalVisible(true);
+        setIsMonthPickerShow(true);
        }}
       >
        <FontAwesome5
@@ -231,9 +273,12 @@ export default ({ refreshFn, loading, now }) => {
         style={{ paddingHorizontal: 20 }}
        />
       </TouchableOpacity>
+      {isMonthPickerShow && <MonthPicker 
+          minimumDate={new Date(2000, 5)}
+          maximumDate={new Date(2025, 5)} onChange={dateChange} value={targetDate} locale="ko" />}
      </View>
     </View>
-    <Modal
+    {/* <Modal
      animationType="fade"
      hardwareAccelerated={true}
      transparent={true}
@@ -248,7 +293,8 @@ export default ({ refreshFn, loading, now }) => {
        }}
       />
      </View>
-    </Modal>
+    </Modal> */}
+    
    </View>
    <ScrollContainer
     refreshOn={true}
@@ -260,7 +306,8 @@ export default ({ refreshFn, loading, now }) => {
      paddingBottom: 50,
     }}
    >
-    {now.map((n, i) => (
+    {dataInfo.status === "success" && dataInfo.data.list.map((data, index) => <TransCard key={index} data={data} targetMonth={Calc.getMonthStr(targetDate)} />)}
+    {/* {now.map((n, i) => (
      <HorizontalTrans
       tmpKey={i}
       key={n.orderSeq}
@@ -299,7 +346,7 @@ export default ({ refreshFn, loading, now }) => {
        goToTransDetail(n, i);
       }}
      />
-    ))}
+    ))} */}
    </ScrollContainer>
   </>
  );
