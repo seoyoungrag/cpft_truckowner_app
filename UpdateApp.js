@@ -10,6 +10,7 @@ import VersionCheck from "react-native-version-check";
 import DeviceInfo from "react-native-device-info";
 import { startUpdateFlow } from "react-native-android-inapp-updates";
 
+const updateModes = "immediate";
 const { width } = Dimensions.get("screen");
 const statusBarHeight = getStatusBarHeight();
 let codePushOptions = {
