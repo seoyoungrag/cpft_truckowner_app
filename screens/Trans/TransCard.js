@@ -56,6 +56,7 @@ import {
               params: { screen: props.data.docketForm,
                         params: {
                           matchingCode: props.data.matchingCode,
+                          // truckManagerCode: props.data.truckManagerCode,
                           targetMonth: props.data.targetMonth,
                           excelSeq: props.data.excelSeq,
                         }}
@@ -66,7 +67,7 @@ import {
           <View style={{flex:1}}></View>
           <View style={{flex:11, alignItems: "center", borderWidth: 1, borderColor: "#3e50b4", borderRadius: 5, backgroundColor: "#3e50b4", height: 38}}>
             <TouchableOpacity onPress={() => navigation.navigate("TaxBillDetail", {
-              screen: ""
+              screen: "TaxBillDetail"
             })} style={{width: "100%", height: "100%", alignItems: "center"}}>
               <Text style={{color: "white", fontSize: 18, height: "100%", textAlignVertical: "center", fontWeight: "bold" }}>세금계산서</Text>
             </TouchableOpacity>

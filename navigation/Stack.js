@@ -186,8 +186,8 @@ export default () => {
      component={MyInfoDocumentsNavigation}
     />
     <Stack.Screen name="MyInfoDetailEdit" component={MyInfoDetailEdit} />
-    <Stack.Screen name="TaxBillDetail" component={TaxBillDetail}/>
     <Stack.Screen name="DocketForm" component={DocketForm}/>
+    <Stack.Screen name="TaxBillDetail" component={TaxBillDetail}/>
    </Stack.Navigator>
   </NavigationContainer>
  );
