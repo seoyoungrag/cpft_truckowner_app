@@ -365,7 +365,7 @@ export default ({ refreshFn, loading, url }) => {
      </TouchableOpacity>
      {/*<DetailHeaderTitle>1/5</DetailHeaderTitle>*/}
     </DetailHeader>
-    <WebView source={{ uri: url }} />
+    <WebView source={{ uri: url }} originWhitelist={['https://*', 'http://*']}/>
     {/**
     <DetailFooter>
      <CancelBtn
