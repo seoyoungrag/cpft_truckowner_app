@@ -215,3 +215,6 @@ web-build/
 *.hprof
 
 .react/
+android/app/release/app-release.apk
+.vscode/launch.json
+yarn-error.log

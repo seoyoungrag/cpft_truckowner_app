@@ -75,15 +75,15 @@ export default () => {
   hasCameraPermission != "undetermined" &&
   hasPhonePermission != "undetermined" &&
   hasFilePermission != "undetermined" ? (
-   !hasTutorialPass ? (
-    !userRegistInfo?.userNm &&
-    !userRegistInfo?.userBirthDate &&
-    !userRegistInfo?.userSex &&
-    !userRegistInfo?.userHPAuthAgree &&
-    !userRegistInfo?.userPHNumber &&
-    !userRegistInfo?.userPattern &&
-    !userRegistInfo?.userServiceAuthAgree &&
-    !userRegistInfo?.userRegistComplete ? (
+   hasTutorialPass ? (
+    userRegistInfo?.userNm &&
+    userRegistInfo?.userBirthDate &&
+    userRegistInfo?.userSex &&
+    userRegistInfo?.userHPAuthAgree &&
+    userRegistInfo?.userPHNumber &&
+    userRegistInfo?.userPattern &&
+    userRegistInfo?.userServiceAuthAgree &&
+    userRegistInfo?.userRegistComplete ? (
      <AuthNavigation />
     ) : (
      <UserRegistNavigation />
