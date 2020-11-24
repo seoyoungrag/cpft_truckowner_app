@@ -63,7 +63,7 @@
     "react-native-version-check": "^3.4.1",
     "react-native-web": "~0.11.7",
     "react-native-web-swiper": "^2.1.7",
-    "react-native-webview": "9.4.0",
+    "react-native-webview": "^9.4.0",
     "react-query": "^2.26.2",
     "react-redux": "^7.2.1",
     "redux": "^4.0.5",
