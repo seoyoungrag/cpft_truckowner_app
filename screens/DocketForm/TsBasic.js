@@ -11,7 +11,7 @@ import PenaltyDetail from "./Details/PenaltyDetail";
 import PaymentDetail from "./Details/PaymentDetail";
 
 export default ({navigation, route}) => {
-	const {matchingCode, targetMonth, excelSeq} = route.params;
+	const {matchingCode, targetMonth} = route.params;
 	const [status, setStatus] = React.useState({
 		isOpen1: false,
 		isOpen2: false,
@@ -23,25 +23,24 @@ export default ({navigation, route}) => {
 	const dataInfo = rq.useQuery(
 		"getDtstmnPreView",
 		async () => {
-			const {data} = await axios.post("https://blueapi.teamfresh.co.kr/v2/trans/getDtstmnPreView", {
+			const {data} = await axios.post("http://172.126.11.154:82/v2/trans/getDtstmnPreView", {
 				matchingCode: matchingCode,
 				deliveryDate: targetMonth,
-				excelSeq: excelSeq,
 			});
 			return data;
 		},
 		{
 			retry: 0,
+			onSuccess: () => {},
 		}
 	);
 
 	const paymentInfo = rq.useQuery(
 		"getPaymentList",
 		async () => {
-			const {data} = await axios.post("https://blueapi.teamfresh.co.kr/v2/trans/getPaymentList", {
+			const {data} = await axios.post("http://172.126.11.154:82/v2/trans/getPaymentList", {
 				matchingCode: matchingCode,
 				deliveryDate: targetMonth,
-				excelSeq: excelSeq,
 			});
 			return data;
 		},
@@ -54,10 +53,9 @@ export default ({navigation, route}) => {
 	const deductionInfo = rq.useQuery(
 		"getDeductionList",
 		async () => {
-			const {data} = await axios.post("https://blueapi.teamfresh.co.kr/v2/trans/getDeductionList", {
+			const {data} = await axios.post("http://172.126.11.154:82/v2/trans/getDeductionList", {
 				matchingCode: matchingCode,
 				deliveryDate: targetMonth,
-				excelSeq: excelSeq,
 			});
 			return data;
 		},
@@ -70,10 +68,9 @@ export default ({navigation, route}) => {
 	const penaltyInfo = rq.useQuery(
 		"getPenaltyList",
 		async () => {
-			const {data} = await axios.post("https://blueapi.teamfresh.co.kr/v2/trans/getPenaltyList", {
+			const {data} = await axios.post("http://172.126.11.154:82/v2/trans/getPenaltyList", {
 				matchingCode: matchingCode,
 				deliveryDate: targetMonth,
-				excelSeq: excelSeq,
 			});
 			return data;
 		},

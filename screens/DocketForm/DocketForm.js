@@ -18,8 +18,9 @@ const DocketFormContainer = ({navigation, route}) => {
 		<DocketFormNav.Navigator>
 			<DocketFormNav.Screen name="TS고정" component={TsBasic} />
 			<DocketFormNav.Screen name="LF고정" component={LfBasic} />
-			<DocketFormNav.Screen name="LF이디야고정" component={LfEdiya} />
-			<DocketFormNav.Screen name={"TS용차" || "LF용차" || "LF이디야용차"} component={DailyWork} />
+			<DocketFormNav.Screen name="TS용차" component={DailyWork} />
+			<DocketFormNav.Screen name="LF용차" component={DailyWork} />
+			{/* <DocketFormNav.Screen name="LF이디야용차" component={DailyWork} /> */}
 		</DocketFormNav.Navigator>
 	);
 };
