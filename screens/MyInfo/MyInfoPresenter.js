@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from "react";
-import {Dimensions, Text, TouchableOpacity, Modal, View, StyleSheet, KeyboardAvoidingView} from "react-native";
+import {Dimensions, Text, TouchableOpacity, Modal, View, StyleSheet, KeyboardAvoidingView, Image} from "react-native";
 import {useNavigation} from "@react-navigation/native";
 import {Entypo} from "@expo/vector-icons";
 import HorizontalMyOrders from "../../components/HorizontalMyOrders";
@@ -192,8 +192,8 @@ export default ({refreshFn, loading, truckOwnerOrders}) => {
 					</View>
 				</View>
 			</Modal>
-			<View style={{flex: 1, backgroundColor: "white"}}>
-				<Title title="MY" />
+			<View style={{flex: 1, backgroundColor: "white", paddingHorizontal: 20}}>
+				{/* <Title title="MY" />
 				<TouchableOpacity
 					onPress={() => {
 						navigation.navigate("MyInfoEdit");
@@ -325,7 +325,33 @@ export default ({refreshFn, loading, truckOwnerOrders}) => {
 							/>
 						))}
 					</ScrollContainer>
-				</Container>
+				</Container> */}
+				<View style={{marginTop: 20}}>
+					<TouchableOpacity
+						onPress={() => {
+							navigation.navigate("MyInfoDetail");
+						}}
+						style={{flexDirection: "row", alignItems: "center"}}
+					>
+						<Image source={require("../../assets/img/icon_profile.png")} />
+						<Text style={{marginLeft: 10, fontSize: 15, fontWeight: "bold", color: "black"}}>{userRegistInfo?.userNm}&nbsp;님</Text>
+					</TouchableOpacity>
+					<View style={{marginTop: 10, flexDirection: "row", justifyContent: "space-evenly"}}>
+						<TouchableOpacity style={{flex: 9, borderColor: "black", borderWidth: 1, alignItems: "center", justifyContent: "center", borderRadius: 15, height: 150}}>
+							<View style={{flexDirection: "column", alignItems: "center"}}>
+								<Image source={require("../../assets/img/icon_명세서_lg.png")} style={{marginBottom: 10}} />
+								<Text style={{color: "black"}}>명세서</Text>
+							</View>
+						</TouchableOpacity>
+						<View style={{flex: 1}}></View>
+						<TouchableOpacity style={{flex: 9, borderColor: "black", borderWidth: 1, alignItems: "center", justifyContent: "center", borderRadius: 15, height: 150}}>
+							<View style={{flexDirection: "column", alignItems: "center"}}>
+								<Image source={require("../../assets/img/icon_taxBill-lg.png")} style={{marginBottom: 10}} />
+								<Text style={{color: "black"}}>세금계산서</Text>
+							</View>
+						</TouchableOpacity>
+					</View>
+				</View>
 			</View>
 		</>
 	);
