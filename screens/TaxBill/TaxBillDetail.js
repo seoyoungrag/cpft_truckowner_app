@@ -5,6 +5,7 @@ import {Table, Row, TableWrapper, Cell} from "react-native-table-component";
 import {WebView} from "react-native-webview";
 import CameraRoll from "@react-native-community/cameraroll";
 import RNFS from "react-native-fs";
+import * as Permissions from "expo-permissions";
 
 const TaxBillDetailStacks = createStackNavigator();
 
@@ -12,26 +13,44 @@ const TaxBillDetail = ({navigation, route}) => {
 	const taxBillSeq = route.params.params.taxBillSeq;
 	const targetMonth = new Date(route.params.params.targetMonth);
 
-	const url = "http://172.126.11.154:3000/forApp/TaxBillDetailForApp?taxBillSeq=" + taxBillSeq + "&targetMonth=" + targetMonth;
+	const url = "http://172.126.11.151:3000/forApp/TaxBillDetailForApp?taxBillSeq=" + taxBillSeq + "&targetMonth=" + targetMonth;
 
 	const viewRef = React.useRef();
 	const [source, setSource] = React.useState(null);
 
 	const onDownloadBtn = React.useCallback(() => {
+		
 		let imageData = source.dataUrl.split("data:image/png;base64,");
 		imageData = imageData[1];
 
-		const filePath = `${RNFS.DocumentDirectoryPath}`;
+		const filePath = `${RNFS.DownloadDirectoryPath}`;
 		console.log("오", filePath);
 
+		//Creating folder
+		if (RNFS.exists(filePath)) {
+
+			RNFS.unlink(filePath)
+			.then(() => {
+				console.log('FOLDER/FILE DELETED');
+			})
+			// `unlink` will throw an error, if the item to unlink does not exist
+			.catch((err) => {
+				console.log('CANT DELETE', err.message);
+			});
+	
+			RNFS.mkdir(filePath)
+		}
+		if(imageData){
 		RNFS.writeFile(filePath + "/세금계산서.png", imageData, "base64")
 			.then((success) => {
+				console.log(filePath);
 				console.log("성공");
 			})
 			.catch((err) => {
 				console.log("실패");
 			});
 		// const result = await CameraRoll.save(file);
+		}
 	}, [source]);
 
 	/** 웹뷰에서 rn으로 값을 보낼때 거치는 함수 */
@@ -40,9 +59,18 @@ const TaxBillDetail = ({navigation, route}) => {
 		setSource(JSON.parse(data));
 	};
 
+	React.useEffect(()=>{
+		const askPermission = async() => {
+
+			const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+			console.log("asdfasdf",status);
+		}
+		askPermission();
+		return askPermission;
+	},[])
 	return (
 		<>
-			<WebView
+			<WebView 
 				ref={viewRef}
 				onMessage={handleOnMessage}
 				source={{uri: url}}
