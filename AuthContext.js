@@ -24,8 +24,20 @@ export const AuthProvider = ({ isLoggedIn: isLoggedInProp, children }) => {
   }
  };
 
+ const getIsLoggedIn = async () => {
+  try {
+    const value = await AsyncStorage.getItem("isLoggedIn");
+    setIsLoggedIn(value);
+   } catch (e) {
+    console.log(e);
+   }
+ }
+
+ React.useEffect(() => {
+    getIsLoggedIn();
+ }, []);
  return (
-  <AuthContext.Provider value={{ isLoggedIn, logUserIn, logUserOut }}>
+  <AuthContext.Provider value={{ isLoggedIn, logUserIn, logUserOut, getIsLoggedIn }}>
    {children}
   </AuthContext.Provider>
  );
@@ -36,6 +48,10 @@ export const useIsLoggedIn = () => {
  return isLoggedIn;
 };
 
+export const useGetIsLoggedIn = () => {
+    const { getIsLoggedIn } = useContext(AuthContext);
+    return getIsLoggedIn;
+}
 export const useLogIn = () => {
  const { logUserIn } = useContext(AuthContext);
  return logUserIn;

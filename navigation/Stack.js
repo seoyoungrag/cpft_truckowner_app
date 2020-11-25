@@ -1,23 +1,22 @@
 import React from "react";
-import {createStackNavigator, HeaderBackButton} from "@react-navigation/stack";
-import {NavigationContainer, useNavigation} from "@react-navigation/native";
+import {createStackNavigator} from "@react-navigation/stack";
+import {NavigationContainer} from "@react-navigation/native";
 import Detail from "../screens/Detail";
 import Filter from "../screens/Filter";
 import Tabs from "./Tabs";
-import {useIsLoggedIn, useLogIn, useLogOut} from "../AuthContext";
+import { useIsLoggedIn, useLogIn, useLogOut} from "../AuthContext";
 import AuthNavigation from "./AuthNavigation";
 import PermissionNavigation from "./PermissionNavigation";
-import {TouchableOpacity, Text} from "react-native";
+import { Text} from "react-native";
 import PhotoNavigation from "./PhotoNavigation";
 import MessageNavigation from "./MessageNavigation";
 import UserRegistNavigation from "./UserRegistNavigation";
 import {useHasCameraPermission, useHasFilePermission, useHasPhonePermission} from "../PermissionContext";
 import TutorialNavigation from "./TutorialNavigation";
 import {useHasTutorialPass} from "../TutorialContext";
-import {useGetUserRegistInfo, useSetUserRegistInfo, useUserRegistInfo} from "../UserRegistContext";
+import {useUserRegistInfo} from "../UserRegistContext";
 import {FontAwesome5} from "@expo/vector-icons";
 import UserStep4 from "../screens/UserRegist/UserStep4";
-import UserStep4AddrFindView from "../screens/UserRegist/UserStep4AddrFindView";
 import OrderDetail from "../screens/OrderDetail";
 import TransDetail from "../screens/TransDetail";
 import DtStmn from "../screens/DtStmn";
@@ -70,7 +69,6 @@ export default () => {
 				userRegistInfo?.userHPAuthAgree &&
 				userRegistInfo?.userPHNumber &&
 				userRegistInfo?.userPattern &&
-				userRegistInfo?.userServiceAuthAgree &&
 				userRegistInfo?.userRegistComplete ? (
 					<AuthNavigation />
 				) : (

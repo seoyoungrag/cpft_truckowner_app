@@ -20,6 +20,9 @@ export const TutorialProvider = ({
    console.log(e);
   }
  };
+ React.useEffect(() => {
+    getHasTutorialPass();
+ }, []);
  return (
   <TutorialContext.Provider
    value={{

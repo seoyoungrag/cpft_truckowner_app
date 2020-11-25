@@ -32,17 +32,24 @@ export const PermissionProvider = ({
  };
  const getCameraPermission = async () => {
   const { status } = await Permissions.getAsync(Permissions.CAMERA);
+  setHasCameraPermission(status);
   return status;
  };
-
  const getPhonePermission = async () => {
   const { status } = await Permissions.getAsync(Permissions.CONTACTS);
+  setHasPhonePermission(status);
   return status;
  };
  const getFilePermission = async () => {
   const { status } = await Permissions.getAsync(Permissions.CAMERA_ROLL);
+  setHasFilePermission(status);
   return status;
  };
+ React.useEffect(() => {
+    getCameraPermission();
+    getPhonePermission();
+    getFilePermission();
+ }, []);
  return (
   <PermissionContext.Provider
    value={{
