@@ -11,6 +11,7 @@ export const UserRegistProvider = ({
  const getUserRegistInfo = async () => {
   try {
    const value = await AsyncStorage.getItem("userRegistInfo");
+   await setUserRegistInfoProp(JSON.parse(value));
    return Promise.resolve(JSON.parse(value));
   } catch (e) {
    console.log(e);
@@ -26,6 +27,9 @@ export const UserRegistProvider = ({
    await setUserRegistInfoProp(null);
   }
  };
+ React.useEffect(() => {
+    getUserRegistInfo();
+ }, []);
  return (
   <UserRegistContext.Provider
    value={{
