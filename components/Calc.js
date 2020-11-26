@@ -23,6 +23,16 @@ export const getMonthStr = (date) => {
 	month = month >= 10 ? month : "0" + month;
 	return year + "-" + month;
 };
+// data에 new Date 형식의 값을 넣으면 yy.mm.dd 형태로 반환해줌
+export const getDateMark = (date) => {
+	let year = date.getFullYear();
+	let month = date.getMonth() + 1;
+	let day = date.getDate();
+	year = String(year).substring(2, String(year).length);
+	month = month >= 10 ? month : "0" + month;
+	day = day >= 10 ? day : "0" + day;
+	return year + "." + month + "." + day;
+};
 
 // 한화 ,000,000 표시
 export const regexWON = (number) => {

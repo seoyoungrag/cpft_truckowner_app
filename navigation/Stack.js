@@ -7,7 +7,7 @@ import Tabs from "./Tabs";
 import {useIsLoggedIn, useLogIn, useLogOut} from "../AuthContext";
 import AuthNavigation from "./AuthNavigation";
 import PermissionNavigation from "./PermissionNavigation";
-import {TouchableOpacity, Text} from "react-native";
+import {TouchableOpacity, Text, StatusBar} from "react-native";
 import PhotoNavigation from "./PhotoNavigation";
 import MessageNavigation from "./MessageNavigation";
 import UserRegistNavigation from "./UserRegistNavigation";
@@ -28,6 +28,8 @@ import MyInfoDocumentsNavigation from "./MyInfoDocumentsNavigation";
 import TaxBillDetail from "../screens/TaxBill/TaxBillDetail";
 import DocketForm from "../screens/DocketForm/DocketForm";
 import MyInfoDetail from "../screens/MyInfoDocuments/MyInfoDetail";
+import EditConfig from "../components/EditConfig";
+import NoticeContainer from "../screens/Notice/NoticeContainer";
 
 const Stack = createStackNavigator();
 
@@ -61,7 +63,7 @@ export default () => {
 	const hasTutorialPass = useHasTutorialPass();
 	const userRegistInfo = useUserRegistInfo();
 	//return <UserRegistNavigation />;
-	return !isLoggedIn ? (
+	return isLoggedIn ? (
 		hasCameraPermission != "undetermined" && hasPhonePermission != "undetermined" && hasFilePermission != "undetermined" ? (
 			hasTutorialPass ? (
 				userRegistInfo?.userNm &&
@@ -83,35 +85,37 @@ export default () => {
 			<PermissionNavigation />
 		)
 	) : (
-		<NavigationContainer independent={true}>
-			<Stack.Navigator
-				mode="modal"
-				screenOptions={{
-					gestureEnabled: true,
-					headerStyle: {
-						backgroundColor: "#3e50b4",
-						shadowColor: "#3e50b4",
-						borderBottomColor: "#3e50b4",
-					},
-					headerTintColor: "white",
-					headerBackTitleVisible: false,
-					headerShown: false,
-				}}
-			>
-				<Stack.Screen name="Tabs" component={Tabs} />
-				<Stack.Screen name="Detail" component={Detail} />
-				<Stack.Screen
-					name="Filter"
-					component={Filter}
-					options={{
-						headerTitleStyle: {
-							textAlign: "center",
-							marginLeft: -20,
-							paddingLeft: 0,
-							fontSize: 24,
-							color: "white",
+		<>
+			<StatusBar barStyle="dark-content" backgroundColor="white" />
+			<NavigationContainer independent={true}>
+				<Stack.Navigator
+					mode="modal"
+					screenOptions={{
+						gestureEnabled: true,
+						headerStyle: {
+							backgroundColor: "#3e50b4",
+							shadowColor: "#3e50b4",
+							borderBottomColor: "#3e50b4",
 						},
-						/*
+						headerTintColor: "white",
+						headerBackTitleVisible: false,
+						headerShown: false,
+					}}
+				>
+					<Stack.Screen name="Tabs" component={Tabs} />
+					<Stack.Screen name="Detail" component={Detail} />
+					<Stack.Screen
+						name="Filter"
+						component={Filter}
+						options={{
+							headerTitleStyle: {
+								textAlign: "center",
+								marginLeft: -20,
+								paddingLeft: 0,
+								fontSize: 24,
+								color: "white",
+							},
+							/*
        headerLeft: (props) => (
         <HeaderBackButton
          {...props}
@@ -120,81 +124,103 @@ export default () => {
          }}
         ></HeaderBackButton>
        ),*/
-						headerTintColor: "white",
-						headerBackTitleVisible: false,
-						headerShown: true,
-						headerTitle: (props) => (
-							<Text {...props}>
-								필터{" "}
-								<FontAwesome5
-									name="filter"
-									size={24}
-									color="white"
-									style={{
-										marginLeft: 10,
-									}}
-								/>
-							</Text>
-						),
-					}}
-				/>
-				<Stack.Screen name="PhotoNavigation" component={PhotoNavigation} />
-				<Stack.Screen name="MessageNavigation" component={MessageNavigation} />
-				<Stack.Screen
-					name="추가정보입력"
-					component={UserStep4}
-					options={{
-						transitionSpec: {
-							open: config,
-							close: config,
-						},
-						cardStyleInterpolator: forFade,
-						headerShown: false,
-					}}
-				/>
-				<Stack.Screen
-					name="OrderDetail"
-					component={OrderDetail}
-					options={{
-						headerShown: false,
-					}}
-				/>
-				<Stack.Screen
-					name="TransDetail"
-					component={TransDetail}
-					options={{
-						headerShown: false,
-					}}
-				/>
-				<Stack.Screen name="DtStmn" component={DtStmn} />
-				<Stack.Screen name="TaxInvoice" component={TaxInvoice} />
-				<Stack.Screen name="MyInfoEdit" component={MyInfoEdit} />
-				<Stack.Screen name="MyInfoDocuments" component={MyInfoDocumentsNavigation} />
-				<Stack.Screen name="MyInfoDetailEdit" component={MyInfoDetailEdit} />
+							headerTintColor: "white",
+							headerBackTitleVisible: false,
+							headerShown: true,
+							headerTitle: (props) => (
+								<Text {...props}>
+									필터{" "}
+									<FontAwesome5
+										name="filter"
+										size={24}
+										color="white"
+										style={{
+											marginLeft: 10,
+										}}
+									/>
+								</Text>
+							),
+						}}
+					/>
+					<Stack.Screen name="PhotoNavigation" component={PhotoNavigation} />
+					<Stack.Screen name="MessageNavigation" component={MessageNavigation} />
+					<Stack.Screen
+						name="추가정보입력"
+						component={UserStep4}
+						options={{
+							transitionSpec: {
+								open: config,
+								close: config,
+							},
+							cardStyleInterpolator: forFade,
+							headerShown: false,
+						}}
+					/>
+					<Stack.Screen
+						name="OrderDetail"
+						component={OrderDetail}
+						options={{
+							headerShown: false,
+						}}
+					/>
+					<Stack.Screen
+						name="TransDetail"
+						component={TransDetail}
+						options={{
+							headerShown: false,
+						}}
+					/>
+					<Stack.Screen name="DtStmn" component={DtStmn} />
+					<Stack.Screen name="TaxInvoice" component={TaxInvoice} />
+					<Stack.Screen name="MyInfoEdit" component={MyInfoEdit} />
+					<Stack.Screen name="MyInfoDocuments" component={MyInfoDocumentsNavigation} />
+					<Stack.Screen name="MyInfoDetailEdit" component={MyInfoDetailEdit} />
 
-				<Stack.Screen name="DocketForm" component={DocketForm} />
-				<Stack.Screen name="TaxBillDetail" component={TaxBillDetail} />
-				<Stack.Screen
-					name="MyInfoDetail"
-					component={MyInfoDetail}
-					options={{
-						title: "개인정보",
-						headerStyle: {
-							backgroundColor: "#3e50b4",
-						},
-						headerTitleStyle: {
-							textAlign: "center",
-							marginLeft: -44,
-							paddingLeft: 0,
-							fontSize: 24,
-							color: "white",
-						},
-						headerTintColor: "white",
-						headerBackTitleVisible: false,
-						headerShown: true,
-					}}
-				/>
-			</Stack.Navigator>
-		</NavigationContainer>
+					<Stack.Screen name="DocketForm" component={DocketForm} />
+					<Stack.Screen name="TaxBillDetail" component={TaxBillDetail} />
+					<Stack.Screen
+						name="MyInfoDetail"
+						component={MyInfoDetail}
+						options={{
+							title: "개인정보",
+							headerStyle: {
+								backgroundColor: "#3e50b4",
+							},
+							headerTitleStyle: {
+								textAlign: "center",
+								marginLeft: -44,
+								paddingLeft: 0,
+								fontSize: 24,
+								color: "white",
+							},
+							headerTintColor: "white",
+							headerBackTitleVisible: false,
+							headerShown: true,
+						}}
+					/>
+					<Stack.Screen
+						name="EditConfig"
+						component={EditConfig}
+						options={{
+							title: "환경설정",
+							headerStyle: {
+								backgroundColor: "#3e50b4",
+							},
+							headerTitleStyle: {
+								textAlign: "center",
+								marginLeft: -44,
+								paddingLeft: 0,
+								fontSize: 24,
+								color: "white",
+							},
+							headerTintColor: "white",
+							headerBackTitleVisible: false,
+							headerShown: true,
+						}}
+					/>
+					<Stack.Screen name="NoticeContainer" component={NoticeContainer} />
+				</Stack.Navigator>
+			</NavigationContainer>
+		</>
 	);
 };

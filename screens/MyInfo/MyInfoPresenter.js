@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from "react";
-import {Dimensions, Text, TouchableOpacity, Modal, View, StyleSheet, KeyboardAvoidingView, Image} from "react-native";
+import {Dimensions, Text, TouchableOpacity, Modal, View, StyleSheet, KeyboardAvoidingView, StatusBar, Image} from "react-native";
 import {useNavigation} from "@react-navigation/native";
 import {Entypo} from "@expo/vector-icons";
 import HorizontalMyOrders from "../../components/HorizontalMyOrders";
@@ -337,14 +337,32 @@ export default ({refreshFn, loading, truckOwnerOrders}) => {
 						<Text style={{marginLeft: 10, fontSize: 15, fontWeight: "bold", color: "black"}}>{userRegistInfo?.userNm}&nbsp;님</Text>
 					</TouchableOpacity>
 					<View style={{marginTop: 10, flexDirection: "row", justifyContent: "space-evenly"}}>
-						<TouchableOpacity style={{flex: 9, borderColor: "black", borderWidth: 1, alignItems: "center", justifyContent: "center", borderRadius: 15, height: 150}}>
+						<TouchableOpacity
+							onPress={() => {
+								navigation.navigate("MyInfoDocuments", {
+									screen: "MyInfoEditTabs",
+									params: {
+										screen: "MyDtstmnList",
+									},
+								});
+							}}
+							style={{flex: 9, borderColor: "black", borderWidth: 1, alignItems: "center", justifyContent: "center", borderRadius: 15, height: 150}}
+						>
 							<View style={{flexDirection: "column", alignItems: "center"}}>
 								<Image source={require("../../assets/img/icon_명세서_lg.png")} style={{marginBottom: 10}} />
 								<Text style={{color: "black"}}>명세서</Text>
 							</View>
 						</TouchableOpacity>
 						<View style={{flex: 1}}></View>
-						<TouchableOpacity style={{flex: 9, borderColor: "black", borderWidth: 1, alignItems: "center", justifyContent: "center", borderRadius: 15, height: 150}}>
+						<TouchableOpacity
+							onPress={() => {
+								navigation.navigate("MyInfoDocuments", {
+									screen: "MyInfoEditTabs",
+									params: {screen: "MyTaxInvoiceList"},
+								});
+							}}
+							style={{flex: 9, borderColor: "black", borderWidth: 1, alignItems: "center", justifyContent: "center", borderRadius: 15, height: 150}}
+						>
 							<View style={{flexDirection: "column", alignItems: "center"}}>
 								<Image source={require("../../assets/img/icon_taxBill-lg.png")} style={{marginBottom: 10}} />
 								<Text style={{color: "black"}}>세금계산서</Text>

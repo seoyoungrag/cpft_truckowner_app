@@ -54,12 +54,6 @@ export default (props) => {
 											params: {
 												targetMonth: props.targetMonth,
 												matchingCode: props.data.matchingCode,
-												// driverSeq: props.data.driverSeq,
-												// carrierSeq: 1,
-												// taxBillSeq: props.data.taxBillSeq,
-												// taxBillItemSeq: props.data.taxBillItemSeq,
-												// truckManagerCode: props.data.truckManagerCode,
-												// excelSeq: props.data.excelSeq,
 											},
 										},
 									});
@@ -72,25 +66,17 @@ export default (props) => {
 						<View style={{flex: 1}}></View>
 						<View style={{flex: 11, alignItems: "center", borderWidth: 1, borderColor: "#3e50b4", borderRadius: 5, backgroundColor: "#3e50b4", height: 38}}>
 							<TouchableOpacity
-								onPress={() =>
+								onPress={() => {
+									console.log(props.data.taxBillSeq);
+									console.log(props.data.targetMonth);
 									navigation.navigate("TaxBillDetail", {
 										screen: "TaxBillDetail",
 										params: {
-											screen: props.data.docketForm,
-											params: {
-												targetMonth: props.targetMonth,
-												taxBillSeq: props.data.taxBillSeq,
-												// driverSeq: props.data.driverSeq,
-												// carrierSeq: 1,
-												// carryingSeq: props.data.carryingSeq,
-												// taxBillItemSeq: props.data.taxBillItemSeq,
-												// matchingCode: props.data.matchingCode,
-												// truckManagerCode: props.data.truckManagerCode,
-												// excelSeq: props.data.excelSeq,
-											},
+											targetMonth: Calc.getMonthStr(new Date(props.data.targetMonth)),
+											taxBillSeq: props.data.taxBillSeq,
 										},
-									})
-								}
+									});
+								}}
 								style={{width: "100%", height: "100%", alignItems: "center"}}
 							>
 								<Text style={{color: "white", fontSize: 18, height: "100%", textAlignVertical: "center", fontWeight: "bold"}}>세금계산서</Text>

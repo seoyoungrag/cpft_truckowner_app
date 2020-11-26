@@ -235,7 +235,8 @@ export default ({refreshFn, loading, now}) => {
 						paddingLeft: 20,
 						paddingRight: 20,
 						paddingVertical: 3,
-						justifyContent: "space-between",
+						justifyContent: "flex-start",
+						paddingTop: 15,
 					}}
 				>
 					<View
@@ -280,11 +281,10 @@ export default ({refreshFn, loading, now}) => {
 				loading={loading}
 				contentContainerStyle={{
 					backgroundColor: useIsModal() ? "rgba(0,0,0,0.5)" : "white",
-					paddingTop: 10,
 					paddingBottom: 50,
 				}}
 			>
-				{dataInfo.status === "success" && dataInfo.data.list.map((data, index) => <TransCard key={index} data={data} targetMonth={Calc.getMonthStr(targetDate)} />)}
+				{dataInfo.status === "success" && dataInfo.data.list.map((data, index) => <TransCard key={index} data={data} />)}
 				{/* {now.map((n, i) => (
      <HorizontalTrans
       tmpKey={i}

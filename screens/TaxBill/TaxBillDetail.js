@@ -9,8 +9,8 @@ import RNFS from "react-native-fs";
 const TaxBillDetailStacks = createStackNavigator();
 
 const TaxBillDetail = ({navigation, route}) => {
-	const taxBillSeq = route.params.params.taxBillSeq;
-	const targetMonth = new Date(route.params.params.targetMonth);
+	const taxBillSeq = route.params.taxBillSeq;
+	const targetMonth = new Date(route.params.targetMonth);
 
 	const url = "http://172.126.11.154:3000/forApp/TaxBillDetailForApp?taxBillSeq=" + taxBillSeq + "&targetMonth=" + targetMonth;
 
