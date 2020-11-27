@@ -21,7 +21,6 @@ export default (props) => {
 		const obj = {
 			matchingCode: props.data.matchingCode,
 			targetMonth: props.data.targetMonth,
-			excelSeq: props.data.excelSeq,
 		};
 		updateCall(obj);
 	}, [props]);
@@ -67,19 +66,21 @@ export default (props) => {
 						<View style={{flex: 11, alignItems: "center", borderWidth: 1, borderColor: "#3e50b4", borderRadius: 5, backgroundColor: "#3e50b4", height: 38}}>
 							<TouchableOpacity
 								onPress={() => {
-									console.log(props.data.taxBillSeq);
-									console.log(props.data.targetMonth);
 									navigation.navigate("TaxBillDetail", {
 										screen: "TaxBillDetail",
 										params: {
 											targetMonth: Calc.getMonthStr(new Date(props.data.targetMonth)),
 											taxBillSeq: props.data.taxBillSeq,
+											businessType: props.data.businessType,
+											taxBillType: props.data.taxbilType,
 										},
 									});
 								}}
 								style={{width: "100%", height: "100%", alignItems: "center"}}
 							>
-								<Text style={{color: "white", fontSize: 18, height: "100%", textAlignVertical: "center", fontWeight: "bold"}}>세금계산서</Text>
+								<Text style={{color: "white", fontSize: 18, height: "100%", textAlignVertical: "center", fontWeight: "bold"}}>
+									{props.data.businessType === "간이" && props.data.taxbilType === "간이" ? "운송료 영수증" : "세금계산서"}
+								</Text>
 							</TouchableOpacity>
 						</View>
 					</View>

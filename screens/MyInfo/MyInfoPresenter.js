@@ -132,7 +132,7 @@ const UserPRComment = styled.Text`
 	text-decoration-line: underline;
 `;
 
-export default ({refreshFn, loading, truckOwnerOrders}) => {
+export default (props) => {
 	const navigation = useNavigation();
 	const codes = useCodes();
 	const getUserRegistInfo = useGetUserRegistInfo();

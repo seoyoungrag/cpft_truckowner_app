@@ -1,21 +1,11 @@
 import React from "react";
-import styled from "styled-components";
 import ScrollContainer from "../../components/ScrollContainer";
-import MyDocumentListRow from "../../components/MyDocumentListRow";
 import * as rq from "react-query";
 import axios from "axios";
 import {useNavigation} from "@react-navigation/native";
 import {Text, View, TouchableOpacity} from "react-native";
 import TaxBillRow from "./TaxBillRow";
-import {FontAwesome5, Entypo} from "@expo/vector-icons";
-
-const DataBottomBtn = styled.TouchableOpacity`
-	flex: 1;
-	align-items: center;
-	justify-content: center;
-	background-color: #3e50b4;
-	border-color: white;
-`;
+import {Entypo} from "@expo/vector-icons";
 
 export default () => {
 	const navigation = useNavigation();
@@ -90,90 +80,6 @@ export default () => {
 					</View>
 					{dataInfo?.status === "success" && dataInfo?.data?.list.map((data, index) => <TaxBillRow key={index} data={data} />)}
 				</View>
-				{/* <MyDocumentListRow
-    title="2020년 7월 고정"
-    content={
-     <DataBottomBtn
-      onPress={() => {
-       navigation.navigate("TaxInvoice", {
-        mgtKey: "7a7a2bg97o2w8oei93j5d18n",
-       });
-      }}
-     >
-      <Text style={{ fontSize: 24, color: "white" }}>세금계산서</Text>
-     </DataBottomBtn>
-    }
-   />
-   <MyDocumentListRow
-    title="2020년 6월 고정"
-    content={
-     <DataBottomBtn
-      onPress={() => {
-       navigation.navigate("TaxInvoice", {
-        mgtKey: "7a7a2bg97o2w8oei93j5d18n",
-       });
-      }}
-     >
-      <Text style={{ fontSize: 24, color: "white" }}>세금계산서</Text>
-     </DataBottomBtn>
-    }
-   />
-   <MyDocumentListRow
-    title="2020년 5월 고정"
-    content={
-     <DataBottomBtn
-      onPress={() => {
-       navigation.navigate("TaxInvoice", {
-        mgtKey: "7a7a2bg97o2w8oei93j5d18n",
-       });
-      }}
-     >
-      <Text style={{ fontSize: 24, color: "white" }}>세금계산서</Text>
-     </DataBottomBtn>
-    }
-   />
-   <MyDocumentListRow
-    title="2020년 4월 고정"
-    content={
-     <DataBottomBtn
-      onPress={() => {
-       navigation.navigate("TaxInvoice", {
-        mgtKey: "7a7a2bg97o2w8oei93j5d18n",
-       });
-      }}
-     >
-      <Text style={{ fontSize: 24, color: "white" }}>세금계산서</Text>
-     </DataBottomBtn>
-    }
-   />
-   <MyDocumentListRow
-    title="2020년 3월 고정"
-    content={
-     <DataBottomBtn
-      onPress={() => {
-       navigation.navigate("TaxInvoice", {
-        mgtKey: "7a7a2bg97o2w8oei93j5d18n",
-       });
-      }}
-     >
-      <Text style={{ fontSize: 24, color: "white" }}>세금계산서</Text>
-     </DataBottomBtn>
-    }
-   />
-   <MyDocumentListRow
-    title="2020년 2월 고정"
-    content={
-     <DataBottomBtn
-      onPress={() => {
-       navigation.navigate("TaxInvoice", {
-        mgtKey: "7a7a2bg97o2w8oei93j5d18n",
-       });
-      }}
-     >
-      <Text style={{ fontSize: 24, color: "white" }}>세금계산서</Text>
-     </DataBottomBtn>
-    }
-   /> */}
 			</ScrollContainer>
 		</>
 	);

@@ -1,21 +1,11 @@
 import React from "react";
-import styled from "styled-components";
-import {View, Text, TouchableOpacity, Dimensions} from "react-native";
+import {View, Text, TouchableOpacity} from "react-native";
 import * as rq from "react-query";
 import axios from "axios";
 import ScrollContainer from "../../components/ScrollContainer";
-import MyDocumentListRow from "../../components/MyDocumentListRow";
 import {useNavigation} from "@react-navigation/native";
 import DtsmnRow from "./DtsmnRow";
-import {FontAwesome5, Entypo} from "@expo/vector-icons";
-
-const DataBottomBtn = styled.TouchableOpacity`
-	flex: 1;
-	align-items: center;
-	justify-content: center;
-	background-color: #3e50b4;
-	border-color: white;
-`;
+import {Entypo} from "@expo/vector-icons";
 
 export default (props) => {
 	const navigation = useNavigation();

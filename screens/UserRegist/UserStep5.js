@@ -88,7 +88,7 @@ export default ({navigation}) => {
 			axios.post("http://172.126.11.154:82/v2/account/insertAccount", obj);
 		},
 		{
-			onSuccess: async (data, mutationVariables) => {},
+			onSuccess: (data, mutationVariables) => {},
 		}
 	);
 
@@ -101,8 +101,7 @@ export default ({navigation}) => {
 		const newValue = Object.assign({}, userRegistInfo, {
 			userRegistComplete: true,
 		});
-
-		await insertCall(JSON.stringify(userRegistInfo));
+		await insertCall(JSON.parse(JSON.stringify(userRegistInfo)));
 		await setUserRegistInfo(newValue);
 		await logIn("testToken");
 		//await setUserRegistInfoProp({...userRegistInfo, userRegistComplete: "Y"});

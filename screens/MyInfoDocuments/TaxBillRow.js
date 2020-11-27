@@ -20,21 +20,13 @@ export default (props) => {
 						params: {
 							targetMonth: Calc.getMonthStr(new Date(props.data.targetMonth)),
 							taxBillSeq: props.data.taxBillSeq,
-							// screen: props.data.docketForm,
-							// params: {
-							// driverSeq: props.data.driverSeq,
-							// carrierSeq: 1,
-							// carryingSeq: props.data.carryingSeq,
-							// taxBillItemSeq: props.data.taxBillItemSeq,
-							// matchingCode: props.data.matchingCode,
-							// truckManagerCode: props.data.truckManagerCode,
-							// excelSeq: props.data.excelSeq,
-							// },
+							businessType: props.data.businessType,
+							taxBillType: props.data.taxbilType,
 						},
 					});
 				}}
 			>
-				<Text style={{color: "blue", fontSize: 14}}>세금계산서</Text>
+				<Text style={{color: "blue", fontSize: 14}}>{props.data.businessType === "간이" && props.data.taxbilType === "간이" ? "운송료 영수증" : "세금계산서"}</Text>
 			</TouchableOpacity>
 		</View>
 	);

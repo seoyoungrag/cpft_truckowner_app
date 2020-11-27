@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default ({refreshFn, loading, now}) => {
+export default (props) => {
 	const navigation = useNavigation();
 	const codes = useCodes();
 	const getUserRegistInfo = useGetUserRegistInfo();
@@ -151,10 +151,6 @@ export default ({refreshFn, loading, now}) => {
 		return unsubscribe;
 	}, [navigation]);
 
-	const getTransList = async (url) => {
-		const {data} = await axios.get(url);
-	};
-
 	const dataInfo = rq.useQuery(
 		"getTransList",
 		async () => {
@@ -170,6 +166,10 @@ export default ({refreshFn, loading, now}) => {
 			onSuccess: (data) => {},
 		}
 	);
+
+	const refreshFn = React.useCallback(() => {
+		rq.queryCache.invalidateQueries("getTransList");
+	}, []);
 
 	return (
 		<>
@@ -278,13 +278,13 @@ export default ({refreshFn, loading, now}) => {
 			<ScrollContainer
 				refreshOn={true}
 				refreshFn={refreshFn}
-				loading={loading}
+				loading={dataInfo?.status === "success" ? false : true}
 				contentContainerStyle={{
 					backgroundColor: useIsModal() ? "rgba(0,0,0,0.5)" : "white",
 					paddingBottom: 50,
 				}}
 			>
-				{dataInfo.status === "success" && dataInfo.data.list.map((data, index) => <TransCard key={index} data={data} />)}
+				{dataInfo.status === "success" && dataInfo.data.list.map((data, index) => <TransCard key={index} data={data} targetMonth={targetDate} />)}
 				{/* {now.map((n, i) => (
      <HorizontalTrans
       tmpKey={i}
