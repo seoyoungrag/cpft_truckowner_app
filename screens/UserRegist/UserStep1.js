@@ -133,7 +133,7 @@ const DataValueRed = styled.Text`
 `;
 export default ({navigation, route}) => {
 	const [merchantUid, setMerchantUid] = useState(`mid_${new Date().getTime()}`);
-	const [company, setCompany] = useState("용차블루");
+	const [company, setCompany] = useState("팀프플러스");
 	const [tierCode, setTierCode] = useState(undefined);
 	const [response, setResponse] = useState({
 		success: null,
@@ -181,7 +181,7 @@ export default ({navigation, route}) => {
 		console.log(response);
 		console.log(newValue);
 		if (response.success === true) {
-			navigation.navigate("UserStep5");
+			navigation.navigate("UserStep3");
 		}
 		//navigation.navigate("UserStep2");
 	};
