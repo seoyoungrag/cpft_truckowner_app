@@ -30,7 +30,7 @@ export default (props) => {
 			retry: 0,
 			refetchOnWindowFocus: false,
 			onSuccess: (data) => {
-				const length = data.list.length;
+				const length = data.data.list.length;
 				const obj = {};
 				for (let i = 0; i < length; i++) {
 					obj["isOpen" + (i + 1)] = false;
