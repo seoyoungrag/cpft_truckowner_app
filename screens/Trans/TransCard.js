@@ -8,12 +8,19 @@ import axios from "axios";
 export default (props) => {
 	const navigation = useNavigation();
 
+	rq.setConsole({
+		log: console.log,
+		warn: console.warn,
+		error: console.warn,
+	});
+
 	const [updateCall] = rq.useMutation(
 		(obj) => {
-			axios.post("https://blueapi.teamfresh.co.kr/v2/trans/updateApproveStatus", obj);
+			return axios.post("https://blueapi.teamfresh.co.kr/v2/trans/updateApproveStatus", obj);
 		},
 		{
-			onSuccess: async (data, mutationVariables) => {},
+			onSuccess: async (data, preVal) => {},
+			onError: async (error) => {},
 		}
 	);
 
@@ -22,7 +29,9 @@ export default (props) => {
 			matchingCode: props.data.matchingCode,
 			targetMonth: props.data.targetMonth,
 		};
-		updateCall(obj);
+		try {
+			updateCall(obj);
+		} catch (error) {}
 	}, [props]);
 
 	return (

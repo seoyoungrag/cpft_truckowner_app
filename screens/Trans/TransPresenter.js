@@ -2,19 +2,17 @@ import React, {useState, useEffect, useRef} from "react";
 import {Dimensions, Text, TouchableOpacity, Modal, View, StyleSheet} from "react-native";
 import {useNavigation} from "@react-navigation/native";
 import {FontAwesome5} from "@expo/vector-icons";
-import HorizontalTrans from "../../components/HorizontalTrans";
 import ScrollContainer from "../../components/ScrollContainer";
-import {code} from "../../utils";
 import {useIsModal} from "../../ModalContext";
 import {useCodes} from "../../CodeContext";
 import {useGetUserRegistInfo} from "../../UserRegistContext";
 import MonthPicker from "react-native-month-year-picker";
-import YearMonthPicker from "../../components/YearMonthPicker";
 import * as Calc from "../../components/Calc";
 import TransCard from "./TransCard";
 import axios from "axios";
 import * as rq from "react-query";
-import {getAnythingCpft, postAnythingCpft} from "../../api";
+import Empty from "../../components/Empty";
+import ErrorText from "../../components/ErrorText";
 
 const {width, height} = Dimensions.get("screen");
 
@@ -74,16 +72,9 @@ const styles = StyleSheet.create({
 
 export default (props) => {
 	const navigation = useNavigation();
-	const codes = useCodes();
 	const getUserRegistInfo = useGetUserRegistInfo();
 	const [userRegistInfo, setUserRegistInfoProp] = useState(null);
 	const [modalVisible, setModalVisible] = useState(false);
-	const [monthPickerModalVisible, setMonthPickerModalVisible] = useState(false);
-	const [startYear, setStartYear] = useState(2020);
-	const [endYear, setEndYear] = useState(2020);
-	const [selectedYear, setSelectedYear] = useState(2020);
-	const [selectedMonth, setSelectedMonth] = useState(8);
-	const monthPicker = useRef();
 
 	const targetMonthRef = useRef(new Date());
 
@@ -91,8 +82,6 @@ export default (props) => {
 		const data = await getUserRegistInfo();
 		setUserRegistInfoProp(data);
 	};
-
-	const dummyArray = [1, 2, 3, 4, 5];
 
 	const [targetDate, setTargetDate] = useState(new Date());
 	const [isMonthPickerShow, setIsMonthPickerShow] = useState(false);
@@ -108,39 +97,6 @@ export default (props) => {
 		[targetDate]
 	);
 
-	const goToTransDetail = (order, tmpKey) => {
-		navigation.navigate("TransDetail", {
-			year: selectedYear,
-			month: selectedMonth,
-			orderSeq: order.orderSeq,
-			opratSctn: order.opratSctn,
-			workArea: order.workArea,
-			rcritType: order.rcritType,
-			carTypes: order.carTypes,
-			tonType: order.tonType,
-			dlvyPrdlst: order.dlvyPrdlst,
-			salary: order.salary,
-			expensYn: order.expensYn,
-			workHourStart: order.workHourStart,
-			workMinuteStart: order.workMinuteStart,
-			workHourEnd: order.workHourEnd,
-			workMinuteEnd: order.workMinuteEnd,
-			detailMatter: order.detailMatter,
-			workDays: order.workDays,
-			tmpKey,
-		});
-	};
-	const showPicker = () => {
-		monthPicker.current.show({startYear, endYear, selectedYear, selectedMonth}).then(({year, month}) => {
-			setSelectedYear(year);
-			setSelectedMonth(month);
-		});
-	};
-	useEffect(() => {
-		if (monthPickerModalVisible) {
-			showPicker();
-		}
-	}, [monthPickerModalVisible]);
 	useEffect(() => {
 		const unsubscribe = navigation.addListener("focus", async () => {
 			if (!userRegistInfo) {
@@ -151,19 +107,39 @@ export default (props) => {
 		return unsubscribe;
 	}, [navigation]);
 
+	const token =
+		"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwidXNlckxvZ2luSWQiOiJ5b3VuZ3JhZy5zZW8iLCJ1c2VyTm0iOiLshJzsmIHrnb0iLCJ1c2VyU2VxIjoxLCJ1c2VyRW1haWwiOiJ5b3VuZ3JhZy5zZW9AdGltZi5jby5rciIsInJvbGVzIjpbXSwiaWF0IjoxNjA2NDcyNTA2LCJleHAiOjE2MDkwNjQ1MDZ9.LIhHuQZLdh4NA-Dd6Bx_Hb-W22jkN0ohy-HiegSc4f4";
+
+	rq.setConsole({
+		log: console.log,
+		warn: console.warn,
+		error: console.warn,
+	});
+
 	const dataInfo = rq.useQuery(
 		"getTransList",
 		async () => {
-			const {data} = await axios.post("http://172.126.11.154:82/v2/trans/getTransList", {
-				targetMonth: targetMonthRef.current.toISOString(),
-			});
-			return data;
+			return await axios.post(
+				"http://172.126.11.154:82/v2/trans/getTransList",
+				{
+					targetMonth: targetMonthRef.current.toISOString(),
+				},
+				{
+					headers: {
+						"Content-Type": "application/json",
+						"X-AUTH-TOKEN": `${token}`,
+					},
+				}
+			);
 		},
 		{
 			enabled: targetDate,
 			retry: 0,
 			refetchOnWindowFocus: false,
 			onSuccess: (data) => {},
+			onError: (error) => {
+				console.log("에러!!", error);
+			},
 		}
 	);
 
@@ -219,13 +195,7 @@ export default (props) => {
 						width: width,
 						paddingLeft: 20,
 					}}
-				>
-					{/* <Text
-      style={{ color: "#3e50b4", fontSize: 13, textAlignVertical: "center" }}
-     >
-      {Calc.getMonthStr(targetDate)}월
-     </Text> */}
-				</View>
+				></View>
 				<View
 					style={{
 						alignItems: "center",
@@ -249,7 +219,6 @@ export default (props) => {
 						<Text style={{color: "#0d0d0d", fontSize: 24}}>{Calc.getMonthStr(targetDate)}월</Text>
 						<TouchableOpacity
 							onPress={() => {
-								// setMonthPickerModalVisible(true);
 								setIsMonthPickerShow(true);
 							}}
 						>
@@ -258,73 +227,23 @@ export default (props) => {
 						{isMonthPickerShow && <MonthPicker minimumDate={new Date(2000, 5)} maximumDate={new Date(2025, 5)} onChange={dateChange} value={targetDate} locale="ko" />}
 					</View>
 				</View>
-				{/* <Modal
-     animationType="fade"
-     hardwareAccelerated={true}
-     transparent={true}
-     statusBarTranslucent={true}
-     visible={monthPickerModalVisible}
-    >
-     <View behavior="padding" enabled style={styles.centeredView}>
-      <YearMonthPicker
-       ref={monthPicker}
-       dismissFnc={() => {
-        setMonthPickerModalVisible(false);
-       }}
-      />
-     </View>
-    </Modal> */}
 			</View>
 			<ScrollContainer
 				refreshOn={true}
 				refreshFn={refreshFn}
-				loading={dataInfo?.status === "success" ? false : true}
+				loading={dataInfo?.isLoading}
 				contentContainerStyle={{
 					backgroundColor: useIsModal() ? "rgba(0,0,0,0.5)" : "white",
 					paddingBottom: 50,
 				}}
 			>
-				{dataInfo.status === "success" && dataInfo.data.list.map((data, index) => <TransCard key={index} data={data} targetMonth={targetDate} />)}
-				{/* {now.map((n, i) => (
-     <HorizontalTrans
-      tmpKey={i}
-      key={n.orderSeq}
-      id={n.orderSeq}
-      opratSctn={n.opratSctn}
-      workArea={n.workArea}
-      rcritType={code(codes, n.rcritType)}
-      carTypes={n.carTypes.map((c) => {
-       return code(codes, c) + " ";
-      })}
-      tonType={code(codes, n.tonType)}
-      dlvyPrdlst={n.dlvyPrdlst}
-      salary={n.salary}
-      expensYn={code(codes, n.expensYn)}
-      goToTransDetail={() => {
-       goToTransDetail(n, i);
-      }}
-     />
-    ))}
-    {now.map((n, i) => (
-     <HorizontalTrans
-      tmpKey={i}
-      key={n.orderSeq}
-      id={n.orderSeq}
-      opratSctn={n.opratSctn}
-      workArea={n.workArea}
-      rcritType={code(codes, n.rcritType)}
-      carTypes={n.carTypes.map((c) => {
-       return code(codes, c) + " ";
-      })}
-      tonType={code(codes, n.tonType)}
-      dlvyPrdlst={n.dlvyPrdlst}
-      salary={n.salary}
-      expensYn={code(codes, n.expensYn)}
-      goToTransDetail={() => {
-       goToTransDetail(n, i);
-      }}
-     />
-    ))} */}
+				{dataInfo?.status === "success" ? (
+					dataInfo?.data?.data?.list?.map((data, index) => <TransCard key={index} data={data} targetMonth={targetDate} />)
+				) : dataInfo?.status === "error" ? (
+					<ErrorText />
+				) : (
+					<Empty />
+				)}
 			</ScrollContainer>
 		</>
 	);

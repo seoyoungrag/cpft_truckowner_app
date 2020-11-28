@@ -2,7 +2,6 @@ import React from "react";
 import {View, Text, TouchableOpacity} from "react-native";
 import RadioForm from "react-native-simple-radio-button";
 import {useGetUserRegistInfo} from "../../UserRegistContext";
-import * as rq from "react-query";
 
 const radioProps = [
 	{label: "동의", value: true},

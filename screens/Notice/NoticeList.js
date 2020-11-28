@@ -7,14 +7,24 @@ import {Collapse, CollapseHeader, CollapseBody, AccordionList} from "accordion-c
 
 export default (props) => {
 	const [status, setStatus] = React.useState();
+	const token =
+		"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwidXNlckxvZ2luSWQiOiJ5b3VuZ3JhZy5zZW8iLCJ1c2VyTm0iOiLshJzsmIHrnb0iLCJ1c2VyU2VxIjoxLCJ1c2VyRW1haWwiOiJ5b3VuZ3JhZy5zZW9AdGltZi5jby5rciIsInJvbGVzIjpbXSwiaWF0IjoxNjA2NDcyNTA2LCJleHAiOjE2MDkwNjQ1MDZ9.LIhHuQZLdh4NA-Dd6Bx_Hb-W22jkN0ohy-HiegSc4f4";
 
 	const dataInfo = rq.useQuery(
 		"getNoticeList",
 		async () => {
-			const {data} = await axios.post("http://172.126.11.154:82/v2/notice/getNoticeList", {
-				userSeq: 1,
-			});
-			return data;
+			return await axios.post(
+				"http://172.126.11.154:82/v2/notice/getNoticeList",
+				{
+					userSeq: 1,
+				},
+				{
+					headers: {
+						"Content-Type": "application/json",
+						"X-AUTH-TOKEN": `${token}`,
+					},
+				}
+			);
 		},
 		{
 			retry: 0,
@@ -27,6 +37,7 @@ export default (props) => {
 				}
 				setStatus(obj);
 			},
+			onError: (error) => {},
 		}
 	);
 
@@ -34,7 +45,7 @@ export default (props) => {
 		<View style={{flex: 1, padding: 20}}>
 			<View style={{paddingTop: 20, paddingRight: 20, paddingLeft: 20, paddingBottom: 10, backgroundColor: "white"}}>
 				{dataInfo.status === "success" &&
-					dataInfo.data.list.map((data, index) => (
+					dataInfo?.data?.data?.list.map((data, index) => (
 						<Collapse key={index} onToggle={(bool) => setStatus((prevStatus) => ({...prevStatus, ["isOpen" + (index + 1)]: bool}))}>
 							<CollapseHeader>
 								<View style={{flexDirection: "row", marginVertical: 10, paddingBottom: 20, borderBottomColor: "#efefef", borderBottomWidth: 1}}>

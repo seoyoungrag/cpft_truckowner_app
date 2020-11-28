@@ -8,6 +8,8 @@ import TaxBillRow from "./TaxBillRow";
 import {Entypo} from "@expo/vector-icons";
 
 export default () => {
+	const token =
+		"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwidXNlckxvZ2luSWQiOiJ5b3VuZ3JhZy5zZW8iLCJ1c2VyTm0iOiLshJzsmIHrnb0iLCJ1c2VyU2VxIjoxLCJ1c2VyRW1haWwiOiJ5b3VuZ3JhZy5zZW9AdGltZi5jby5rciIsInJvbGVzIjpbXSwiaWF0IjoxNjA2NDcyNTA2LCJleHAiOjE2MDkwNjQ1MDZ9.LIhHuQZLdh4NA-Dd6Bx_Hb-W22jkN0ohy-HiegSc4f4";
 	const navigation = useNavigation();
 
 	const [targetYear, setTargetYear] = React.useState(new Date().getFullYear());
@@ -18,18 +20,33 @@ export default () => {
 		rq.queryCache.invalidateQueries("getMyDtstmnList");
 	}, [targetYear]);
 
+	rq.setConsole({
+		log: console.log,
+		warn: console.warn,
+		error: console.warn,
+	});
+
 	const dataInfo = rq.useQuery(
 		"getMyDtstmnList",
 		async () => {
-			const {data} = await axios.post("http://172.126.11.154:82/v2/trans/getTransList", {
-				targetYear: targetYearRef.current,
-			});
-			return data;
+			return await axios.post(
+				"http://172.126.11.154:82/v2/trans/getTransList",
+				{
+					targetYear: targetYearRef.current,
+				},
+				{
+					headers: {
+						"Content-Type": "application/json",
+						"X-AUTH-TOKEN": `${token}`,
+					},
+				}
+			);
 		},
 		{
 			retry: 0,
 			refetchOnWindowFocus: false,
 			onSuccess: (data) => {},
+			onError: (error) => {},
 		}
 	);
 	return (
@@ -78,7 +95,7 @@ export default () => {
 							<Text style={{color: "black", fontWeight: "bold", fontSize: 15}}>세금계산서</Text>
 						</View>
 					</View>
-					{dataInfo?.status === "success" && dataInfo?.data?.list.map((data, index) => <TaxBillRow key={index} data={data} />)}
+					{dataInfo?.status === "success" && dataInfo?.data?.data?.list.map((data, index) => <TaxBillRow key={index} data={data} />)}
 				</View>
 			</ScrollContainer>
 		</>

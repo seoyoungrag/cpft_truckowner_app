@@ -36,7 +36,6 @@ const TaxBillDetail = ({navigation, route}) => {
 		imageData = imageData[1];
 
 		const filePath = `${RNFS.DownloadDirectoryPath}`;
-		console.log("오", filePath);
 
 		//Creating folder
 		if (RNFS.exists(filePath)) {
@@ -79,22 +78,40 @@ const TaxBillDetail = ({navigation, route}) => {
 		return askPermission;
 	}, []);
 
+	const token =
+		"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwidXNlckxvZ2luSWQiOiJ5b3VuZ3JhZy5zZW8iLCJ1c2VyTm0iOiLshJzsmIHrnb0iLCJ1c2VyU2VxIjoxLCJ1c2VyRW1haWwiOiJ5b3VuZ3JhZy5zZW9AdGltZi5jby5rciIsInJvbGVzIjpbXSwiaWF0IjoxNjA2NDcyNTA2LCJleHAiOjE2MDkwNjQ1MDZ9.LIhHuQZLdh4NA-Dd6Bx_Hb-W22jkN0ohy-HiegSc4f4";
+
+	rq.setConsole({
+		log: console.log,
+		warn: console.warn,
+		error: console.warn,
+	});
+
 	const dataInfo = rq.useQuery(
 		"getTransferDetail",
 		async () => {
-			const {data} = await axios.post("http://172.126.11.154:82/v2/trans/getTransferDetail", {
-				taxBillSeq: taxBillSeq,
-				targetMonth: targetMonth,
-				taxBillType: taxBillType,
-				businessType: businessType,
-			});
-			return data;
+			return await axios.post(
+				"http://172.126.11.154:82/v2/trans/getTransferDetail",
+				{
+					taxBillSeq: taxBillSeq,
+					targetMonth: targetMonth,
+					taxBillType: taxBillType,
+					businessType: businessType,
+				},
+				{
+					headers: {
+						"Content-Type": "application/json",
+						"X-AUTH-TOKEN": `${token}`,
+					},
+				}
+			);
 		},
 		{
 			retry: 0,
 			refetchOnWindowFocus: false,
 			enabled: taxBillType === "간이" && businessType === "간이",
 			onSuccess: (data) => {},
+			onError: (error) => {},
 		}
 	);
 
@@ -142,7 +159,9 @@ const TaxBillDetail = ({navigation, route}) => {
 							<Text style={{color: "black", fontSize: 15}}>금액</Text>
 						</View>
 						{dataInfo.status === "success" &&
-							dataInfo.data.list.map((data, index, array) => <TransDetail key={index} data={data} bool={index + 1 === array.length ? true : false} array={array} />)}
+							dataInfo?.data?.data?.list.map((data, index, array) => (
+								<TransDetail key={index} data={data} bool={index + 1 === array.length ? true : false} array={array} />
+							))}
 					</View>
 					<View style={{marginTop: "20%", alignItems: "center"}}>
 						<Text style={{color: "black", fontWeight: "black", fontSize: 16}}>위 금액을 영수함</Text>

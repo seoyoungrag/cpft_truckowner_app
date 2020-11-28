@@ -85,10 +85,14 @@ const DataValue = styled.Text`
 export default ({navigation}) => {
 	const [insertCall] = rq.useMutation(
 		(obj) => {
-			axios.post("http://172.126.11.154:82/v2/account/insertAccount", obj);
+			return axios.post("http://172.126.11.154:82/v2/account/insertAccount", obj).catch((e) => console.log(e));
 		},
 		{
-			onSuccess: (data, mutationVariables) => {},
+			onSuccess: (data, preVal) => {
+				const token = data?.data?.data;
+				console.log("ㅎㅎ", data?.data?.data);
+			},
+			onError: (error) => {},
 		}
 	);
 
@@ -101,9 +105,13 @@ export default ({navigation}) => {
 		const newValue = Object.assign({}, userRegistInfo, {
 			userRegistComplete: true,
 		});
-		await insertCall(JSON.parse(JSON.stringify(userRegistInfo)));
-		await setUserRegistInfo(newValue);
-		await logIn("testToken");
+		try {
+			await insertCall(JSON.parse(JSON.stringify(userRegistInfo)));
+			await setUserRegistInfo(newValue);
+			await logIn("testToken");
+		} catch (e) {
+			console.log("에러", e);
+		}
 		//await setUserRegistInfoProp({...userRegistInfo, userRegistComplete: "Y"});
 		//await setUserRegistInfo({...userRegistInfo, userRegistComplete: "Y"})
 	};
@@ -131,7 +139,7 @@ export default ({navigation}) => {
 							justifyContent: "center",
 						}}
 					></TouchableOpacity>
-					<ModalHeaderTitle>4/4</ModalHeaderTitle>
+					<ModalHeaderTitle>2/2</ModalHeaderTitle>
 				</ModalHeader>
 				<ScrollContainer
 					loading={false}

@@ -8,6 +8,8 @@ import DtsmnRow from "./DtsmnRow";
 import {Entypo} from "@expo/vector-icons";
 
 export default (props) => {
+	const token =
+		"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwidXNlckxvZ2luSWQiOiJ5b3VuZ3JhZy5zZW8iLCJ1c2VyTm0iOiLshJzsmIHrnb0iLCJ1c2VyU2VxIjoxLCJ1c2VyRW1haWwiOiJ5b3VuZ3JhZy5zZW9AdGltZi5jby5rciIsInJvbGVzIjpbXSwiaWF0IjoxNjA2NDcyNTA2LCJleHAiOjE2MDkwNjQ1MDZ9.LIhHuQZLdh4NA-Dd6Bx_Hb-W22jkN0ohy-HiegSc4f4";
 	const navigation = useNavigation();
 
 	const [targetYear, setTargetYear] = React.useState(new Date().getFullYear());
@@ -18,18 +20,33 @@ export default (props) => {
 		rq.queryCache.invalidateQueries("getMyDtstmnList");
 	}, [targetYear]);
 
+	rq.setConsole({
+		log: console.log,
+		warn: console.warn,
+		error: console.warn,
+	});
+
 	const dataInfo = rq.useQuery(
 		"getMyDtstmnList",
 		async () => {
-			const {data} = await axios.post("http://172.126.11.154:82/v2/trans/getTransList", {
-				targetYear: targetYearRef.current,
-			});
-			return data;
+			return await axios.post(
+				"http://172.126.11.154:82/v2/trans/getTransList",
+				{
+					targetYear: targetYearRef.current,
+				},
+				{
+					headers: {
+						"Content-Type": "application/json",
+						"X-AUTH-TOKEN": `${token}`,
+					},
+				}
+			);
 		},
 		{
 			retry: 0,
 			refetchOnWindowFocus: false,
 			onSuccess: (data) => {},
+			onError: (error) => {},
 		}
 	);
 
@@ -79,80 +96,8 @@ export default (props) => {
 							<Text style={{color: "black", fontWeight: "bold", fontSize: 15}}>명세서</Text>
 						</View>
 					</View>
-					{dataInfo?.status === "success" && dataInfo?.data?.list.map((data, index) => <DtsmnRow key={index} data={data} />)}
+					{dataInfo?.status === "success" && dataInfo?.data?.data?.list.map((data, index) => <DtsmnRow key={index} data={data} />)}
 				</View>
-				{/* <MyDocumentListRow
-    title="2020년 7월 고정"
-    content={
-     <DataBottomBtn
-      onPress={() => {
-       navigation.navigate("DtStmn");
-      }}
-     >
-      <Text style={{ fontSize: 24, color: "white" }}>명세서 보기</Text>
-     </DataBottomBtn>
-    }
-   />
-   <MyDocumentListRow
-    title="2020년 6월 고정"
-    content={
-     <DataBottomBtn
-      onPress={() => {
-       navigation.navigate("DtStmn");
-      }}
-     >
-      <Text style={{ fontSize: 24, color: "white" }}>명세서 보기</Text>
-     </DataBottomBtn>
-    }
-   />
-   <MyDocumentListRow
-    title="2020년 5월 고정"
-    content={
-     <DataBottomBtn
-      onPress={() => {
-       navigation.navigate("DtStmn");
-      }}
-     >
-      <Text style={{ fontSize: 24, color: "white" }}>명세서 보기</Text>
-     </DataBottomBtn>
-    }
-   />
-   <MyDocumentListRow
-    title="2020년 4월 고정"
-    content={
-     <DataBottomBtn
-      onPress={() => {
-       navigation.navigate("DtStmn");
-      }}
-     >
-      <Text style={{ fontSize: 24, color: "white" }}>명세서 보기</Text>
-     </DataBottomBtn>
-    }
-   />
-   <MyDocumentListRow
-    title="2020년 3월 고정"
-    content={
-     <DataBottomBtn
-      onPress={() => {
-       navigation.navigate("DtStmn");
-      }}
-     >
-      <Text style={{ fontSize: 24, color: "white" }}>명세서 보기</Text>
-     </DataBottomBtn>
-    }
-   />
-   <MyDocumentListRow
-    title="2020년 2월 고정"
-    content={
-     <DataBottomBtn
-      onPress={() => {
-       navigation.navigate("DtStmn");
-      }}
-     >
-      <Text style={{ fontSize: 24, color: "white" }}>명세서 보기</Text>
-     </DataBottomBtn>
-    }
-   /> */}
 			</ScrollContainer>
 		</>
 	);

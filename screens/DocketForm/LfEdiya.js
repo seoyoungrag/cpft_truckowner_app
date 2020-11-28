@@ -11,6 +11,8 @@ import PenaltyDetail from "./Details/PenaltyDetail";
 import PaymentDetail from "./Details/PaymentDetail";
 
 export default ({navigation, route}) => {
+	const token =
+		"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwidXNlckxvZ2luSWQiOiJ5b3VuZ3JhZy5zZW8iLCJ1c2VyTm0iOiLshJzsmIHrnb0iLCJ1c2VyU2VxIjoxLCJ1c2VyRW1haWwiOiJ5b3VuZ3JhZy5zZW9AdGltZi5jby5rciIsInJvbGVzIjpbXSwiaWF0IjoxNjA2NDcyNTA2LCJleHAiOjE2MDkwNjQ1MDZ9.LIhHuQZLdh4NA-Dd6Bx_Hb-W22jkN0ohy-HiegSc4f4";
 	const {matchingCode, targetMonth} = route.params;
 	const [status, setStatus] = React.useState({
 		isOpen1: false,
@@ -20,62 +22,90 @@ export default ({navigation, route}) => {
 
 	const {isOpen1, isOpen2, isOpen3} = status;
 
+	rq.setConsole({
+		log: console.log,
+		warn: console.warn,
+		error: console.warn,
+	});
+
 	const dataInfo = rq.useQuery(
 		"getDtstmnPreView",
 		async () => {
-			const {data} = await axios.post("http://172.126.11.154:82/v2/trans/getDtstmnPreView", {
-				matchingCode: matchingCode,
-				deliveryDate: targetMonth,
-			});
-			return data;
+			return await axios.post(
+				"http://172.126.11.154:82/v2/trans/getDtstmnPreView",
+				{
+					matchingCode: matchingCode,
+					deliveryDate: targetMonth,
+				},
+				{
+					headers: {
+						"Content-Type": "application/json",
+						"X-AUTH-TOKEN": `${token}`,
+					},
+				}
+			);
 		},
 		{
 			retry: 0,
+			onSuccess: (data) => {},
+			onError: (error) => {},
 		}
 	);
 
 	const paymentInfo = rq.useQuery(
 		"getPaymentList",
 		async () => {
-			const {data} = await axios.post("http://172.126.11.154:82/v2/trans/getPaymentList", {
-				matchingCode: matchingCode,
-				deliveryDate: targetMonth,
-			});
-			return data;
+			return await axios.post(
+				"http://172.126.11.154:82/v2/trans/getPaymentList",
+				{
+					matchingCode: matchingCode,
+					deliveryDate: targetMonth,
+				},
+				{
+					headers: {
+						"Content-Type": "application/json",
+						"X-AUTH-TOKEN": `${token}`,
+					},
+				}
+			);
 		},
 		{
 			retry: 0,
-			enabled: dataInfo.status === "success" && dataInfo.data.data.payment,
+			enabled: dataInfo.status === "success" && dataInfo?.data?.data?.data?.payment,
+			onSuccess: (data) => {},
+			onError: (error) => {},
 		}
 	);
 
 	const deductionInfo = rq.useQuery(
 		"getDeductionList",
 		async () => {
-			const {data} = await axios.post("http://172.126.11.154:82/v2/trans/getDeductionList", {
+			return await axios.post("http://172.126.11.154:82/v2/trans/getDeductionList", {
 				matchingCode: matchingCode,
 				deliveryDate: targetMonth,
 			});
-			return data;
 		},
 		{
 			enabled: dataInfo.status === "success",
 			retry: 0,
+			onSuccess: (data) => {},
+			onError: (error) => {},
 		}
 	);
 
 	const penaltyInfo = rq.useQuery(
 		"getPenaltyList",
 		async () => {
-			const {data} = await axios.post("http://172.126.11.154:82/v2/trans/getPenaltyList", {
+			return await axios.post("http://172.126.11.154:82/v2/trans/getPenaltyList", {
 				matchingCode: matchingCode,
 				deliveryDate: targetMonth,
 			});
-			return data;
 		},
 		{
 			enabled: dataInfo.status === "success",
 			retry: 0,
+			onSuccess: (data) => {},
+			onError: (error) => {},
 		}
 	);
 
@@ -89,8 +119,8 @@ export default ({navigation, route}) => {
 			{dataInfo.status === "success" && (
 				<View style={{padding: 20}}>
 					<View style={{flexDirection: "row", justifyContent: "space-between"}}>
-						<Text style={{fontSize: 15}}>화주사: {dataInfo.data.data.owrProfsNm || "-"}</Text>
-						<Text style={{fontSize: 15}}>{dataInfo.data.data.truckManagerNm || "-"} 님</Text>
+						<Text style={{fontSize: 15}}>화주사: {dataInfo?.data?.data?.data?.owrProfsNm || "-"}</Text>
+						<Text style={{fontSize: 15}}>{dataInfo?.data?.data?.data?.truckManagerNm || "-"} 님</Text>
 					</View>
 					<View style={{backgroundColor: "white", marginTop: 10, padding: 17}}>
 						<View style={{flexDirection: "row", justifyContent: "flex-start"}}>
@@ -100,7 +130,7 @@ export default ({navigation, route}) => {
 							<Text style={{fontSize: 15}}>총 지급액</Text>
 						</View>
 						<View style={{flexDirection: "row", justifyContent: "center"}}>
-							<Text style={{fontSize: 23, color: "#3e50b4", fontWeight: "bold"}}>{Calc.regexWON(dataInfo.data.data.totalPayment) || "-"}원</Text>
+							<Text style={{fontSize: 23, color: "#3e50b4", fontWeight: "bold"}}>{Calc.regexWON(dataInfo?.data?.data?.data?.totalPayment) || "-"}원</Text>
 						</View>
 						<View style={{borderTopWidth: 3, borderTopColor: "#efefef", marginTop: 5, paddingTop: 15}}>
 							<Text style={{fontWeight: "bold", color: "black"}}>
@@ -110,23 +140,23 @@ export default ({navigation, route}) => {
 						</View>
 						<View style={{flexDirection: "row", justifyContent: "space-between", marginTop: 10}}>
 							<Text>운송료</Text>
-							<Text>{Calc.regexWON(dataInfo.data.data.transportCharges) || "-"}원</Text>
+							<Text>{Calc.regexWON(dataInfo?.data?.data?.data?.transportCharges) || "-"}원</Text>
 						</View>
 						{/* <View style={{flexDirection: "row", justifyContent: "space-between", marginTop: 10}}>
             <Text>분류</Text>
-            <Text>{Calc.regexWON(dataInfo.data.data.clAllwnc) || "-"}원</Text>
+            <Text>{Calc.regexWON(dataInfo?.data?.data?.data?.clAllwnc) || "-"}원</Text>
           </View> */}
 						{/* <View style={{flexDirection: "row", justifyContent: "space-between", marginTop: 10, marginBottom: 10}}>
             <Text>추가수당</Text>
-            <Text>{Calc.regexWON(dataInfo.data.data.addedAllwnc) || "-"}원</Text>
+            <Text>{Calc.regexWON(dataInfo?.data?.data?.data?.addedAllwnc) || "-"}원</Text>
           </View> */}
 						<View style={{flexDirection: "row", justifyContent: "space-between", marginTop: 10, marginBottom: 10}}>
 							<Text>발생 운행경비</Text>
-							<Text>{Calc.regexWON(dataInfo.data.data.transExtraPay) || "-"}원</Text>
+							<Text>{Calc.regexWON(dataInfo?.data?.data?.data?.transExtraPay) || "-"}원</Text>
 						</View>
 						<View style={{flexDirection: "row", justifyContent: "space-between", marginTop: 10, borderTopColor: "#efefef", borderTopWidth: 1, paddingTop: 15}}>
 							<Text>지급액ⓐ</Text>
-							<Text style={{fontWeight: "bold"}}>{Calc.regexWON(dataInfo.data.data.paymentAmount) || "-"}원</Text>
+							<Text style={{fontWeight: "bold"}}>{Calc.regexWON(dataInfo?.data?.data?.data?.paymentAmount) || "-"}원</Text>
 						</View>
 						<View style={{marginTop: 30}}>
 							<Text style={{fontWeight: "bold", color: "black"}}>
@@ -136,23 +166,23 @@ export default ({navigation, route}) => {
 						</View>
 						<View style={{flexDirection: "row", justifyContent: "space-between", marginTop: 10}}>
 							<Text>차감</Text>
-							<Text>{Calc.regexWON(dataInfo.data.data.deductionVal) || "-"}원</Text>
+							<Text>{Calc.regexWON(dataInfo?.data?.data?.data?.deductionVal) || "-"}원</Text>
 						</View>
 						<View style={{flexDirection: "row", justifyContent: "space-between", marginTop: 10, marginBottom: 10}}>
 							<Text>선입금 수수료</Text>
-							<Text>{Calc.regexWON(dataInfo.data.data.commission) || "-"}원</Text>
+							<Text>{Calc.regexWON(dataInfo?.data?.data?.data?.commission) || "-"}원</Text>
 						</View>
 						<View style={{flexDirection: "row", justifyContent: "space-between", marginTop: 10, borderTopColor: "#efefef", borderTopWidth: 1, paddingTop: 15}}>
 							<Text>공제액ⓑ</Text>
-							<Text style={{fontWeight: "bold"}}>{Calc.regexWON(dataInfo.data.data.deductibleAmount)}원</Text>
+							<Text style={{fontWeight: "bold"}}>{Calc.regexWON(dataInfo?.data?.data?.data?.deductibleAmount)}원</Text>
 						</View>
 						<View style={{flexDirection: "row", justifyContent: "space-between", marginTop: 30}}>
 							<Text>공급가액ⓐ-ⓑ</Text>
-							<Text>{Calc.regexWON(dataInfo.data.data.supplyValue) || "-"}원</Text>
+							<Text>{Calc.regexWON(dataInfo?.data?.data?.data?.supplyValue) || "-"}원</Text>
 						</View>
 						<View style={{flexDirection: "row", justifyContent: "space-between", marginTop: 10, marginBottom: 20}}>
 							<Text>소계ⓒ</Text>
-							<Text style={{color: "#3e50b4", fontWeight: "bold"}}>{Calc.regexWON(dataInfo.data.data.subTotal) || "-"}원</Text>
+							<Text style={{color: "#3e50b4", fontWeight: "bold"}}>{Calc.regexWON(dataInfo?.data?.data?.data?.subTotal) || "-"}원</Text>
 						</View>
 						<View style={{paddingTop: 20, borderTopWidth: 1, borderTopColor: "#b8b8b8"}}>
 							<Text style={{fontWeight: "bold", color: "black"}}>
@@ -162,29 +192,29 @@ export default ({navigation, route}) => {
 						</View>
 						<View style={{flexDirection: "row", justifyContent: "space-between", marginTop: 10}}>
 							<Text>소계ⓒ</Text>
-							<Text>{Calc.regexWON(dataInfo.data.data.subTotal) || "-"}원</Text>
+							<Text>{Calc.regexWON(dataInfo?.data?.data?.data?.subTotal) || "-"}원</Text>
 						</View>
 						<View style={{flexDirection: "row", justifyContent: "space-between", marginTop: 10}}>
 							<Text>패널티ⓓ</Text>
-							<Text>{Calc.regexWON(dataInfo.data.data.penalty) || "-"}원</Text>
+							<Text>{Calc.regexWON(dataInfo?.data?.data?.data?.penalty) || "-"}원</Text>
 						</View>
-						{dataInfo.data.data.payment && (
+						{dataInfo?.data?.data?.data?.payment && (
 							<View style={{flexDirection: "row", justifyContent: "space-between", marginTop: 10, marginBottom: 10}}>
 								<Text>지입료ⓔ</Text>
-								<Text>{Calc.regexWON(dataInfo.data.data.payment) || "-"}원</Text>
+								<Text>{Calc.regexWON(dataInfo?.data?.data?.data?.payment) || "-"}원</Text>
 							</View>
 						)}
 						<View style={{flexDirection: "row", justifyContent: "space-between", marginTop: 10, borderTopColor: "#efefef", borderTopWidth: 1, paddingTop: 15}}>
-							<Text>합계ⓒ-ⓓ{dataInfo.data.data.payment && "-ⓔ"}</Text>
-							<Text style={{fontWeight: "bold"}}>{Calc.regexWON(dataInfo.data.data.depositTotal)}원</Text>
+							<Text>합계ⓒ-ⓓ{dataInfo?.data?.data?.data?.payment && "-ⓔ"}</Text>
+							<Text style={{fontWeight: "bold"}}>{Calc.regexWON(dataInfo?.data?.data?.data?.depositTotal)}원</Text>
 						</View>
 						<View style={{flexDirection: "row", justifyContent: "space-between", marginTop: 25}}>
 							<Text>선입급</Text>
-							<Text>{Calc.regexWON(dataInfo.data.data.upftPayment) || "-"}원</Text>
+							<Text>{Calc.regexWON(dataInfo?.data?.data?.data?.upftPayment) || "-"}원</Text>
 						</View>
 						<View style={{flexDirection: "row", justifyContent: "space-between", marginTop: 10, marginBottom: 20}}>
 							<Text>지급액</Text>
-							<Text style={{fontWeight: "bold", color: "#3e50b4"}}>{Calc.regexWON(dataInfo.data.data.depositTotal) || "-"}원</Text>
+							<Text style={{fontWeight: "bold", color: "#3e50b4"}}>{Calc.regexWON(dataInfo?.data?.data?.data?.depositTotal) || "-"}원</Text>
 						</View>
 						<Collapse onToggle={(bool) => setStatus((prevStatus) => ({...prevStatus, isOpen1: bool}))}>
 							<CollapseHeader>
@@ -231,7 +261,7 @@ export default ({navigation, route}) => {
 								</View>
 							</CollapseBody>
 						</Collapse>
-						{dataInfo.data.data.payment && (
+						{dataInfo?.data?.data?.data?.payment && (
 							<Collapse onToggle={(bool) => setStatus((prevStatus) => ({...prevStatus, isOpen3: bool}))}>
 								<CollapseHeader>
 									<View style={{flexDirection: "row", justifyContent: "space-between", paddingTop: 20, borderTopWidth: 1, borderTopColor: "#efefef"}}>

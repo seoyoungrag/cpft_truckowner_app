@@ -30,6 +30,8 @@ import DocketForm from "../screens/DocketForm/DocketForm";
 import MyInfoDetail from "../screens/MyInfoDocuments/MyInfoDetail";
 import EditConfig from "../components/EditConfig";
 import NoticeContainer from "../screens/Notice/NoticeContainer";
+import ServiceUse from "../screens/AgreementDoc/ServiceUse";
+import PersonalInfo from "../screens/AgreementDoc/PersonalInfo";
 
 const Stack = createStackNavigator();
 
@@ -219,6 +221,47 @@ export default () => {
 						}}
 					/>
 					<Stack.Screen name="NoticeContainer" component={NoticeContainer} />
+
+					<Stack.Screen
+						name="ServiceUse"
+						component={ServiceUse}
+						options={{
+							title: "서비스 이용 약관",
+							headerStyle: {
+								backgroundColor: "#3e50b4",
+							},
+							headerTitleStyle: {
+								textAlign: "center",
+								marginLeft: -44,
+								paddingLeft: 0,
+								fontSize: 24,
+								color: "white",
+							},
+							headerTintColor: "white",
+							headerBackTitleVisible: false,
+							headerShown: true,
+						}}
+					/>
+					<Stack.Screen
+						name="PersonalInfo"
+						component={PersonalInfo}
+						options={{
+							title: "개인정보 처리 방침",
+							headerStyle: {
+								backgroundColor: "#3e50b4",
+							},
+							headerTitleStyle: {
+								textAlign: "center",
+								marginLeft: -44,
+								paddingLeft: 0,
+								fontSize: 24,
+								color: "white",
+							},
+							headerTintColor: "white",
+							headerBackTitleVisible: false,
+							headerShown: true,
+						}}
+					/>
 				</Stack.Navigator>
 			</NavigationContainer>
 		</>
