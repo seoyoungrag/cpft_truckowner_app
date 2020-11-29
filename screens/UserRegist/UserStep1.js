@@ -8,7 +8,8 @@ import ScrollContainer from "../../components/ScrollContainer";
 import FloatingLabelInput from "../../components/FloatingLabelInput";
 import * as rq from "react-query";
 import axios from "axios";
-import {useIsLoggedIn, useLogIn, useLogOut} from "../../AuthContext";
+import {useIsLoggedIn, useLogIn, useLogOut, useSetIsLoggedIn} from "../../AuthContext";
+import jwt from "jwt-decode";
 
 const screenWidth = Math.round(Dimensions.get("window").width);
 const screenHeight = Math.round(Dimensions.get("window").height);
@@ -173,6 +174,7 @@ export default ({navigation, route}) => {
 		navigation.push("UserStep1HPA4");
 	};
 	const [userRegistInfo, setUserRegistInfoProp] = useState(null);
+	const userRegistInfoRef = React.useRef();
 	const getUserRegistInfo = useGetUserRegistInfo();
 	const setUserRegistInfo = useSetUserRegistInfo();
 	const confrimBtnClicked = async (userRegistInfoForm) => {
@@ -181,7 +183,7 @@ export default ({navigation, route}) => {
 		console.log(response);
 		console.log(newValue);
 		if (response.success === true) {
-			navigation.navigate("UserStep3");
+			navigation.navigate("UserStep5");
 		}
 		//navigation.navigate("UserStep2");
 	};
@@ -192,6 +194,7 @@ export default ({navigation, route}) => {
 		await setValue(fildNm, value);
 		await setUserRegistInfoProp({...userRegistInfo, [fildNm]: value});
 		await setUserRegistInfo({...userRegistInfo, [fildNm]: value});
+		userRegistInfoRef.current = userRegistInfo;
 	};
 	const fetchData = async () => {
 		const data = await getUserRegistInfo();
@@ -273,44 +276,45 @@ export default ({navigation, route}) => {
 	}, [navigation]);
 	useEffect(() => {}, []);
 
-	const token =
-		"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwidXNlckxvZ2luSWQiOiJ5b3VuZ3JhZy5zZW8iLCJ1c2VyTm0iOiLshJzsmIHrnb0iLCJ1c2VyU2VxIjoxLCJ1c2VyRW1haWwiOiJ5b3VuZ3JhZy5zZW9AdGltZi5jby5rciIsInJvbGVzIjpbXSwiaWF0IjoxNjA2NDcyNTA2LCJleHAiOjE2MDkwNjQ1MDZ9.LIhHuQZLdh4NA-Dd6Bx_Hb-W22jkN0ohy-HiegSc4f4";
-
 	rq.setConsole({
 		log: console.log,
 		warn: console.warn,
 		error: console.warn,
 	});
 
+	const login = useLogIn();
+
 	const dataInfo = rq.useQuery(
 		"getUserInfo",
 		async () => {
-			return await axios.post("http://172.126.11.154:82/v2/account/getUserInfo", JSON.parse(JSON.stringify(userRegistInfo)), {
-				headers: {
-					"Content-Type": "application/json",
-					"X-AUTH-TOKEN": `${token}`,
-				},
-			});
+			return await axios.post("https://blueapi.teamfresh.co.kr/v2/account/getUserInfo", JSON.parse(JSON.stringify(userRegistInfo)));
 		},
 		{
 			retry: 0,
 			refetchOnWindowFocus: false,
-			enabled: response.success,
+			enabled: response.success && userRegistInfo,
 			onSuccess: (data) => {
-				if (data) {
+				const token = data?.data?.data;
+				const userInfo = jwt(token);
+				if (token) {
 					Alert.alert("이미 가입되어 있는 회원입니다.", "홈 화면으로 이동합니다.", [
 						{
 							text: "확인",
-							onPress: () => {
-								// setUserRegistInfo(data);
-								// useLogIn();
+							onPress: async () => {
+								await setUserRegistInfo(userInfo);
+								await login(token);
 							},
 						},
 					]);
 				}
 			},
 			onError: (error) => {
-				console.log("에러!!");
+				Alert.alert("가입된 정보가 없습니다.", "회원가입을 진행합니다. 약관을 확인해주세요", [
+					{
+						text: "확인",
+						onPress: () => {},
+					},
+				]);
 			},
 		}
 	);

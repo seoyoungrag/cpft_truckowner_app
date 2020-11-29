@@ -1,27 +1,23 @@
-import React, { createContext, useContext, useState } from "react";
-import { AsyncStorage } from "react-native";
+import React, {createContext, useContext, useState} from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const CodeContext = createContext();
 
-export const CodeProvider = ({ codes: codesProp, children }) => {
- const [codes, setCodes] = useState(codesProp);
- const setCodesProp = async (codes) => {
-  setCodes(codes);
- };
+export const CodeProvider = ({codes: codesProp, children}) => {
+	const [codes, setCodes] = useState(codesProp);
+	const setCodesProp = async (codes) => {
+		setCodes(codes);
+	};
 
- return (
-  <CodeContext.Provider value={{ codes, setCodesProp }}>
-   {children}
-  </CodeContext.Provider>
- );
+	return <CodeContext.Provider value={{codes, setCodesProp}}>{children}</CodeContext.Provider>;
 };
 
 export const useCodes = () => {
- const { codes } = useContext(CodeContext);
- return codes;
+	const {codes} = useContext(CodeContext);
+	return codes;
 };
 
 export const useSetCodesProp = () => {
- const { setCodesProp } = useContext(CodeContext);
- return setCodesProp;
+	const {setCodesProp} = useContext(CodeContext);
+	return setCodesProp;
 };

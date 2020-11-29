@@ -4,6 +4,7 @@ import * as Calc from "../../components/Calc";
 import * as rq from "react-query";
 import {useNavigation} from "@react-navigation/native";
 import axios from "axios";
+import {useToken} from "../../AuthContext";
 
 export default (props) => {
 	const navigation = useNavigation();
@@ -14,9 +15,16 @@ export default (props) => {
 		error: console.warn,
 	});
 
+	const token = useToken();
+
 	const [updateCall] = rq.useMutation(
 		(obj) => {
-			return axios.post("https://blueapi.teamfresh.co.kr/v2/trans/updateApproveStatus", obj);
+			return axios.post("https://blueapi.teamfresh.co.kr/v2/trans/updateApproveStatus", obj, {
+				headers: {
+					"Content-Type": "application/json",
+					"X-AUTH-TOKEN": `${token}`,
+				},
+			});
 		},
 		{
 			onSuccess: async (data, preVal) => {},
@@ -75,10 +83,11 @@ export default (props) => {
 						<View style={{flex: 11, alignItems: "center", borderWidth: 1, borderColor: "#3e50b4", borderRadius: 5, backgroundColor: "#3e50b4", height: 38}}>
 							<TouchableOpacity
 								onPress={() => {
+									console.log("ㅋ", props.data);
 									navigation.navigate("TaxBillDetail", {
 										screen: "TaxBillDetail",
 										params: {
-											targetMonth: Calc.getMonthStr(new Date(props.data.targetMonth)),
+											targetMonth: Calc.getMonthStr(new Date(props.data.yearMonth)),
 											taxBillSeq: props.data.taxBillSeq,
 											businessType: props.data.businessType,
 											taxBillType: props.data.taxbilType,

@@ -32,7 +32,7 @@ export default ({navigation, route}) => {
 		"getDtstmnPreView",
 		async () => {
 			return await axios.post(
-				"http://172.126.11.154:82/v2/trans/getDtstmnPreView",
+				"https://blueapi.teamfresh.co.kr/v2/trans/getDtstmnPreView",
 				{
 					matchingCode: matchingCode,
 					deliveryDate: targetMonth,
@@ -56,7 +56,7 @@ export default ({navigation, route}) => {
 		"getPaymentList",
 		async () => {
 			return await axios.post(
-				"http://172.126.11.154:82/v2/trans/getPaymentList",
+				"https://blueapi.teamfresh.co.kr/v2/trans/getPaymentList",
 				{
 					matchingCode: matchingCode,
 					deliveryDate: targetMonth,
@@ -80,7 +80,7 @@ export default ({navigation, route}) => {
 	const deductionInfo = rq.useQuery(
 		"getDeductionList",
 		async () => {
-			return await axios.post("http://172.126.11.154:82/v2/trans/getDeductionList", {
+			return await axios.post("https://blueapi.teamfresh.co.kr/v2/trans/getDeductionList", {
 				matchingCode: matchingCode,
 				deliveryDate: targetMonth,
 			});
@@ -96,7 +96,7 @@ export default ({navigation, route}) => {
 	const penaltyInfo = rq.useQuery(
 		"getPenaltyList",
 		async () => {
-			return await axios.post("http://172.126.11.154:82/v2/trans/getPenaltyList", {
+			return await axios.post("https://blueapi.teamfresh.co.kr/v2/trans/getPenaltyList", {
 				matchingCode: matchingCode,
 				deliveryDate: targetMonth,
 			});

@@ -9,10 +9,9 @@ import axios from "axios";
 import DeductionDetail from "./Details/DeductionDetail";
 import PenaltyDetail from "./Details/PenaltyDetail";
 import PaymentDetail from "./Details/PaymentDetail";
+import {useToken} from "../../AuthContext";
 
 export default ({navigation, route}) => {
-	const token =
-		"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwidXNlckxvZ2luSWQiOiJ5b3VuZ3JhZy5zZW8iLCJ1c2VyTm0iOiLshJzsmIHrnb0iLCJ1c2VyU2VxIjoxLCJ1c2VyRW1haWwiOiJ5b3VuZ3JhZy5zZW9AdGltZi5jby5rciIsInJvbGVzIjpbXSwiaWF0IjoxNjA2NDcyNTA2LCJleHAiOjE2MDkwNjQ1MDZ9.LIhHuQZLdh4NA-Dd6Bx_Hb-W22jkN0ohy-HiegSc4f4";
 	const {matchingCode, targetMonth} = route.params;
 	const [status, setStatus] = React.useState({
 		isOpen1: false,
@@ -28,11 +27,13 @@ export default ({navigation, route}) => {
 		error: console.warn,
 	});
 
+	const token = useToken();
+
 	const dataInfo = rq.useQuery(
 		"getDtstmnPreView",
 		async () => {
 			return await axios.post(
-				"http://172.126.11.154:82/v2/trans/getDtstmnPreView",
+				"https://blueapi.teamfresh.co.kr/v2/trans/getDtstmnPreView",
 				{
 					matchingCode: matchingCode,
 					deliveryDate: targetMonth,
@@ -56,7 +57,7 @@ export default ({navigation, route}) => {
 		"getPaymentList",
 		async () => {
 			return await axios.post(
-				"http://172.126.11.154:82/v2/trans/getPaymentList",
+				"https://blueapi.teamfresh.co.kr/v2/trans/getPaymentList",
 				{
 					matchingCode: matchingCode,
 					deliveryDate: targetMonth,
@@ -81,7 +82,7 @@ export default ({navigation, route}) => {
 		"getDeductionList",
 		async () => {
 			return await axios.post(
-				"http://172.126.11.154:82/v2/trans/getDeductionList",
+				"https://blueapi.teamfresh.co.kr/v2/trans/getDeductionList",
 				{
 					matchingCode: matchingCode,
 					deliveryDate: targetMonth,
@@ -106,7 +107,7 @@ export default ({navigation, route}) => {
 		"getPenaltyList",
 		async () => {
 			return await axios.post(
-				"http://172.126.11.154:82/v2/trans/getPenaltyList",
+				"https://blueapi.teamfresh.co.kr/v2/trans/getPenaltyList",
 				{
 					matchingCode: matchingCode,
 					deliveryDate: targetMonth,
@@ -250,7 +251,7 @@ export default ({navigation, route}) => {
 								</View>
 								<View style={{marginBottom: 20}}>
 									{deductionInfo.status === "success" &&
-										deductionInfo.data.list.map((data, index, array) => (
+										deductionInfo.data.data.list.map((data, index, array) => (
 											<DeductionDetail key={index} data={data} bool={index + 1 === array.length ? true : false} array={array} />
 										))}
 								</View>
@@ -269,7 +270,7 @@ export default ({navigation, route}) => {
 							<CollapseBody>
 								<View style={{borderBottomWidth: 1, borderBottomColor: "#efefef", paddingBottom: 10}}>
 									{penaltyInfo.status === "success" &&
-										penaltyInfo.data.list.map((data, index, array) => (
+										penaltyInfo.data.data.list.map((data, index, array) => (
 											<PenaltyDetail key={index} data={data} bool={index + 1 === array.length ? true : false} array={array} index={index + 1} />
 										))}
 								</View>

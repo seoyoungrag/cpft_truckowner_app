@@ -9,24 +9,34 @@ import * as Permissions from "expo-permissions";
 import * as Calc from "../../components/Calc";
 import * as rq from "react-query";
 import axios from "axios";
+import {useToken} from "../../AuthContext";
+import jwt from "jwt-decode";
+import TransDetail from "./TransDetail";
 
 const TaxBillDetailStacks = createStackNavigator();
 
 const TaxBillDetail = ({navigation, route}) => {
+	const token = useToken();
+
 	const taxBillSeq = route.params.taxBillSeq;
-	const targetMonth = new Date(route.params.targetMonth);
+	const targetMonth = route.params.targetMonth;
 	const taxBillType = route.params.taxBillType;
 	const businessType = route.params.businessType;
+	const userSeq = jwt(token).userSeq;
 
 	const url =
 		"http://172.126.11.154:3000/forApp/TaxBillDetailForApp?taxBillSeq=" +
 		taxBillSeq +
 		"&targetMonth=" +
 		targetMonth +
-		"&taxBillType=" +
+		"&taxbilType=" +
 		taxBillType +
 		"&businessType=" +
-		businessType;
+		businessType +
+		"&userSeq=" +
+		userSeq;
+
+	console.log("주소", url);
 
 	const viewRef = React.useRef();
 	const [source, setSource] = React.useState(null);
@@ -78,9 +88,6 @@ const TaxBillDetail = ({navigation, route}) => {
 		return askPermission;
 	}, []);
 
-	const token =
-		"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwidXNlckxvZ2luSWQiOiJ5b3VuZ3JhZy5zZW8iLCJ1c2VyTm0iOiLshJzsmIHrnb0iLCJ1c2VyU2VxIjoxLCJ1c2VyRW1haWwiOiJ5b3VuZ3JhZy5zZW9AdGltZi5jby5rciIsInJvbGVzIjpbXSwiaWF0IjoxNjA2NDcyNTA2LCJleHAiOjE2MDkwNjQ1MDZ9.LIhHuQZLdh4NA-Dd6Bx_Hb-W22jkN0ohy-HiegSc4f4";
-
 	rq.setConsole({
 		log: console.log,
 		warn: console.warn,
@@ -91,12 +98,13 @@ const TaxBillDetail = ({navigation, route}) => {
 		"getTransferDetail",
 		async () => {
 			return await axios.post(
-				"http://172.126.11.154:82/v2/trans/getTransferDetail",
+				"https://blueapi.teamfresh.co.kr/v2/trans/getTransferDetail",
 				{
-					taxBillSeq: taxBillSeq,
-					targetMonth: targetMonth,
-					taxBillType: taxBillType,
-					businessType: businessType,
+					taxBilSeq: taxBillSeq,
+					targetMonth: new Date(targetMonth),
+					taxbilType: taxBillType,
+					driverBsnmType: businessType,
+					userSeq: userSeq,
 				},
 				{
 					headers: {
@@ -116,27 +124,29 @@ const TaxBillDetail = ({navigation, route}) => {
 	);
 
 	// row
-	const TransDetail = (props) => {
-		let total = 0;
-		if (props.bool) {
-			props.array.map((data) => (total += data.transPayment));
-		}
-		return (
-			<>
-				<View style={{flexDirection: "row", justifyContent: "space-around", marginVertical: 5}}>
-					<Text style={{color: "black", fontSize: 15}}>{Calc.getDateStr(new Date(props.data.issuDate)) | "-"}</Text>
-					<Text style={{color: "black", fontSize: 15}}>{props.data.productList || "-"}</Text>
-					<Text style={{color: "black", fontSize: 15}}>{Calc.regexWON(props.data.transPayment) || "-"}원</Text>
-				</View>
-				{props.bool && (
-					<View style={{flexDirection: "row", justifyContent: "space-between", marginTop: 10}}>
-						<Text>합계</Text>
-						<Text style={{fontWeight: "bold", color: "#3e50b4"}}>{Calc.regexWON(total)}원</Text>
-					</View>
-				)}
-			</>
-		);
-	};
+	// const TransDetail = (props) => {
+	// 	let total = 0;
+	// 	if (props.bool) {
+	// 		props.array.map((data) => (total += data.transPayment));
+	// 	}
+	// 	let date = Calc.getDateStr(new Date(props.data.issuDate));
+	// 	console.log("날짜", date);
+	// 	return (
+	// 		<>
+	// 			<View style={{flexDirection: "row", justifyContent: "space-around", marginVertical: 5}}>
+	// 				<Text style={{color: "black", fontSize: 15}}>{Calc.getDateStr(new Date(props.data.issuDate)) | "-"}</Text>
+	// 				<Text style={{color: "black", fontSize: 15}}>{props.data.productList || "-"}</Text>
+	// 				<Text style={{color: "black", fontSize: 15}}>{Calc.regexWON(props.data.transPayment) || "-"}원</Text>
+	// 			</View>
+	// 			{props.bool && (
+	// 				<View style={{flexDirection: "row", justifyContent: "space-between", marginTop: 10}}>
+	// 					<Text>합계</Text>
+	// 					<Text style={{fontWeight: "bold", color: "#3e50b4"}}>{Calc.regexWON(total) || "-"}원</Text>
+	// 				</View>
+	// 			)}
+	// 		</>
+	// 	);
+	// };
 
 	return (
 		<>
@@ -172,7 +182,10 @@ const TaxBillDetail = ({navigation, route}) => {
 					<WebView
 						ref={viewRef}
 						onMessage={handleOnMessage}
-						source={{uri: url}}
+						source={{
+							uri: url,
+						}}
+
 						// injectedJavaScript={`const meta = document.createElement('meta'); meta.setAttribute('content', 'width=width, initial-scale=0.5, maximum-scale=0.5, user-scalable=2.0'); meta.setAttribute('name', 'viewport'); document.getElementsByTagName('head')[0].appendChild(meta); `}
 					></WebView>
 					{source ? (

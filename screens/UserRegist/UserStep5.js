@@ -85,14 +85,16 @@ const DataValue = styled.Text`
 export default ({navigation}) => {
 	const [insertCall] = rq.useMutation(
 		(obj) => {
-			return axios.post("http://172.126.11.154:82/v2/account/insertAccount", obj).catch((e) => console.log(e));
+			return axios.post("http://172.126.11.154:19201/v2/account/insertAccount", obj);
 		},
 		{
-			onSuccess: (data, preVal) => {
+			onSuccess: async (data, preVal) => {
 				const token = data?.data?.data;
-				console.log("ㅎㅎ", data?.data?.data);
+				await logIn(token);
 			},
-			onError: (error) => {},
+			onError: (error) => {
+				console.log("에러", error);
+			},
 		}
 	);
 
@@ -106,9 +108,8 @@ export default ({navigation}) => {
 			userRegistComplete: true,
 		});
 		try {
-			await insertCall(JSON.parse(JSON.stringify(userRegistInfo)));
 			await setUserRegistInfo(newValue);
-			await logIn("testToken");
+			await insertCall(JSON.parse(JSON.stringify(userRegistInfo)));
 		} catch (e) {
 			console.log("에러", e);
 		}

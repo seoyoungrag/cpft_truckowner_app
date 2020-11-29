@@ -4,7 +4,7 @@ import {NavigationContainer, useNavigation} from "@react-navigation/native";
 import Detail from "../screens/Detail";
 import Filter from "../screens/Filter";
 import Tabs from "./Tabs";
-import {useIsLoggedIn, useLogIn, useLogOut} from "../AuthContext";
+import {useIsLoggedIn, useLogIn, useLogOut, useToken} from "../AuthContext";
 import AuthNavigation from "./AuthNavigation";
 import PermissionNavigation from "./PermissionNavigation";
 import {TouchableOpacity, Text, StatusBar} from "react-native";
@@ -55,6 +55,7 @@ const forFade = ({current, closing}) => ({
 
 export default () => {
 	const isLoggedIn = useIsLoggedIn();
+	const token = useToken();
 	const hasCameraPermission = useHasCameraPermission();
 	const hasPhonePermission = useHasPhonePermission();
 	const hasFilePermission = useHasFilePermission();
@@ -65,7 +66,7 @@ export default () => {
 	const hasTutorialPass = useHasTutorialPass();
 	const userRegistInfo = useUserRegistInfo();
 	//return <UserRegistNavigation />;
-	return !isLoggedIn ? (
+	return !isLoggedIn || token == null ? (
 		hasCameraPermission != "undetermined" && hasPhonePermission != "undetermined" && hasFilePermission != "undetermined" ? (
 			hasTutorialPass ? (
 				userRegistInfo?.userNm &&

@@ -4,11 +4,10 @@ import * as rq from "react-query";
 import * as Calc from "../../components/Calc";
 import axios from "axios";
 import {Collapse, CollapseHeader, CollapseBody, AccordionList} from "accordion-collapse-react-native";
+import {useToken} from "../../AuthContext";
 
 export default (props) => {
 	const [status, setStatus] = React.useState();
-	const token =
-		"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwidXNlckxvZ2luSWQiOiJ5b3VuZ3JhZy5zZW8iLCJ1c2VyTm0iOiLshJzsmIHrnb0iLCJ1c2VyU2VxIjoxLCJ1c2VyRW1haWwiOiJ5b3VuZ3JhZy5zZW9AdGltZi5jby5rciIsInJvbGVzIjpbXSwiaWF0IjoxNjA2NDcyNTA2LCJleHAiOjE2MDkwNjQ1MDZ9.LIhHuQZLdh4NA-Dd6Bx_Hb-W22jkN0ohy-HiegSc4f4";
 
 	rq.setConsole({
 		log: console.log,
@@ -16,11 +15,13 @@ export default (props) => {
 		error: console.warn,
 	});
 
+	const token = useToken();
+
 	const dataInfo = rq.useQuery(
 		"getPushList",
 		async () => {
 			return await axios.post(
-				"http://172.126.11.154:82/v2/notice/getPushList",
+				"https://blueapi.teamfresh.co.kr/v2/notice/getPushList",
 				{
 					userSeq: 1,
 				},

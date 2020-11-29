@@ -1,62 +1,59 @@
-import React, { createContext, useContext, useState } from "react";
-import { AsyncStorage } from "react-native";
+import React, {createContext, useContext, useState} from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const UserRegistContext = createContext();
 
-export const UserRegistProvider = ({
- userRegistInfo: userRegistInfoProp,
- children,
-}) => {
- const [userRegistInfo, setUserRegistInfoProp] = useState(userRegistInfoProp);
- const getUserRegistInfo = async () => {
-  try {
-   const value = await AsyncStorage.getItem("userRegistInfo");
-   await setUserRegistInfoProp(JSON.parse(value));
-   return Promise.resolve(JSON.parse(value));
-  } catch (e) {
-   console.log(e);
-   return Promise.resolve(null);
-  }
- };
- const setUserRegistInfo = async (value) => {
-  try {
-   await AsyncStorage.setItem("userRegistInfo", JSON.stringify(value));
-   await setUserRegistInfoProp(value);
-  } catch (e) {
-   console.log(e);
-   await setUserRegistInfoProp(null);
-  }
- };
- React.useEffect(() => {
-    getUserRegistInfo();
- }, []);
- return (
-  <UserRegistContext.Provider
-   value={{
-    userRegistInfo,
-    useUserRegistInfo,
-    getUserRegistInfo,
-    setUserRegistInfo,
-    useGetUserRegistInfo,
-    useSetUserRegistInfo,
-   }}
-  >
-   {children}
-  </UserRegistContext.Provider>
- );
+export const UserRegistProvider = ({userRegistInfo: userRegistInfoProp, children}) => {
+	const [userRegistInfo, setUserRegistInfoProp] = useState(userRegistInfoProp);
+	const getUserRegistInfo = async () => {
+		try {
+			const value = await AsyncStorage.getItem("userRegistInfo");
+			await setUserRegistInfoProp(JSON.parse(value));
+			return Promise.resolve(JSON.parse(value));
+		} catch (e) {
+			console.log(e);
+			return Promise.resolve(null);
+		}
+	};
+	const setUserRegistInfo = async (value) => {
+		try {
+			await AsyncStorage.setItem("userRegistInfo", JSON.stringify(value));
+			await setUserRegistInfoProp(value);
+		} catch (e) {
+			console.log(e);
+			await setUserRegistInfoProp(null);
+		}
+	};
+	React.useEffect(() => {
+		getUserRegistInfo();
+	}, []);
+	return (
+		<UserRegistContext.Provider
+			value={{
+				userRegistInfo,
+				useUserRegistInfo,
+				getUserRegistInfo,
+				setUserRegistInfo,
+				useGetUserRegistInfo,
+				useSetUserRegistInfo,
+			}}
+		>
+			{children}
+		</UserRegistContext.Provider>
+	);
 };
 
 export const useUserRegistInfo = () => {
- const { userRegistInfo } = useContext(UserRegistContext);
- return userRegistInfo;
+	const {userRegistInfo} = useContext(UserRegistContext);
+	return userRegistInfo;
 };
 
 export const useGetUserRegistInfo = () => {
- const { getUserRegistInfo } = useContext(UserRegistContext);
- return getUserRegistInfo;
+	const {getUserRegistInfo} = useContext(UserRegistContext);
+	return getUserRegistInfo;
 };
 
 export const useSetUserRegistInfo = () => {
- const { setUserRegistInfo } = useContext(UserRegistContext);
- return setUserRegistInfo;
+	const {setUserRegistInfo} = useContext(UserRegistContext);
+	return setUserRegistInfo;
 };

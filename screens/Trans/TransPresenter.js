@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useRef} from "react";
 import {Dimensions, Text, TouchableOpacity, Modal, View, StyleSheet} from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useNavigation} from "@react-navigation/native";
 import {FontAwesome5} from "@expo/vector-icons";
 import ScrollContainer from "../../components/ScrollContainer";
@@ -13,6 +14,8 @@ import axios from "axios";
 import * as rq from "react-query";
 import Empty from "../../components/Empty";
 import ErrorText from "../../components/ErrorText";
+import {useToken} from "../../AuthContext";
+import jwt from "jwt-decode";
 
 const {width, height} = Dimensions.get("screen");
 
@@ -107,20 +110,18 @@ export default (props) => {
 		return unsubscribe;
 	}, [navigation]);
 
-	const token =
-		"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwidXNlckxvZ2luSWQiOiJ5b3VuZ3JhZy5zZW8iLCJ1c2VyTm0iOiLshJzsmIHrnb0iLCJ1c2VyU2VxIjoxLCJ1c2VyRW1haWwiOiJ5b3VuZ3JhZy5zZW9AdGltZi5jby5rciIsInJvbGVzIjpbXSwiaWF0IjoxNjA2NDcyNTA2LCJleHAiOjE2MDkwNjQ1MDZ9.LIhHuQZLdh4NA-Dd6Bx_Hb-W22jkN0ohy-HiegSc4f4";
-
 	rq.setConsole({
 		log: console.log,
 		warn: console.warn,
 		error: console.warn,
 	});
 
+	const token = useToken();
 	const dataInfo = rq.useQuery(
 		"getTransList",
 		async () => {
 			return await axios.post(
-				"http://172.126.11.154:82/v2/trans/getTransList",
+				"https://blueapi.teamfresh.co.kr/v2/trans/getTransList",
 				{
 					targetMonth: targetMonthRef.current.toISOString(),
 				},

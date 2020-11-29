@@ -6,10 +6,9 @@ import ScrollContainer from "../../components/ScrollContainer";
 import {useNavigation} from "@react-navigation/native";
 import DtsmnRow from "./DtsmnRow";
 import {Entypo} from "@expo/vector-icons";
+import {useToken} from "../../AuthContext";
 
 export default (props) => {
-	const token =
-		"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwidXNlckxvZ2luSWQiOiJ5b3VuZ3JhZy5zZW8iLCJ1c2VyTm0iOiLshJzsmIHrnb0iLCJ1c2VyU2VxIjoxLCJ1c2VyRW1haWwiOiJ5b3VuZ3JhZy5zZW9AdGltZi5jby5rciIsInJvbGVzIjpbXSwiaWF0IjoxNjA2NDcyNTA2LCJleHAiOjE2MDkwNjQ1MDZ9.LIhHuQZLdh4NA-Dd6Bx_Hb-W22jkN0ohy-HiegSc4f4";
 	const navigation = useNavigation();
 
 	const [targetYear, setTargetYear] = React.useState(new Date().getFullYear());
@@ -18,6 +17,7 @@ export default (props) => {
 	React.useEffect(() => {
 		targetYearRef.current = targetYear;
 		rq.queryCache.invalidateQueries("getMyDtstmnList");
+		console.log("로딩 dtstmn");
 	}, [targetYear]);
 
 	rq.setConsole({
@@ -26,11 +26,13 @@ export default (props) => {
 		error: console.warn,
 	});
 
+	const token = useToken();
+
 	const dataInfo = rq.useQuery(
 		"getMyDtstmnList",
 		async () => {
 			return await axios.post(
-				"http://172.126.11.154:82/v2/trans/getTransList",
+				"https://blueapi.teamfresh.co.kr/v2/trans/getTransList",
 				{
 					targetYear: targetYearRef.current,
 				},

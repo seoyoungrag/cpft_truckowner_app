@@ -3,13 +3,12 @@ import ScrollContainer from "../../components/ScrollContainer";
 import * as rq from "react-query";
 import axios from "axios";
 import {useNavigation} from "@react-navigation/native";
-import {Text, View, TouchableOpacity} from "react-native";
+import {Text, View, TouchableOpacity, AppState} from "react-native";
 import TaxBillRow from "./TaxBillRow";
 import {Entypo} from "@expo/vector-icons";
+import {useToken} from "../../AuthContext";
 
 export default () => {
-	const token =
-		"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwidXNlckxvZ2luSWQiOiJ5b3VuZ3JhZy5zZW8iLCJ1c2VyTm0iOiLshJzsmIHrnb0iLCJ1c2VyU2VxIjoxLCJ1c2VyRW1haWwiOiJ5b3VuZ3JhZy5zZW9AdGltZi5jby5rciIsInJvbGVzIjpbXSwiaWF0IjoxNjA2NDcyNTA2LCJleHAiOjE2MDkwNjQ1MDZ9.LIhHuQZLdh4NA-Dd6Bx_Hb-W22jkN0ohy-HiegSc4f4";
 	const navigation = useNavigation();
 
 	const [targetYear, setTargetYear] = React.useState(new Date().getFullYear());
@@ -17,7 +16,7 @@ export default () => {
 
 	React.useEffect(() => {
 		targetYearRef.current = targetYear;
-		rq.queryCache.invalidateQueries("getMyDtstmnList");
+		rq.queryCache.invalidateQueries("getMyTaxInvoiceList");
 	}, [targetYear]);
 
 	rq.setConsole({
@@ -26,11 +25,28 @@ export default () => {
 		error: console.warn,
 	});
 
+	const token = useToken();
+
+	rq.setFocusHandler((handleFocus) => {
+		const handleAppStateChange = (appState) => {
+			if (appState === "active") {
+				handleFocus();
+			}
+		};
+		AppState.addEventListener("change", handleAppStateChange);
+		return () => AppState.removeEventListener("change", handleAppStateChange);
+	});
+
+	React.useEffect(() => {
+		console.log("ㅎㅎ!!");
+		console.log(AppState.change);
+	}, [AppState]);
+
 	const dataInfo = rq.useQuery(
-		"getMyDtstmnList",
+		"getMyTaxInvoiceList",
 		async () => {
 			return await axios.post(
-				"http://172.126.11.154:82/v2/trans/getTransList",
+				"https://blueapi.teamfresh.co.kr/v2/trans/getTransList",
 				{
 					targetYear: targetYearRef.current,
 				},
@@ -44,8 +60,10 @@ export default () => {
 		},
 		{
 			retry: 0,
-			refetchOnWindowFocus: false,
-			onSuccess: (data) => {},
+			refetchOnWindowFocus: true,
+			onSuccess: (data) => {
+				console.log("통신!!");
+			},
 			onError: (error) => {},
 		}
 	);

@@ -8,19 +8,20 @@ export default (props) => {
 	return (
 		<View style={{borderBottomWidth: 3, borderBottomColor: "#efefef", paddingBottom: 20, justifyContent: "space-around", flexDirection: "row", paddingTop: 20}}>
 			<View>
-				<Text style={{fontSize: 14}}>{Calc.getMonthStr(new Date(props?.data?.targetMonth)) || "-"}</Text>
+				<Text style={{fontSize: 14}}>{new Date(props?.data?.yearMonth).getMonth() + 1 || "-"}월</Text>
 			</View>
 			<View>
 				<Text style={{fontSize: 14}}>{props?.data?.owrProfsNm || "-"}</Text>
 			</View>
 			<TouchableOpacity
 				onPress={() => {
+					console.log(props.data);
 					navigation.navigate("DocketForm", {
 						screen: "DocketFormContainer",
 						params: {
 							screen: props?.data?.docketForm,
 							params: {
-								targetMonth: props?.data?.targetMonth,
+								targetMonth: new Date(props?.data?.yearMonth),
 								matchingCode: props?.data?.matchingCode,
 							},
 						},
