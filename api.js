@@ -33,7 +33,6 @@ export const getAnythingCpft = async (path, params = {}) => {
       },
       params: { ...params }
     });
-    await new Promise(r => setTimeout(r, 1000)) // wait a second
     return [list || data || result, null];
   } catch (e) {
     return [null, e];
