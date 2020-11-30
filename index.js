@@ -7,6 +7,7 @@ messaging().setBackgroundMessageHandler(async (remoteMessage) => {
 import { YellowBox } from "react-native";
 
 YellowBox.ignoreWarnings(["No task registered for key"]);
+YellowBox.ignoreWarnings(['Setting a timer']);
 
 import App from "./App";
 
