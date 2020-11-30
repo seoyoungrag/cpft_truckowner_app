@@ -287,7 +287,8 @@ export default ({navigation, route}) => {
 	const dataInfo = rq.useQuery(
 		"getUserInfo",
 		async () => {
-			return await axios.post("https://blueapi.teamfresh.co.kr/v2/account/getUserInfo", JSON.parse(JSON.stringify(userRegistInfo)));
+			// return await axios.post("https://blueapi.teamfresh.co.kr/v2/account/getUserInfo", JSON.parse(JSON.stringify(userRegistInfo)));
+			return await axios.post("http://172.126.11.154:19201/v2/account/getUserInfo", JSON.parse(JSON.stringify(userRegistInfo)));
 		},
 		{
 			retry: 0,
@@ -296,6 +297,7 @@ export default ({navigation, route}) => {
 			onSuccess: (data) => {
 				const token = data?.data?.data;
 				const userInfo = jwt(token);
+				console.log("ㅎㅎㅎㅎㅎ");
 				if (token) {
 					Alert.alert("이미 가입되어 있는 회원입니다.", "홈 화면으로 이동합니다.", [
 						{

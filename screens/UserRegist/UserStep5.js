@@ -85,6 +85,7 @@ const DataValue = styled.Text`
 export default ({navigation}) => {
 	const [insertCall] = rq.useMutation(
 		(obj) => {
+			// return axios.post("https://blueapi.teamfresh.co.kr/v2/account/insertAccount", obj);
 			return axios.post("http://172.126.11.154:19201/v2/account/insertAccount", obj);
 		},
 		{

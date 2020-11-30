@@ -98,7 +98,8 @@ const TaxBillDetail = ({navigation, route}) => {
 		"getTransferDetail",
 		async () => {
 			return await axios.post(
-				"https://blueapi.teamfresh.co.kr/v2/trans/getTransferDetail",
+				// "https://blueapi.teamfresh.co.kr/v2/trans/getTransferDetail",
+				"http://172.126.11.152:19201/v2/trans/getTransferDetail",
 				{
 					taxBilSeq: taxBillSeq,
 					targetMonth: new Date(targetMonth),

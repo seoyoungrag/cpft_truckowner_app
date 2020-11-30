@@ -1,5 +1,5 @@
 import React from "react";
-import {View, Text, TouchableOpacity, Image} from "react-native";
+import {View, Text, TouchableOpacity, Image, Linking, Alert} from "react-native";
 import * as Calc from "../../components/Calc";
 import * as rq from "react-query";
 import ScrollContainer from "../../components/ScrollContainer";
@@ -19,6 +19,8 @@ export default ({navigation, route}) => {
 		isOpen2: false,
 		isOpen3: false,
 	});
+
+	const [phone, setPhone] = React.useState(null);
 
 	const {isOpen1, isOpen2, isOpen3} = status;
 
@@ -43,7 +45,7 @@ export default ({navigation, route}) => {
 		},
 		{
 			retry: 0,
-			onSuccess: () => {},
+			onSuccess: (data) => {},
 		}
 	);
 
@@ -302,7 +304,25 @@ export default ({navigation, route}) => {
 						)}
 						<View style={{flexDirection: "row", justifyContent: "space-between", marginTop: 40}}>
 							<View style={{borderWidth: 1, borderColor: "#3e50b4", height: 38, flex: 4, alignItems: "center", borderRadius: 5}}>
-								<TouchableOpacity style={{width: "100%", height: "100%", alignItems: "center"}}>
+								<TouchableOpacity
+									onPress={() => {
+										Alert.alert("현장 담당자에게 연락해보시겠습니까?", "TEL:~전화번호~", [
+											{
+												text: "예",
+												onPress: () => {
+													{
+														Linking.openURL(`tel:`);
+													}
+												},
+											},
+											{
+												text: "아니오",
+												onPress: () => {},
+											},
+										]);
+									}}
+									style={{width: "100%", height: "100%", alignItems: "center"}}
+								>
 									<Text style={{color: "#3e50b4", fontWeight: "bold", height: "100%", textAlignVertical: "center"}}>재요청</Text>
 								</TouchableOpacity>
 							</View>

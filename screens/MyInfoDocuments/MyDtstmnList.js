@@ -17,7 +17,6 @@ export default (props) => {
 	React.useEffect(() => {
 		targetYearRef.current = targetYear;
 		rq.queryCache.invalidateQueries("getMyDtstmnList");
-		console.log("로딩 dtstmn");
 	}, [targetYear]);
 
 	rq.setConsole({
@@ -47,7 +46,9 @@ export default (props) => {
 		{
 			retry: 0,
 			refetchOnWindowFocus: false,
-			onSuccess: (data) => {},
+			onSuccess: (data) => {
+				console.log("로딩 dt");
+			},
 			onError: (error) => {},
 		}
 	);
@@ -85,7 +86,14 @@ export default (props) => {
 					</TouchableOpacity>
 				</View>
 			</View>
-			<ScrollContainer loading={false} contentContainerStyle={{paddingTop: 20, backgroundColor: "white"}}>
+			<ScrollContainer
+				loading={dataInfo?.isLoading}
+				contentContainerStyle={{paddingTop: 20, backgroundColor: "white"}}
+				refreshOn={true}
+				refreshFn={() => {
+					rq.queryCache.invalidateQueries("getMyDtstmnList");
+				}}
+			>
 				<View style={{paddingHorizontal: 20, flex: 1}}>
 					<View style={{flexDirection: "row", borderBottomWidth: 3, borderBottomColor: "#efefef", paddingBottom: 20, justifyContent: "space-around"}}>
 						<View>

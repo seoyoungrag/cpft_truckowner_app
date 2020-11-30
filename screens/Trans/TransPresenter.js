@@ -117,11 +117,14 @@ export default (props) => {
 	});
 
 	const token = useToken();
+
+	console.log("ㅋㅋ", jwt(token));
 	const dataInfo = rq.useQuery(
 		"getTransList",
 		async () => {
 			return await axios.post(
-				"https://blueapi.teamfresh.co.kr/v2/trans/getTransList",
+				// "https://blueapi.teamfresh.co.kr/v2/trans/getTransList",
+				"http://172.126.11.154:19201/v2/trans/getTransList",
 				{
 					targetMonth: targetMonthRef.current.toISOString(),
 				},

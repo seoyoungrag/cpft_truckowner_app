@@ -37,10 +37,10 @@ export default () => {
 		return () => AppState.removeEventListener("change", handleAppStateChange);
 	});
 
-	React.useEffect(() => {
-		console.log("ㅎㅎ!!");
-		console.log(AppState.change);
-	}, [AppState]);
+	// React.useEffect(() => {
+	// 	console.log("ㅎㅎ!!");
+	// 	console.log(AppState.change);
+	// }, [AppState]);
 
 	const dataInfo = rq.useQuery(
 		"getMyTaxInvoiceList",
@@ -62,7 +62,7 @@ export default () => {
 			retry: 0,
 			refetchOnWindowFocus: true,
 			onSuccess: (data) => {
-				console.log("통신!!");
+				console.log("로딩 tax");
 			},
 			onError: (error) => {},
 		}
@@ -100,7 +100,14 @@ export default () => {
 					</TouchableOpacity>
 				</View>
 			</View>
-			<ScrollContainer loading={false} contentContainerStyle={{paddingTop: 20, backgroundColor: "white"}}>
+			<ScrollContainer
+				loading={dataInfo?.isLoading}
+				contentContainerStyle={{paddingTop: 20, backgroundColor: "white"}}
+				refreshOn={true}
+				refreshFn={() => {
+					rq.queryCache.invalidateQueries("getMyTaxInvoiceList");
+				}}
+			>
 				<View style={{paddingHorizontal: 20, flex: 1}}>
 					<View style={{flexDirection: "row", borderBottomWidth: 3, borderBottomColor: "#efefef", paddingBottom: 20, justifyContent: "space-around"}}>
 						<View>
