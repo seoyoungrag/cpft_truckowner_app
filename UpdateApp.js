@@ -94,48 +94,59 @@ const UpdateApp = ({ updateModalVisible }) => {
   const updateFromPlayStore = async () => {
     const isEmulator = await DeviceInfo.isEmulator();
 
-    console.log("CUSTOMTAG", "isEmulator: ", isEmulator);
+    console.log("UpdateApp", "isEmulator: ", isEmulator);
     //공개 버전이 되어야 쓸 수 있음.
+    /*
     VersionCheck.getLatestVersion({
       forceUpdate: true,
       provider: () =>
         fetch("https://play.google.com/store/apps/details?id=kr.co.teamfresh.cpft.truckowner.android")
           .then(
-            (r) =>
-              new Promise((resolve, reject) => {
+            (r) =>{
                 if (r.status && r.status == 404) {
-                  return reject("플레이스토어에서 앱을 찾을 수 없음.");
+                  console.log("UpdateApp", "getLatestVersion: ",r);
+                  return Promise.reject("플레이스토어에서 앱을 찾을 수 없음.");
+                }else{
+                  console.log("UpdateApp", "getLatestVersion: ",r);
                 }
                 return r.json();
               })
-          )
           .then(({ version }) => version)
     })
-      .then(async (latestVersion) => {
-        console.log(latestVersion);
-        try {
-          await VersionCheck.needUpdate().then(async (res) => {
+    */
+   console.log(VersionCheck.getCurrentBuildNumber());
+
+   VersionCheck.needUpdate()
+  .then(res => {
+    console.log(res);
+    // { isNeeded: true, currentVersion: "1.0.0", latestVersion: "1.1.0" }
+  });
+   VersionCheck.getLatestVersion()
+  .then(latestVersion => {
+    console.log("UpdateApp", "getLatestVersion: ",latestVersion);
+    // 2.0.0
+  })
+      
+          VersionCheck.needUpdate().then(async (res) => {
+            console.log("UpdateApp", "needUpdate: ",res);
             if (res.isNeeded) {
               try {
                 const result = await startUpdateFlow(updateModes);
                 console.log(result);
               } catch (e) {
-                console.log("CUSTOMTAG error:", e);
+                console.log("UpdateApp", "updateFromPlayStore error:", e);
               }
             }
           });
-        } catch (e) {}
-      })
-      .catch((error) => console.log(error));
 
     if (!isEmulator) {
       //공개 버전이 되어야 쓸 수 있음.
 
       try {
         const result = await startUpdateFlow(updateModes);
-        console.log(result);
+        console.log("UpdateApp", "startUpdateFlow result: ", result);
       } catch (e) {
-        console.log("CUSTOMTAG error:", e);
+        console.log("UpdateApp", "startUpdateFlow error: ", e);
       }
     }
   };

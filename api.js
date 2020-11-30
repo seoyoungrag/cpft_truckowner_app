@@ -1,11 +1,11 @@
 import axios from "axios";
 axios.interceptors.request.use((request) => {
-  //console.log("Starting Request", request);
+  console.log("Starting Request", request);
   return request;
 });
 
 axios.interceptors.response.use((response) => {
-  //console.log("Response:", response);
+  console.log("Response:", response);
   return response;
 });
 
@@ -33,6 +33,7 @@ export const getAnythingCpft = async (path, params = {}) => {
       },
       params: { ...params }
     });
+    await new Promise(r => setTimeout(r, 1000)) // wait a second
     return [list || data || result, null];
   } catch (e) {
     return [null, e];
