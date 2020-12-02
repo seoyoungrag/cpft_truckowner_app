@@ -12,6 +12,7 @@ axios.interceptors.response.use((response) => {
 const TMDB_KEY = "743fefbcfe0700b7660693ec2c54ab7f";
 const jwtToken =
 	"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwidXNlckxvZ2luSWQiOiJ5b3VuZ3JhZy5zZW8iLCJ1c2VyTm0iOiLshJzsmIHrnb0iLCJ1c2VyU2VxIjoiMSIsInVzZXJFbWFpbCI6InlvdW5ncmFnLnNlb0B0aW1mLmNvLmtyIiwicm9sZXMiOlsiUk9MRV9VU0VSIiwiUk9MRV9DQVJSSUVSIl0sImNhcnJpZXJTZXEiOiIxIiwiY2Fycmllck5tIjoi7YyA7ZSE66CI7IucIiwiaWF0IjoxNTk2NDE5MjE0LCJleHAiOjE1OTkwMTEyMTR9.o1o9HDtEvJSPPyqchsPlnlKeAV8RqmpLFPNfdE5uYH4";
+
 const makeRequest = (path, params) =>
 	axios.get(`https://api.themoviedb.org/3${path}`, {
 		params: {...params, api_key: TMDB_KEY},

@@ -32,6 +32,7 @@ export default ({navigation, route}) => {
 		async () => {
 			return await axios.post(
 				"https://blueapi.teamfresh.co.kr/v2/trans/getDtstmnPreView",
+				// "http://172.126.11.154:19201/v2/trans/getDtstmnPreView",
 				{
 					matchingCode: matchingCode,
 					deliveryDate: targetMonth,
@@ -56,6 +57,7 @@ export default ({navigation, route}) => {
 		async () => {
 			return await axios.post(
 				"https://blueapi.teamfresh.co.kr/v2/trans/getDailyWorkList",
+				// "http://172.126.11.154:19201/v2/trans/getDailyWorkList",
 				{
 					matchingCode: matchingCode,
 					deliveryDate: targetMonth,

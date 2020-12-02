@@ -1,7 +1,7 @@
 import React, {useLayoutEffect} from "react";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import {createStackNavigator, HeaderBackButton} from "@react-navigation/stack";
-import {Text} from "react-native";
+import {Text, Image} from "react-native";
 import Orders from "../screens/Orders";
 import Trans from "../screens/Trans";
 import MyInfo from "../screens/MyInfo";
@@ -56,7 +56,8 @@ export default ({navigation, route}) => {
 						if (route.name === "Orders") {
 							iconName += "truck";
 						} else if (route.name === "Trans") {
-							iconName += "dolly";
+							// iconName += "dolly";
+							return focused ? <Image source={require("../assets/img/icon_calc.png")} /> : <Image source={require("../assets/img/icon_deCalc.png")} />;
 						} else if (route.name === "NoticeContainer") {
 							iconName += "film";
 						} else if (route.name === "MyInfo") {
@@ -77,7 +78,7 @@ export default ({navigation, route}) => {
 						if (route.name === "Orders") {
 							label = "오더";
 						} else if (route.name === "Trans") {
-							label = "운송";
+							label = "정산";
 						} else if (route.name === "MyInfo") {
 							label = "My";
 						} else if (route.name === "NoticeContainer") {

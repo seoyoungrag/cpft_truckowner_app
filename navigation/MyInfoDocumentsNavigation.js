@@ -3,7 +3,7 @@ import {createMaterialTopTabNavigator} from "@react-navigation/material-top-tabs
 import {createStackNavigator} from "@react-navigation/stack";
 import MyDtstmnList from "../screens/MyInfoDocuments/MyDtstmnList";
 import MyTaxInvoiceList from "../screens/MyInfoDocuments/MyTaxInvoiceList";
-import {Text, View, TouchableOpacity} from "react-native";
+import {Text, View, TouchableOpacity, Image} from "react-native";
 import {FontAwesome5, Entypo} from "@expo/vector-icons";
 
 const MyInfoEditTabs = createMaterialTopTabNavigator();
@@ -13,6 +13,13 @@ const MyInfoEditTabsImpl = ({navigation, route}) => {
 	return (
 		<MyInfoEditTabs.Navigator
 			screenOptions={({route}) => ({
+				// tabBarIcon: ({focused}) => {
+				// 	if (route.name === "MyDtstmnList") {
+				// 		return focused ? <Image source={require("../assets/img/icon_dtstmn.png")} /> : <Image source={require("../assets/img/icon_calc.png")} />;
+				// 	} else if (route.name === "MyTaxInvoiceList") {
+				// 		return focused ? <Image source={require("../assets/img/icon_calc.png")} /> : <Image source={require("../assets/img/icon_deCalc.png")} />;
+				// 	}
+				// },
 				tabBarLabel: ({focused}) => {
 					let label;
 					if (route.name === "MyDtstmnList") {
@@ -20,27 +27,38 @@ const MyInfoEditTabsImpl = ({navigation, route}) => {
 					} else if (route.name === "MyTaxInvoiceList") {
 						label = "세금계산서";
 					}
-					let iconName = "";
-					if (route.name === "MyDtstmnList") {
-						iconName += "truck";
-					} else if (route.name === "MyTaxInvoiceList") {
-						iconName += "dolly";
-					}
+					// let iconName = "";
+					// if (route.name === "MyDtstmnList") {
+					// 	iconName += "truck";
+					// } else if (route.name === "MyTaxInvoiceList") {
+					// 	iconName += "dolly";
+					// }
 					return (
-						<Text style={{fontSize: 12, color: focused ? "#3e50b4" : "grey"}}>
-							<FontAwesome5 name={iconName} color={focused ? "#3e50b4" : "grey"} size={20} />
-							{"  "}
-							{label}
-						</Text>
+						<View style={{flexDirection: "row"}}>
+							{label === "명세서" ? (
+								focused ? (
+									<Image source={require("../assets/img/icon_dtstmn.png")} />
+								) : (
+									<Image source={require("../assets/img/icon_deDtstmn.png")} />
+								)
+							) : focused ? (
+								<Image source={require("../assets/img/icon_calc.png")} />
+							) : (
+								<Image source={require("../assets/img/icon_deCalc.png")} />
+							)}
+							<Text style={{fontSize: 14, color: focused ? "#3e50b4" : "grey", marginLeft: 5, marginTop: 3}}>{label}</Text>
+						</View>
 					);
 				},
 			})}
 			tabBarOptions={{
 				showLabel: true,
+				showIcon: true,
 				style: {
 					borderTopColor: "silver",
 					color: "#3e50b4",
 					backgroundColor: "white",
+					justifyContent: "flex-start",
 				},
 			}}
 			tabBarPosition="bottom"

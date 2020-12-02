@@ -7,6 +7,8 @@ import {Text, View, TouchableOpacity, AppState} from "react-native";
 import TaxBillRow from "./TaxBillRow";
 import {Entypo} from "@expo/vector-icons";
 import {useToken} from "../../AuthContext";
+import Empty from "../../components/Empty";
+import ErrorText from "../../components/ErrorText";
 
 export default () => {
 	const navigation = useNavigation();
@@ -37,16 +39,14 @@ export default () => {
 		return () => AppState.removeEventListener("change", handleAppStateChange);
 	});
 
-	// React.useEffect(() => {
-	// 	console.log("ㅎㅎ!!");
-	// 	console.log(AppState.change);
-	// }, [AppState]);
+	const url = "https://blueapi.teamfresh.co.kr/v2/trans/getTransList";
+	// const url = "http://172.126.11.154:19201/v2/trans/getTransList";
 
 	const dataInfo = rq.useQuery(
 		"getMyTaxInvoiceList",
 		async () => {
 			return await axios.post(
-				"https://blueapi.teamfresh.co.kr/v2/trans/getTransList",
+				url,
 				{
 					targetYear: targetYearRef.current,
 				},
@@ -61,9 +61,7 @@ export default () => {
 		{
 			retry: 0,
 			refetchOnWindowFocus: true,
-			onSuccess: (data) => {
-				console.log("로딩 tax");
-			},
+			onSuccess: (data) => {},
 			onError: (error) => {},
 		}
 	);
@@ -120,7 +118,9 @@ export default () => {
 							<Text style={{color: "black", fontWeight: "bold", fontSize: 15}}>세금계산서</Text>
 						</View>
 					</View>
-					{dataInfo?.status === "success" && dataInfo?.data?.data?.list.map((data, index) => <TaxBillRow key={index} data={data} />)}
+					{dataInfo?.status === "success" &&
+						(dataInfo?.data?.data?.list?.length > 0 ? dataInfo?.data?.data?.list?.map((data, index) => <TaxBillRow key={index} data={data} />) : <Empty />)}
+					{dataInfo?.status === "error" && <ErrorText />}
 				</View>
 			</ScrollContainer>
 		</>

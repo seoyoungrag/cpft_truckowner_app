@@ -31,6 +31,7 @@ export default ({navigation, route}) => {
 		async () => {
 			return await axios.post(
 				"https://blueapi.teamfresh.co.kr/v2/trans/getDtstmnPreView",
+				// "http://172.126.11.154:19201/v2/trans/getDtstmnPreView",
 				{
 					matchingCode: matchingCode,
 					deliveryDate: targetMonth,
@@ -54,6 +55,7 @@ export default ({navigation, route}) => {
 		async () => {
 			return await axios.post(
 				"https://blueapi.teamfresh.co.kr/v2/trans/getPaymentList",
+				// "http://172.126.11.154:19201/v2/trans/getPaymentList",
 				{
 					matchingCode: matchingCode,
 					deliveryDate: targetMonth,
@@ -77,6 +79,7 @@ export default ({navigation, route}) => {
 		async () => {
 			return await axios.post(
 				"https://blueapi.teamfresh.co.kr/v2/trans/getDeductionList",
+				// "http://172.126.11.154:19201/v2/trans/getDeductionList",
 				{
 					matchingCode: matchingCode,
 					deliveryDate: targetMonth,
@@ -101,6 +104,7 @@ export default ({navigation, route}) => {
 		async () => {
 			return await axios.post(
 				"https://blueapi.teamfresh.co.kr/v2/trans/getPenaltyList",
+				// "http://172.126.11.154:19201/v2/trans/getPenaltyList",
 				{
 					matchingCode: matchingCode,
 					deliveryDate: targetMonth,
@@ -116,6 +120,12 @@ export default ({navigation, route}) => {
 		{
 			enabled: deductionInfo?.status === "success",
 			retry: 0,
+			onSuccess: (data) => {
+				console.log("ㅎㅎ");
+			},
+			onError: (error) => {
+				console.log("??");
+			},
 		}
 	);
 

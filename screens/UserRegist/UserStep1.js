@@ -10,6 +10,7 @@ import * as rq from "react-query";
 import axios from "axios";
 import {useIsLoggedIn, useLogIn, useLogOut, useSetIsLoggedIn} from "../../AuthContext";
 import jwt from "jwt-decode";
+import messaging from "@react-native-firebase/messaging";
 
 const screenWidth = Math.round(Dimensions.get("window").width);
 const screenHeight = Math.round(Dimensions.get("window").height);
@@ -284,20 +285,41 @@ export default ({navigation, route}) => {
 
 	const login = useLogIn();
 
+	const [fcmToken, setFcmToken] = React.useState(null);
+
+	const getFcmToken = React.useCallback(async () => {
+		const fcmToken = await messaging().getToken();
+		if (fcmToken) {
+			// console.log(fcmToken);
+			console.log("Your Firebase Token is:", fcmToken);
+			setFcmToken(fcmToken);
+		} else {
+			console.log("Failed", "No token received");
+		}
+	}, []);
+
+	React.useEffect(() => {
+		getFcmToken();
+	}, []);
+
+	// const url = "http://172.126.11.154:19201/v2/account/getUserInfo";
+	const url = "https://blueapi.teamfresh.co.kr/v2/account/getUserInfo";
+
 	const dataInfo = rq.useQuery(
 		"getUserInfo",
 		async () => {
-			// return await axios.post("https://blueapi.teamfresh.co.kr/v2/account/getUserInfo", JSON.parse(JSON.stringify(userRegistInfo)));
-			return await axios.post("http://172.126.11.154:19201/v2/account/getUserInfo", JSON.parse(JSON.stringify(userRegistInfo)));
+			const fcmTokenObj = {
+				fcmToken: fcmToken,
+			};
+			return await axios.post(url, Object.assign({}, userRegistInfo, fcmTokenObj));
 		},
 		{
 			retry: 0,
 			refetchOnWindowFocus: false,
-			enabled: response.success && userRegistInfo,
+			enabled: response.success && userRegistInfo && fcmToken,
 			onSuccess: (data) => {
 				const token = data?.data?.data;
 				const userInfo = jwt(token);
-				console.log("ㅎㅎㅎㅎㅎ");
 				if (token) {
 					Alert.alert("이미 가입되어 있는 회원입니다.", "홈 화면으로 이동합니다.", [
 						{

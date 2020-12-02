@@ -62,14 +62,14 @@ export default () => {
 						<Image source={require("../../assets/img/icon_setting.png")} />
 					</TouchableOpacity>
 				),
-				headerTitle: () => <Text style={{color: "#3e50b4", fontSize: 24}}>브랜드 로고</Text>,
+				headerTitle: () => <Image source={require("../../assets/img/logo_timf_plus.png")} />,
 				headerRight: () => (
 					<TouchableOpacity
 						onPress={() => {
 							navigation.navigate("NoticeContainer");
 						}}
 					>
-						<Image source={require("../../assets/img/icon_notification.png")} />
+						<Image source={require("../../assets/img/icon_deNotification.png")} />
 					</TouchableOpacity>
 				),
 			}}

@@ -232,7 +232,6 @@ function App() {
 	return (
 		<SafeAreaView flex={1}>
 			{/*<BackendHealthCheck updateModalVisible={updateModalVisible}></BackendHealthCheck>*/}
-			<UpdateApp updateModalVisible={updateModalVisible}></UpdateApp>
 			{isReady ? (
 				<>
 					<Provider store={store}>
@@ -248,6 +247,7 @@ function App() {
 											<UserRegistProvider userRegistInfo={userRegistInfo}>
 												<AuthProvider isLoggedIn={isLoggedIn}>
 													<TutorialProvider hasTutorialPass={hasTutorialPass}>
+														<UpdateApp updateModalVisible={updateModalVisible}></UpdateApp>
 														<Stack />
 													</TutorialProvider>
 												</AuthProvider>

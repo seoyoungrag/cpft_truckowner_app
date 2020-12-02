@@ -17,9 +17,12 @@ export default (props) => {
 
 	const token = useToken();
 
+	const url = "https://blueapi.teamfresh.co.kr/v2/trans/updateApproveStatus";
+	// const url = "http://172.126.11.154:19201/v2/trans/updateApproveStatus";
+
 	const [updateCall] = rq.useMutation(
 		(obj) => {
-			return axios.post("https://blueapi.teamfresh.co.kr/v2/trans/updateApproveStatus", obj, {
+			return axios.post(url, obj, {
 				headers: {
 					"Content-Type": "application/json",
 					"X-AUTH-TOKEN": `${token}`,
@@ -36,6 +39,7 @@ export default (props) => {
 		const obj = {
 			matchingCode: props.data.matchingCode,
 			targetMonth: props.data.targetMonth,
+			excelGroupName: props.data.excelGroupName,
 		};
 		try {
 			updateCall(obj);
@@ -83,11 +87,10 @@ export default (props) => {
 						<View style={{flex: 11, alignItems: "center", borderWidth: 1, borderColor: "#3e50b4", borderRadius: 5, backgroundColor: "#3e50b4", height: 38}}>
 							<TouchableOpacity
 								onPress={() => {
-									console.log("ㅋ", props.data);
 									navigation.navigate("TaxBillDetail", {
 										screen: "TaxBillDetail",
 										params: {
-											targetMonth: Calc.getMonthStr(new Date(props.data.yearMonth)),
+											targetMonth: Calc.getMonthStr(new Date(String(props.data.targetMonth).replace(".", "-"))),
 											taxBillSeq: props.data.taxBillSeq,
 											businessType: props.data.businessType,
 											taxBillType: props.data.taxbilType,

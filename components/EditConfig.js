@@ -19,7 +19,7 @@ export default (props) => {
 				</TouchableOpacity>
 			</View>
 			<View style={{flexDirection: "row", justifyContent: "space-between"}}>
-				<Text style={{color: "grey", fontSize: 20, marginLeft: 10}}>개인정보 처리방침</Text>
+				<Text style={{color: "grey", fontSize: 20, marginLeft: 10}}>개인정보 취급방침</Text>
 				<TouchableOpacity
 					onPress={() => {
 						props.navigation.navigate("PersonalInfo");

@@ -6,6 +6,7 @@ import {useGetUserRegistInfo, useSetUserRegistInfo} from "../../UserRegistContex
 import ScrollContainer from "../../components/ScrollContainer";
 import * as rq from "react-query";
 import axios from "axios";
+import messaging from "@react-native-firebase/messaging";
 
 const screenWidth = Math.round(Dimensions.get("window").width);
 const screenHeight = Math.round(Dimensions.get("window").height);
@@ -82,11 +83,13 @@ const DataValue = styled.Text`
 	font-size: 14px;
 `;
 
+// const url = "http://172.126.11.154:19201/v2/account/insertAccount";
+const url = "https://blueapi.teamfresh.co.kr/v2/account/insertAccount";
+
 export default ({navigation}) => {
 	const [insertCall] = rq.useMutation(
 		(obj) => {
-			// return axios.post("https://blueapi.teamfresh.co.kr/v2/account/insertAccount", obj);
-			return axios.post("http://172.126.11.154:19201/v2/account/insertAccount", obj);
+			return axios.post(url, obj);
 		},
 		{
 			onSuccess: async (data, preVal) => {
@@ -104,19 +107,40 @@ export default ({navigation}) => {
 	const getUserRegistInfo = useGetUserRegistInfo();
 	const setUserRegistInfo = useSetUserRegistInfo();
 
-	const loginSuccess = async () => {
+	const [fcmToken, setFcmToken] = React.useState(null);
+
+	const getFcmToken = React.useCallback(async () => {
+		const fcmToken = await messaging().getToken();
+		if (fcmToken) {
+			// console.log(fcmToken);
+			console.log("Your Firebase Token is:", fcmToken);
+			setFcmToken(fcmToken);
+		} else {
+			console.log("Failed", "No token received");
+		}
+	}, []);
+
+	React.useEffect(() => {
+		getFcmToken();
+	}, []);
+
+	const loginSuccess = React.useCallback(async () => {
 		const newValue = Object.assign({}, userRegistInfo, {
 			userRegistComplete: true,
 		});
+
 		try {
 			await setUserRegistInfo(newValue);
-			await insertCall(JSON.parse(JSON.stringify(userRegistInfo)));
+			const fcmTokenObj = {
+				fcmToken: fcmToken,
+			};
+			await insertCall(Object.assign({}, userRegistInfo, fcmTokenObj));
 		} catch (e) {
 			console.log("에러", e);
 		}
 		//await setUserRegistInfoProp({...userRegistInfo, userRegistComplete: "Y"});
 		//await setUserRegistInfo({...userRegistInfo, userRegistComplete: "Y"})
-	};
+	}, [fcmToken, userRegistInfo]);
 
 	const fetchData = async () => {
 		const data = await getUserRegistInfo();
@@ -165,7 +189,11 @@ export default ({navigation}) => {
 				</ScrollContainer>
 
 				<ModalFooter>
-					<ConfirmBtn onPress={loginSuccess}>
+					<ConfirmBtn
+						onPress={() => {
+							loginSuccess();
+						}}
+					>
 						<ConfirmBtnText>완료</ConfirmBtnText>
 					</ConfirmBtn>
 				</ModalFooter>

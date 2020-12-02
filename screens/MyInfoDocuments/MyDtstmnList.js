@@ -7,6 +7,8 @@ import {useNavigation} from "@react-navigation/native";
 import DtsmnRow from "./DtsmnRow";
 import {Entypo} from "@expo/vector-icons";
 import {useToken} from "../../AuthContext";
+import Empty from "../../components/Empty";
+import ErrorText from "../../components/ErrorText";
 
 export default (props) => {
 	const navigation = useNavigation();
@@ -27,11 +29,14 @@ export default (props) => {
 
 	const token = useToken();
 
+	const url = "https://blueapi.teamfresh.co.kr/v2/trans/getTransList";
+	// const url = "http://172.126.11.154:19201/v2/trans/getTransList";
+
 	const dataInfo = rq.useQuery(
 		"getMyDtstmnList",
 		async () => {
 			return await axios.post(
-				"https://blueapi.teamfresh.co.kr/v2/trans/getTransList",
+				url,
 				{
 					targetYear: targetYearRef.current,
 				},
@@ -46,9 +51,7 @@ export default (props) => {
 		{
 			retry: 0,
 			refetchOnWindowFocus: false,
-			onSuccess: (data) => {
-				console.log("로딩 dt");
-			},
+			onSuccess: (data) => {},
 			onError: (error) => {},
 		}
 	);
@@ -106,7 +109,9 @@ export default (props) => {
 							<Text style={{color: "black", fontWeight: "bold", fontSize: 15}}>명세서</Text>
 						</View>
 					</View>
-					{dataInfo?.status === "success" && dataInfo?.data?.data?.list.map((data, index) => <DtsmnRow key={index} data={data} />)}
+					{dataInfo?.status === "success" &&
+						(dataInfo?.data?.data?.list?.length > 0 ? dataInfo?.data?.data?.list?.map((data, index) => <DtsmnRow key={index} data={data} />) : <Empty />)}
+					{dataInfo?.status === "error" && <ErrorText />}
 				</View>
 			</ScrollContainer>
 		</>

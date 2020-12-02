@@ -24,8 +24,11 @@ const TaxBillDetail = ({navigation, route}) => {
 	const businessType = route.params.businessType;
 	const userSeq = jwt(token).userSeq;
 
-	const url =
-		"http://172.126.11.154:3000/forApp/TaxBillDetailForApp?taxBillSeq=" +
+	console.log("!!", route.params);
+
+	const webViewUrl =
+		// "http://172.126.11.154:3000/forApp/TaxBillDetailForApp?taxBillSeq=" +
+		"https://blue.teamfresh.co.kr/forApp/TaxBillDetailForApp?taxBillSeq=" +
 		taxBillSeq +
 		"&targetMonth=" +
 		targetMonth +
@@ -35,8 +38,6 @@ const TaxBillDetail = ({navigation, route}) => {
 		businessType +
 		"&userSeq=" +
 		userSeq;
-
-	console.log("주소", url);
 
 	const viewRef = React.useRef();
 	const [source, setSource] = React.useState(null);
@@ -94,12 +95,14 @@ const TaxBillDetail = ({navigation, route}) => {
 		error: console.warn,
 	});
 
+	// const url = "http://172.126.11.152:19201/v2/trans/getTransferDetail";
+	const url = "https://blueapi.teamfresh.co.kr/v2/trans/getTransferDetail";
+
 	const dataInfo = rq.useQuery(
 		"getTransferDetail",
 		async () => {
 			return await axios.post(
-				// "https://blueapi.teamfresh.co.kr/v2/trans/getTransferDetail",
-				"http://172.126.11.152:19201/v2/trans/getTransferDetail",
+				url,
 				{
 					taxBilSeq: taxBillSeq,
 					targetMonth: new Date(targetMonth),
@@ -184,7 +187,7 @@ const TaxBillDetail = ({navigation, route}) => {
 						ref={viewRef}
 						onMessage={handleOnMessage}
 						source={{
-							uri: url,
+							uri: webViewUrl,
 						}}
 
 						// injectedJavaScript={`const meta = document.createElement('meta'); meta.setAttribute('content', 'width=width, initial-scale=0.5, maximum-scale=0.5, user-scalable=2.0'); meta.setAttribute('name', 'viewport'); document.getElementsByTagName('head')[0].appendChild(meta); `}
@@ -208,6 +211,8 @@ const TaxBillDetail = ({navigation, route}) => {
 };
 
 export default ({navigation, route}) => {
+	const taxBillType = route?.params?.params?.taxBillType;
+	const businessType = route?.params?.params?.businessType;
 	return (
 		<>
 			<TaxBillDetailStacks.Navigator>
@@ -215,7 +220,7 @@ export default ({navigation, route}) => {
 					name="TaxBillDetail"
 					component={TaxBillDetail}
 					options={{
-						title: "세금계산서",
+						title: taxBillType === "간이" && businessType === "간이" ? "간이영수증" : "세금계산서",
 						headerStyle: {
 							backgroundColor: "#3e50b4",
 						},

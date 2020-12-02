@@ -118,13 +118,14 @@ export default (props) => {
 
 	const token = useToken();
 
-	console.log("ㅋㅋ", jwt(token));
+	// const url = "http://172.126.11.154:19201/v2/trans/getTransList";
+	const url = "https://blueapi.teamfresh.co.kr/v2/trans/getTransList";
+
 	const dataInfo = rq.useQuery(
 		"getTransList",
 		async () => {
 			return await axios.post(
-				// "https://blueapi.teamfresh.co.kr/v2/trans/getTransList",
-				"http://172.126.11.154:19201/v2/trans/getTransList",
+				url,
 				{
 					targetMonth: targetMonthRef.current.toISOString(),
 				},
@@ -241,13 +242,13 @@ export default (props) => {
 					paddingBottom: 50,
 				}}
 			>
-				{dataInfo?.status === "success" ? (
-					dataInfo?.data?.data?.list?.map((data, index) => <TransCard key={index} data={data} targetMonth={targetDate} />)
-				) : dataInfo?.status === "error" ? (
-					<ErrorText />
-				) : (
-					<Empty />
-				)}
+				{dataInfo?.status === "success" &&
+					(dataInfo?.data?.data?.list?.length > 0 ? (
+						dataInfo?.data?.data?.list?.map((data, index) => <TransCard key={index} data={data} targetMonth={targetDate} />)
+					) : (
+						<Empty />
+					))}
+				{dataInfo?.status === "error" && <ErrorText />}
 			</ScrollContainer>
 		</>
 	);

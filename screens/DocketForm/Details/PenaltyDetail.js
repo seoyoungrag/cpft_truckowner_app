@@ -10,17 +10,17 @@ export default (props) => {
 	return (
 		<>
 			<View style={{flexDirection: "row", justifyContent: "flex-start", marginVertical: 5}}>
-				<Text style={{fontWeight: "bold", marginRight: 15}}>{props.index}</Text>
+				<Text style={{fontWeight: "bold", marginRight: 15}}>{props.index || "-"}</Text>
 				<Text style={{marginRight: 30}}>차감사유</Text>
-				<Text>{props.data.reasonOfDeduction}</Text>
+				<Text>{props.data.reasonOfDeduction || "-"}</Text>
 			</View>
 			<View style={{flexDirection: "row", justifyContent: "flex-start", marginVertical: 5}}>
 				<Text style={{marginLeft: 23, marginRight: 57}}>일자</Text>
-				<Text>{Calc.getDateStr(new Date(props.data.deliveryDate))}</Text>
+				<Text>{Calc.getDateStr(new Date(String(props.data.deliveryDate).replace(/\./gi, "-")))}</Text>
 			</View>
 			<View style={{flexDirection: "row", justifyContent: "flex-start", marginVertical: 5}}>
 				<Text style={{marginLeft: 23, marginRight: 30}}>실수령지</Text>
-				<Text>{props.data.targetAddress}</Text>
+				<Text>{props.data.targetAddress || "-"}</Text>
 			</View>
 			<View
 				style={{
@@ -39,7 +39,7 @@ export default (props) => {
 			{props.bool && (
 				<View style={{flexDirection: "row", justifyContent: "space-between"}}>
 					<Text>합계</Text>
-					<Text style={{fontWeight: "bold", color: "#3e50b4"}}>{Calc.regexWON(total)}원</Text>
+					<Text style={{fontWeight: "bold", color: "#3e50b4"}}>{Calc.regexWON(total) || "-"}원</Text>
 				</View>
 			)}
 		</>

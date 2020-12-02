@@ -346,7 +346,15 @@ export default (props) => {
 									},
 								});
 							}}
-							style={{flex: 9, borderColor: "black", borderWidth: 1, alignItems: "center", justifyContent: "center", borderRadius: 15, height: 150}}
+							style={{
+								flex: 9,
+								borderColor: "grey",
+								borderWidth: 1,
+								alignItems: "center",
+								justifyContent: "center",
+								borderRadius: 15,
+								height: 150,
+							}}
 						>
 							<View style={{flexDirection: "column", alignItems: "center"}}>
 								<Image source={require("../../assets/img/icon_명세서_lg.png")} style={{marginBottom: 10}} />
@@ -361,7 +369,7 @@ export default (props) => {
 									params: {screen: "MyTaxInvoiceList"},
 								});
 							}}
-							style={{flex: 9, borderColor: "black", borderWidth: 1, alignItems: "center", justifyContent: "center", borderRadius: 15, height: 150}}
+							style={{flex: 9, borderColor: "grey", borderWidth: 1, alignItems: "center", justifyContent: "center", borderRadius: 15, height: 150}}
 						>
 							<View style={{flexDirection: "column", alignItems: "center"}}>
 								<Image source={require("../../assets/img/icon_taxBill-lg.png")} style={{marginBottom: 10}} />
