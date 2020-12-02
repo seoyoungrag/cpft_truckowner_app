@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">용차블루</string>
+    <string name="app_name">팀프플러스</string>
     <string moduleConfig="true" name="CodePushDeploymentKey">nR0cxSxA35Jbx5lkd6AXq98XaOL1JDtGpAPdV</string>
     <string name="appCenterCrashes_whenToSendCrashes" moduleConfig="true" translatable="false">DO_NOT_ASK_JAVASCRIPT</string>
     <string name="appCenterAnalytics_whenToEnableAnalytics" moduleConfig="true" translatable="false">ALWAYS_SEND</string>
