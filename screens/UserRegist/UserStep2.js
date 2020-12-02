@@ -129,7 +129,7 @@ const DataValueRed = styled.Text`
 `;
 export default ({navigation, route}) => {
 	const [merchantUid, setMerchantUid] = useState(`mid_${new Date().getTime()}`);
-	const [company, setCompany] = useState("용차블루");
+	const [company, setCompany] = useState("팀프플러스");
 	const [tierCode, setTierCode] = useState(undefined);
 	const {trigger, register, getValues, setValue, handleSubmit, errors} = useForm();
 	const [userRegistInfo, setUserRegistInfoProp] = useState(null);

@@ -33,7 +33,7 @@ export default (props) => {
 	const [agreement2, setAgreement2] = React.useState(null);
 
 	const [merchantUid, setMerchantUid] = React.useState(`mid_${new Date().getTime()}`);
-	const [company, setCompany] = React.useState("용차블루");
+	const [company, setCompany] = React.useState("팀프플러스");
 	const [tierCode, setTierCode] = React.useState(undefined);
 
 	// const requestPHAuthNumber = React.useCallback(async () => {

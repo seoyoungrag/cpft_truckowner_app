@@ -155,8 +155,8 @@ android {
         applicationId "kr.co.teamfresh.cpft.truckowner.android"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 28
-        versionName "1.0"
+        versionCode 30
+        versionName "1.2"
     }
     splits {
         abi {
