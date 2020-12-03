@@ -179,10 +179,10 @@ export default ({navigation, route}) => {
 	const getUserRegistInfo = useGetUserRegistInfo();
 	const setUserRegistInfo = useSetUserRegistInfo();
 	const confrimBtnClicked = async (userRegistInfoForm) => {
-		const newValue = Object.assign({}, userRegistInfo, userRegistInfoForm);
-		await setUserRegistInfo(newValue);
-		console.log(response);
-		console.log(newValue);
+		// const newValue = Object.assign({}, userRegistInfo, userRegistInfoForm);
+		// await setUserRegistInfo(newValue);
+		// console.log(response);
+		// console.log(newValue);
 		if (response.success === true) {
 			navigation.navigate("UserStep5");
 		}
@@ -325,7 +325,10 @@ export default ({navigation, route}) => {
 						{
 							text: "확인",
 							onPress: async () => {
-								await setUserRegistInfo(userInfo);
+								const newValue = Object.assign({}, userInfo, {
+									userRegistComplete: true,
+								});
+								await setUserRegistInfo(newValue);
 								await login(token);
 							},
 						},

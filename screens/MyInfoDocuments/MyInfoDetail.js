@@ -24,7 +24,7 @@ export default (props) => {
 	const fetchData = async () => {
 		const data = await getUserRegistInfo();
 		setInputs(data);
-		const key = data.userHPAuthAgree === "Y" ? 0 : 1;
+		const key = data.userHPAuthAgree ? 0 : 1;
 		agree1Ref.current.updateIsActiveIndex(key);
 		agree2Ref.current.updateIsActiveIndex(key);
 	};
@@ -110,6 +110,7 @@ export default (props) => {
 						onPress={(bool) => setAgreement1(bool)}
 						radio_props={radioProps}
 						initial={-1}
+						selectedButtonColor={!isMutate ? "grey" : "#2196f3"}
 						buttonColor={!isMutate ? "grey" : "#2196f3"}
 						formHorizontal={true}
 						labelStyle={{marginRight: 40}}
@@ -127,6 +128,7 @@ export default (props) => {
 						onPress={(bool) => setAgreement2(bool)}
 						radio_props={radioProps}
 						initial={-1}
+						selectedButtonColor={!isMutate ? "grey" : "#2196f3"}
 						buttonColor={!isMutate ? "grey" : "#2196f3"}
 						formHorizontal={true}
 						labelStyle={{marginRight: 40}}

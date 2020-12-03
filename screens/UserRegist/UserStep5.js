@@ -7,6 +7,7 @@ import ScrollContainer from "../../components/ScrollContainer";
 import * as rq from "react-query";
 import axios from "axios";
 import messaging from "@react-native-firebase/messaging";
+import jwt from "jwt-decode";
 
 const screenWidth = Math.round(Dimensions.get("window").width);
 const screenHeight = Math.round(Dimensions.get("window").height);
@@ -92,8 +93,13 @@ export default ({navigation}) => {
 			return axios.post(url, obj);
 		},
 		{
-			onSuccess: async (data, preVal) => {
+			onSuccess: async (data) => {
 				const token = data?.data?.data;
+				const userInfo = jwt(token);
+				const newValue = Object.assign({}, userInfo, {
+					userRegistComplete: true,
+				});
+				await setUserRegistInfo(newValue);
 				await logIn(token);
 			},
 			onError: (error) => {
@@ -130,7 +136,7 @@ export default ({navigation}) => {
 		});
 
 		try {
-			await setUserRegistInfo(newValue);
+			// await setUserRegistInfo(newValue);
 			const fcmTokenObj = {
 				fcmToken: fcmToken,
 			};
