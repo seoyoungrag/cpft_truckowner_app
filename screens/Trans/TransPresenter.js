@@ -124,10 +124,12 @@ export default (props) => {
 	const dataInfo = rq.useQuery(
 		"getTransList",
 		async () => {
+			var tm;
+			tm = targetMonthRef.current.getFullYear()+'-'+(targetMonthRef.current.getMonth()+1);
 			return await axios.post(
 				url,
 				{
-					targetMonth: targetMonthRef.current.toISOString(),
+					targetMonth: tm,
 				},
 				{
 					headers: {
