@@ -153,7 +153,7 @@ export default ({navigation, route}) => {
 							<Text style={{fontSize: 15}}>총 지급액</Text>
 						</View>
 						<View style={{flexDirection: "row", justifyContent: "center"}}>
-							<Text style={{fontSize: 23, color: "#3e50b4", fontWeight: "bold"}}>{Calc.regexWON(dataInfo.data.data.data.totalPayment) || "-"}원</Text>
+							<Text style={{fontSize: 23, color: "#3e50b4", fontWeight: "bold"}}>{Calc.regexWON(dataInfo.data.data.data.depositTotal) || "-"}원</Text>
 						</View>
 						<View style={{borderTopWidth: 3, borderTopColor: "#efefef", marginTop: 5, paddingTop: 15}}>
 							<Text style={{fontWeight: "bold", color: "black"}}>
