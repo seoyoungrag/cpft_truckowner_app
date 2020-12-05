@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 
-import {Image, Dimensions, Text, StyleSheet, Alert, Animated} from "react-native";
+import {Image, Dimensions, Text, StyleSheet, Alert, Animated, Linking} from "react-native";
 
 import CodePush from "react-native-code-push";
 import * as Progress from "react-native-progress";
@@ -8,7 +8,8 @@ import {getStatusBarHeight} from "react-native-status-bar-height";
 
 import VersionCheck from "react-native-version-check";
 import DeviceInfo from "react-native-device-info";
-import {startUpdateFlow} from "react-native-android-inapp-updates";
+import {startUpdateFlow,checkUpdateAvailability} from '@gurukumparan/react-native-android-inapp-updates';
+
 import * as rq from "react-query";
 import axios from "axios";
 import {useToken} from "./AuthContext";
@@ -27,11 +28,10 @@ const statusBarHeight = getStatusBarHeight();
 let codePushOptions = {
 	checkFrequency: CodePush.CheckFrequency.MANUAL,
 	updateDialog: {
-		appendReleaseDescription: true,
-		descriptionPrefix: "업데이트 설명",
-		mandatoryContinueButtonLabel: "앱 업데이트",
-		mandatoryUpdateMessage: "앱 업데이트 기능이 패치되었습니다.",
-		title: "앱 업데이트가 발생했습니다.",
+        title : "새로운 업데이트가 존재합니다.",
+        optionalUpdateMessage : "지금 업데이트하시겠습니까?",
+        optionalIgnoreButtonLabel : "나중에",
+        optionalInstallButtonLabel : "업데이트"
 	},
 };
 const UpdateApp = ({updateModalVisible}) => {
@@ -97,84 +97,49 @@ const UpdateApp = ({updateModalVisible}) => {
 	};
 
 	/** Update is downloaded silently, and applied on restart (recommended) */
+	/*
 	const sync = () => {
 		CodePush.sync({}, codePushStatusDidChange, codePushDownloadDidProgress);
 	};
-
+	*/
 	/** Update pops a confirmation dialog, and then immediately reboots the app */
-	const updateFromPlayStore = async () => {
+	const updateFromPlayStoreAndCodePush = async () => {
 		const isEmulator = await DeviceInfo.isEmulator();
 
 		console.log("UpdateApp", "isEmulator: ", isEmulator);
-		//공개 버전이 되어야 쓸 수 있음.
-		/*
-    VersionCheck.getLatestVersion({
-      forceUpdate: true,
-      provider: () =>
-        fetch("https://play.google.com/store/apps/details?id=kr.co.teamfresh.cpft.truckowner.android")
-          .then(
-            (r) =>{
-                if (r.status && r.status == 404) {
-                  console.log("UpdateApp", "getLatestVersion: ",r);
-                  return Promise.reject("플레이스토어에서 앱을 찾을 수 없음.");
-                }else{
-                  console.log("UpdateApp", "getLatestVersion: ",r);
-                }
-                return r.json();
-              })
-          .then(({ version }) => version)
-    })
-    */
-		console.log(VersionCheck.getCurrentBuildNumber());
-
-		VersionCheck.needUpdate().then((res) => {
-			console.log(res);
-			// { isNeeded: true, currentVersion: "1.0.0", latestVersion: "1.1.0" }
-		});
-		VersionCheck.getLatestVersion().then((latestVersion) => {
-			console.log("UpdateApp", "getLatestVersion: ", latestVersion);
-			// 2.0.0
-		});
-
-		VersionCheck.needUpdate().then(async (res) => {
-			console.log("UpdateApp", "needUpdate: ", res);
-			if (res.isNeeded) {
-				try {
-					const result = await startUpdateFlow(updateModes);
-					console.log(result);
-				} catch (e) {
-					console.log("UpdateApp", "updateFromPlayStore error:", e);
+		
+		checkUpdateAvailability().then(e=>{
+			startUpdateFlow(updateModes);
+			return {needPlayStoreUpdate: true};
+		}).catch(e=>{
+			console.log('react-native-android-inapp-updates errors', e);
+			VersionCheck.needUpdate().then(async (res) => {
+				console.log("UpdateApp", "needUpdate: ", res);
+				if (res.isNeeded) {
+					Alert.alert(
+						'앱 업데이트 필요',
+						'신규 기능에 대한 업데이트가 필요합니다.',
+						[
+						{ text: '확인', onPress: async () => Linking.openURL(await VersionCheck.getStoreUrl()+ '&rnd=' + Math.random()) }
+						],
+						{ cancelable: false }
+					);
 				}
+			});
+			return {needPlayStoreUpdate: false};
+		}).then(({needPlayStoreUpdate})=>{
+			console.log("needPlayStoreUpdate", needPlayStoreUpdate);
+			if(needPlayStoreUpdate==false){
+				CodePush.sync(codePushOptions,
+					codePushStatusDidChange,
+					codePushDownloadDidProgress
+				);
 			}
 		});
-
-		if (!isEmulator) {
-			//공개 버전이 되어야 쓸 수 있음.
-
-			try {
-				const result = await startUpdateFlow(updateModes);
-				console.log("UpdateApp", "startUpdateFlow result: ", result);
-			} catch (e) {
-				console.log("UpdateApp", "startUpdateFlow error: ", e);
-			}
-		}
+		
 	};
-	const syncImmediate = () => {
-		updateFromPlayStore();
-		CodePush.sync(
-			{
-				installMode: CodePush.InstallMode.IMMEDIATE,
-				updateDialog: {
-					appendReleaseDescription: true,
-					descriptionPrefix: "업데이트 설명",
-					mandatoryContinueButtonLabel: "앱 업데이트",
-					mandatoryUpdateMessage: "앱 업데이트 기능이 패치되었습니다.",
-					title: "앱 업데이트가 발생했습니다.",
-				},
-			},
-			codePushStatusDidChange,
-			codePushDownloadDidProgress
-		);
+	const syncImmediate = async() => {
+		await updateFromPlayStoreAndCodePush();
 		/*
   setTimeout(() => {
    setModalVisible(false);
