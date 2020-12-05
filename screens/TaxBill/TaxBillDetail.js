@@ -76,7 +76,7 @@ const TaxBillDetail = ({navigation, route}) => {
 		console.log("cnt:",cnt);
 		ToastAndroid.showWithGravityAndOffset(
 		  "파일을 다운로드 합니다.",
-		  ToastAndroid.LONG,
+		  ToastAndroid.SHORT,
 		  ToastAndroid.BOTTOM,
 		  25,
 		  50
