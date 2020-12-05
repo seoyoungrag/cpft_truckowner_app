@@ -12,6 +12,7 @@ import axios from "axios";
 import {useToken} from "../../AuthContext";
 import jwt from "jwt-decode";
 import TransDetail from "./TransDetail";
+import RNFetchBlob from "rn-fetch-blob";
 Date.prototype.format = function(f) {
     if (!this.valueOf()) return " ";
 
@@ -69,7 +70,10 @@ const TaxBillDetail = ({navigation, route}) => {
 	const viewRef = React.useRef();
 	const [source, setSource] = React.useState(null);
 
-	const onDownloadBtn = React.useCallback(() => {
+	let cnt = 0;
+	const onDownloadBtn = React.useCallback(async () => {
+		cnt++;
+		console.log("cnt:",cnt);
 		ToastAndroid.showWithGravityAndOffset(
 		  "파일을 다운로드 합니다.",
 		  ToastAndroid.LONG,
@@ -101,10 +105,9 @@ const TaxBillDetail = ({navigation, route}) => {
 		if (imageData) {
 			let dateStr = new Date().format("yyyy년MM월dd일a/phh시mm분ss초")
 			let downloadPath = filePath + "/"+targetMonth+"_세금계산서"+dateStr+".png";
-			RNFS.writeFile(filePath + "/"+targetMonth+"_세금계산서"+dateStr+".png", imageData, "base64")
-				.then((success) => {
-					console.log(filePath);
-					console.log("다운로드 성공");
+			await RNFS.writeFile(filePath + "/"+targetMonth+"_세금계산서"+dateStr+".png", imageData, "base64")
+				.then(async (success) => {
+					console.log("다운로드 성공", downloadPath);
 					ToastAndroid.showWithGravityAndOffset(
 					  "파일을 다운로드가 성공했습니다.\r\n파일명:"+downloadPath,
 					  ToastAndroid.LONG,
@@ -112,6 +115,8 @@ const TaxBillDetail = ({navigation, route}) => {
 					  25,
 					  50
 					);
+					await RNFetchBlob.android.actionViewIntent(downloadPath, 'image/png');
+					console.log("파일열기 성공");
 				})
 				.catch((err) => {
 					console.log("다운로드 실패");
