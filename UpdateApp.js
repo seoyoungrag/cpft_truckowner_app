@@ -311,10 +311,10 @@ const UpdateApp = ({updateModalVisible}) => {
     </TouchableOpacity>
 
     */}
-			{progressUI != 0 && progressUI && <Progress.Bar progress={bytesToSize(progressUI.receivedBytes) /bytesToSize(progressUI.totalBytes)} indeterminate={indeterminate} />}
+			{progressUI != 0 && progressUI && <Progress.Bar progress={progressUI.receivedBytes /progressUI.totalBytes} indeterminate={indeterminate} />}
 			{progressUI != 0 && progressUI && (
 				<Text style={styles.messages}>
-					{progressUI.receivedBytes} / {progressUI.totalBytes}
+					{bytesToSize(progressUI.receivedBytes)} / {bytesToSize(progressUI.totalBytes)}
 				</Text>
 			)}
 			{/*
