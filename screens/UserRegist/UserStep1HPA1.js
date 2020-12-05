@@ -81,11 +81,16 @@ export default ({ navigation }) => {
           }}
           refreshOn={false}
         >
-          <Image style={{ width: screenWidth, height: screenHeight }} resizeMode={"stretch"} source={require("../../assets/terms1-1.png")} />
-          <Image style={{ width: screenWidth, height: screenHeight }} resizeMode={"stretch"} source={require("../../assets/terms1-2.png")} />
-          <Image style={{ width: screenWidth, height: screenHeight }} resizeMode={"stretch"} source={require("../../assets/terms1-3.png")} />
-          <Image style={{ width: screenWidth, height: screenHeight }} resizeMode={"stretch"} source={require("../../assets/terms1-4.png")} />
-          <Image style={{ width: screenWidth, height: screenHeight }} resizeMode={"stretch"} source={require("../../assets/terms1-5.png")} />
+				<Image source={require("../../assets/img/serviceTerms/terms01.png")} />
+				<Image source={require("../../assets/img/serviceTerms/terms02.png")} />
+				<Image source={require("../../assets/img/serviceTerms/terms03.png")} />
+				<Image source={require("../../assets/img/serviceTerms/terms04.png")} />
+				<Image source={require("../../assets/img/serviceTerms/terms05.png")} />
+				<Image source={require("../../assets/img/serviceTerms/terms06.png")} />
+				<Image source={require("../../assets/img/serviceTerms/terms07.png")} />
+				<Image source={require("../../assets/img/serviceTerms/terms08.png")} />
+				<Image source={require("../../assets/img/serviceTerms/terms09.png")} />
+				<Image source={require("../../assets/img/serviceTerms/terms10.png")} />
         </ScrollContainer>
       </Modal>
     </OuterContainer>

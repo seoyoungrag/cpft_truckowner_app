@@ -14,6 +14,13 @@ import axios from "axios";
 import {useToken} from "./AuthContext";
 import messaging from "@react-native-firebase/messaging";
 
+function bytesToSize(bytes) {
+	var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+	if (bytes == 0) return '0 Byte';
+	var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+	return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+ }
+
 const updateModes = "immediate";
 const {width} = Dimensions.get("screen");
 const statusBarHeight = getStatusBarHeight();
@@ -304,7 +311,7 @@ const UpdateApp = ({updateModalVisible}) => {
     </TouchableOpacity>
 
     */}
-			{progressUI != 0 && progressUI && <Progress.Bar progress={progressUI.receivedBytes / progressUI.totalBytes} indeterminate={indeterminate} />}
+			{progressUI != 0 && progressUI && <Progress.Bar progress={bytesToSize(progressUI.receivedBytes) /bytesToSize(progressUI.totalBytes)} indeterminate={indeterminate} />}
 			{progressUI != 0 && progressUI && (
 				<Text style={styles.messages}>
 					{progressUI.receivedBytes} / {progressUI.totalBytes}
