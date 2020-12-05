@@ -1,5 +1,5 @@
 import React from "react";
-import {View, Text, TouchableOpacity, Image, ActivityIndicator} from "react-native";
+import {View, Text, TouchableOpacity, Image, ActivityIndicator, ToastAndroid} from "react-native";
 import {createStackNavigator} from "@react-navigation/stack";
 import {Table, Row, TableWrapper, Cell} from "react-native-table-component";
 import {WebView} from "react-native-webview";
@@ -12,6 +12,33 @@ import axios from "axios";
 import {useToken} from "../../AuthContext";
 import jwt from "jwt-decode";
 import TransDetail from "./TransDetail";
+Date.prototype.format = function(f) {
+    if (!this.valueOf()) return " ";
+
+    var weekName = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];
+	var d = this;
+	var h = "";
+     
+    return f.replace(/(yyyy|yy|MM|dd|E|hh|mm|ss|a\/p)/gi, function($1) {
+        switch ($1) {
+            case "yyyy": return d.getFullYear();
+            case "yy": return (d.getFullYear() % 1000).zf(2);
+            case "MM": return (d.getMonth() + 1).zf(2);
+            case "dd": return d.getDate().zf(2);
+            case "E": return weekName[d.getDay()];
+            case "HH": return d.getHours().zf(2);
+            case "hh": return ((h = d.getHours() % 12) ? h : 12).zf(2);
+            case "mm": return d.getMinutes().zf(2);
+            case "ss": return d.getSeconds().zf(2);
+            case "a/p": return d.getHours() < 12 ? "오전" : "오후";
+            default: return $1;
+        }
+    });
+};
+ 
+String.prototype.string = function(len){var s = '', i = 0; while (i++ < len) { s += this; } return s;};
+String.prototype.zf = function(len){return "0".string(len - this.length) + this;};
+Number.prototype.zf = function(len){return this.toString().zf(len);};
 
 const TaxBillDetailStacks = createStackNavigator();
 
@@ -24,7 +51,7 @@ const TaxBillDetail = ({navigation, route}) => {
 	const businessType = route.params.businessType;
 	const userSeq = jwt(token).userSeq;
 
-	console.log("!!", route.params);
+	console.log("웹뷰parmas 정보", route.params,userSeq);
 
 	const webViewUrl =
 		// "http://172.126.11.154:3000/forApp/TaxBillDetailForApp?taxBillSeq=" +
@@ -43,6 +70,13 @@ const TaxBillDetail = ({navigation, route}) => {
 	const [source, setSource] = React.useState(null);
 
 	const onDownloadBtn = React.useCallback(() => {
+		ToastAndroid.showWithGravityAndOffset(
+		  "파일을 다운로드 합니다.",
+		  ToastAndroid.LONG,
+		  ToastAndroid.BOTTOM,
+		  25,
+		  50
+		);
 		let imageData = source.dataUrl.split("data:image/png;base64,");
 		imageData = imageData[1];
 
@@ -50,6 +84,8 @@ const TaxBillDetail = ({navigation, route}) => {
 
 		//Creating folder
 		if (RNFS.exists(filePath)) {
+			console.log("경로가 존재한다.",filePath);
+			/*
 			RNFS.unlink(filePath)
 				.then(() => {
 					console.log("FOLDER/FILE DELETED");
@@ -60,15 +96,32 @@ const TaxBillDetail = ({navigation, route}) => {
 				});
 
 			RNFS.mkdir(filePath);
+			*/
 		}
 		if (imageData) {
-			RNFS.writeFile(filePath + "/세금계산서.png", imageData, "base64")
+			let dateStr = new Date().format("yyyy년MM월dd일a/phh시mm분ss초")
+			let downloadPath = filePath + "/"+targetMonth+"_세금계산서"+dateStr+".png";
+			RNFS.writeFile(filePath + "/"+targetMonth+"_세금계산서"+dateStr+".png", imageData, "base64")
 				.then((success) => {
 					console.log(filePath);
-					console.log("성공");
+					console.log("다운로드 성공");
+					ToastAndroid.showWithGravityAndOffset(
+					  "파일을 다운로드가 성공했습니다.\r\n파일명:"+downloadPath,
+					  ToastAndroid.LONG,
+					  ToastAndroid.BOTTOM,
+					  25,
+					  50
+					);
 				})
 				.catch((err) => {
-					console.log("실패");
+					console.log("다운로드 실패");
+					ToastAndroid.showWithGravityAndOffset(
+					  "파일을 다운로드가 실패했습니다.\r\n오류:"+err+"\r\n관리자에게 문의해주세요.",
+					  ToastAndroid.LONG,
+					  ToastAndroid.BOTTOM,
+					  25,
+					  50
+					);
 				});
 			// const result = await CameraRoll.save(file);
 		}
@@ -190,7 +243,7 @@ const TaxBillDetail = ({navigation, route}) => {
 							uri: webViewUrl,
 						}}
 
-						// injectedJavaScript={`const meta = document.createElement('meta'); meta.setAttribute('content', 'width=width, initial-scale=0.5, maximum-scale=0.5, user-scalable=2.0'); meta.setAttribute('name', 'viewport'); document.getElementsByTagName('head')[0].appendChild(meta); `}
+						injectedJavaScript={`const meta = document.createElement('meta'); meta.setAttribute('content', 'width=width, initial-scale=0.5, maximum-scale=0.5, user-scalable=2.0'); meta.setAttribute('name', 'viewport'); document.getElementsByTagName('head')[0].appendChild(meta); `}
 					></WebView>
 					{source ? (
 						<View>
