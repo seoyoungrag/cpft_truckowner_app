@@ -26,6 +26,7 @@ const updateModes = "immediate";
 const {width} = Dimensions.get("screen");
 const statusBarHeight = getStatusBarHeight();
 let codePushOptions = {
+	installMode: CodePush.InstallMode.IMMEDIATE,
 	checkFrequency: CodePush.CheckFrequency.MANUAL,
 	updateDialog: {
         title : "새로운 업데이트가 존재합니다.",
