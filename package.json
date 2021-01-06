@@ -31,7 +31,7 @@
     "appcenter": "3.1.1",
     "appcenter-analytics": "3.1.1",
     "appcenter-crashes": "3.1.1",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "expo": "^38.0.9",
     "expo-asset": "~8.1.7",
     "expo-camera": "~8.3.1",
